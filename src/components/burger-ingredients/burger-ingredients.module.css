@@ -1,0 +1,38 @@
+.burger_ingredients_panel{
+    position: absolute;
+    width: 600px;
+    height: 912px;
+    left: 380px;
+    top: 128px;
+    
+    /* interface/bg */
+    background: #131316;
+    
+    /* interface/accent */
+    border: 2px solid #4C4CFF;
+
+}
+
+.burger_ingredients_header{
+    position: absolute;
+    width: 600px;
+    height: 40px;
+    left: 0px;
+    top: 40px;
+
+    /* interface/bg */
+    background: #131316;
+}
+
+.burger_ingredients_tabs{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+
+    position: absolute;
+    width: 600px;
+    height: 56px;
+    left: 0px;
+    top: 100px;
+}
