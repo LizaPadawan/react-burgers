@@ -2,14 +2,14 @@
     position: absolute;
     width: 600px;
     height: 912px;
-    left: 380px;
+    left: calc(50% - 620px);
     top: 128px;
     
     /* interface/bg */
     background: #131316;
     
     /* interface/accent */
-    border: 2px solid #4C4CFF;
+    /* border: 2px solid #4C4CFF; */
 
 }
 
@@ -35,4 +35,15 @@
     height: 56px;
     left: 0px;
     top: 100px;
+}
+
+.burger_ingredients_body{
+    position: absolute;
+width: 600px;
+height: 756px;
+left: 0px;
+top: 156px;
+overflow-y: scroll;
+
+border-radius: 0px;
 }

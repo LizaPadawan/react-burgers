@@ -3,12 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import AppHeader from './components/app-header/app-header';
 import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
+import BurgerConstructor from './components/burger-constructor/burger-constructor';
+import data from '../src/utils/data.json';
 
 function App() {
   return (
     <>
     <AppHeader/>
-    <BurgerIngredients />
+    <BurgerIngredients data={data}/>
+    <BurgerConstructor data={data}/>
     </>
 
     // <div className="App">

@@ -1,0 +1,112 @@
+.burger_constructor_panel{
+position: absolute;
+width: 600px;
+height: 912px;
+left: calc(50% + 20px);
+top: 128px;
+
+/* interface/accent */
+/* border: 2px solid #4C4CFF; */
+}
+
+.burger_components{
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 16px;
+
+position: absolute;
+width: 568px;
+height: 656px;
+left: 16px;
+top: 100px;
+}
+
+.burger_info{
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+align-items: center;
+padding: 0px;
+gap: 40px;
+
+position: absolute;
+width: 568px;
+height: 64px;
+left: 16px;
+top: 796px;
+}
+
+.burger_price{
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 119px;
+height: 64px;
+
+/* interface/accent */
+border: 1px dashed #4C4CFF;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+
+.order_button{
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 20px 40px;
+flex: none;
+order: 0;
+flex-grow: 0;
+
+}
+
+.burger_component{
+width: 568px;
+height: 80px;
+
+/* interface/accent */
+/* border: 1px dashed #4C4CFF; */
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+
+.burger_icon{
+position: absolute;
+visibility: hidden;
+width: 24px;
+height: 24px;
+left: 0px;
+top: calc(50% - 24px/2);
+}
+
+.burger_ingredient{
+    display: flex;
+flex-direction: row;
+justify-content: flex-end;
+align-items: center;
+padding: 16px 32px 16px 24px;
+gap: 20px;
+
+position: absolute;
+height: 80px;
+left: 32px;
+right: 0px;
+top: calc(50% - 80px/2);
+
+/* interface/modal-bg */
+background: #1C1C21;
+border-radius: 88px 88px 40px 40px;
+}
