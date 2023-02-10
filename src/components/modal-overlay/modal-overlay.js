@@ -4,9 +4,9 @@ import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import appHeaderStyles from './app-header.module.css';
+import modalStyles from './modal.module.css';
 
-function AppHeader() {
+function ModalOverlay() {
     return (
         <header>
             <nav className={appHeaderStyles.navigation_panel}>
@@ -48,4 +48,4 @@ function AppHeader() {
     );
 }
 
-export default AppHeader;
+export default ModalOverlay;

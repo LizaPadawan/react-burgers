@@ -47,9 +47,9 @@ function BurgerIngredients(props) {
     return (
         <div className={burgerIngredientsStyles.burger_ingredients_panel}>
             <div className={burgerIngredientsStyles.burger_ingredients_header}>
-                    <text className="text text_type_main-medium">
+                    <p className="text text_type_main-medium">
                         Соберите бургер
-                    </text>
+                    </p>
             </div>
             <IngredientsTabs/>
             <div className={burgerIngredientsStyles.burger_ingredients_body}>
