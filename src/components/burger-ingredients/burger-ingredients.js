@@ -27,8 +27,9 @@ function IngredientsTabs(){
 function IngredientCard(props){
   return (
       <div
-          className={burgerIngredientsStyles.ingredient_card}
+          className={burgerIngredientsStyles.burger_ingredient_card}
       >
+        <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image} style={{width: 240, height: 120}} />
           {props.count > 0 && <Counter count={props.count} size='default'/>}
           <p className={`text text_type_digits-default`}>
@@ -38,9 +39,17 @@ function IngredientCard(props){
           <p className='text text_type_main-default mb-4'>
               {props.name}
           </p>
+        </div>
       </div>
   );
 };
+
+function IngredientGroup(props){
+  return (
+    
+
+  );
+}
 
 
 function BurgerIngredients(props) {
