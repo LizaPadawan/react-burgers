@@ -39,11 +39,11 @@
 
 .burger_ingredients_body{
     position: absolute;
-width: 600px;
-height: 756px;
-left: 0px;
-top: 156px;
-overflow-y: scroll;
-
-border-radius: 0px;
+    width: 600px;
+    height: 756px;
+    left: 0px;
+    top: 156px;
+    overflow-y: scroll;
+    
+    border-radius: 0px;
 }
