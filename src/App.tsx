@@ -6,7 +6,7 @@ import BurgerIngredients from './components/burger-ingredients/burger-ingredient
 import BurgerConstructor from './components/burger-constructor/burger-constructor';
 import { Modal } from './components/modal/modal';
 
-//import data from '../src/utils/data.json';
+import data1 from '../src/utils/data.json';
 
 async function getDataJson(url : string, callback : any) {
   //console.log("getDataJson",url);
@@ -50,7 +50,7 @@ function App() {
       console.log("useEffect");
       getDataJson(url, setFetchedData);
 
-   const modalEl = <Modal title={modalTitle} isClose={handleClose} isOpen={isOpen}>
+   const modalEl = <Modal title={modalTitle} onClose={handleClose} isOpen={isOpen}>
   <div>12345</div>
     </Modal>;
 
@@ -65,7 +65,7 @@ function App() {
     <AppHeader/>
     <div id="portal"></div>
     <BurgerIngredients data={fetchedData.data}/>
-    {/* <BurgerConstructor data={fetchedData.data}/> */}
+    <BurgerConstructor data={data1}/>
     {isOpen && modal}
     
     </>
