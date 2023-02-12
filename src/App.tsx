@@ -4,7 +4,6 @@ import './App.css';
 import AppHeader from './components/app-header/app-header';
 import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from './components/burger-constructor/burger-constructor';
-import { Modal } from './components/modal/modal';
 
 import data1 from '../src/utils/data.json';
 
@@ -33,13 +32,6 @@ function App() {
   console.log("App");
 
   const [fetchedData, setFetchedData] = useState({success: false, data: []});
-  const [isOpen, setIsOpen] = useState(true);
-  const [modal, setModal] = useState(<></>);
-  const [modalTitle, setModalTitle] = useState("");
-
-  const handleClose = () => {setIsOpen(false);};
-  const handleOpen = () => {setIsOpen(true);};
-
   const url = 'https://norma.nomoreparties.space/api/ingredients';
 
   // let modal ;
@@ -50,12 +42,6 @@ function App() {
       console.log("useEffect");
       getDataJson(url, setFetchedData);
 
-   const modalEl = <Modal title={modalTitle} onClose={handleClose} isOpen={isOpen}>
-  <div>12345</div>
-    </Modal>;
-
-    setModal(modalEl);
-
     },
     []
   );
@@ -63,10 +49,14 @@ function App() {
   return (
     <>
     <AppHeader/>
-    <div id="portal"></div>
+    
+    {/* <BurgerIngredients data={fetchedData.data}/> */}
+    <main>
     <BurgerIngredients data={fetchedData.data}/>
-    <BurgerConstructor data={data1}/>
-    {isOpen && modal}
+    <BurgerConstructor data={fetchedData.data}/>
+    </main>
+
+    <div id="portal"></div>
     
     </>
   );

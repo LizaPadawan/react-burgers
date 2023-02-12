@@ -1,41 +1,44 @@
-import ReactDOM from 'react-dom';
-import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
-import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { Tab, CurrencyIcon,CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import modalStyles from './modal.module.css';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
-export const Modal = (props) => {
+function Modal(props) {
+  // const [current, setCurrent] = React.useState('one')
+  let modal = document.getElementById(props.modalId);
 
-    const portal = document.getElementById("portal");
-    console.log("portal",portal);
+  useEffect(() => {
+    const handleEsc = (e) => {
+       if (e.keyCode === 27) {
+        props.close(false);
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
 
-    if (props.isOpen) {
-        return ReactDOM.createPortal(
-            <div className={modalStyles.block}>
-                {/* <ModalOverlay onClose={props.onClose} /> */}
-                <div className={modalStyles.container}>
-                    <h2 className="text text_type_main-large">
-                        {props.title || ""}
-                    </h2>
-                    <button onClick={() => props.onClose()} className={modalStyles.close}>
-                        <CloseIcon type="primary" />
-                    </button>
-                    {props.children}
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
-                </div>
-            </div>,
-            portal
-        );
-
-    } else {
-        return ReactDOM.createPortal(
-            <></>,
-            portal
-        );
-
-    }    
-
+  return createPortal(
+    <>
+     {props.overflow !== "hidden" &&
+      <ModalOverlay close={props.close} />
+     }
+      <div className={modalStyles.panel} >
+      <div className={modalStyles.title} >
+        <p className="text text_type_main-medium">{props.caption}</p>
+        <div onClick={e => {props.close(false)}}>
+        <CloseIcon type="primary" />
+        </div>
+      </div>
+          {props.children}
+      </div>
+    </>
+  , modal);
 }
+
+
+
+export default Modal;

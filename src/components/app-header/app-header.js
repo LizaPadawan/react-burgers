@@ -11,22 +11,25 @@ function AppHeader() {
         <header>
             <nav className={appHeaderStyles.navigation_panel}>
                 <div className={appHeaderStyles.content}>
-
                     <nav className={appHeaderStyles.navigation_internal_panel}>
 
+                        <a>
                         <div className={appHeaderStyles.navigation_link_constructor}>
                             <BurgerIcon type="primary" />
                             <p className="text text_type_main-default">
                                 Конструктор
                             </p>
                         </div>
+                        </a>
 
+                        <a>
                         <div className={appHeaderStyles.navigation_link_order}>
                             <ListIcon type="secondary" />
                             <p className="text text_type_main-default  text_color_inactive" type="secondary">
                                 Лента заказов
                             </p>
                         </div>
+                        </a>
                     </nav>
 
 
@@ -34,12 +37,14 @@ function AppHeader() {
                         <Logo />
                     </section>
 
+                    <a>
                     <section className={appHeaderStyles.navigation_link_profile}>
                         <ProfileIcon type="secondary" />
                         <p className="text text_type_main-default text_color_inactive">
                             Личный кабинет
                         </p>
                     </section>
+                    </a>
 
                 </div>
             </nav>
