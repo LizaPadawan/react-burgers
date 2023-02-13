@@ -7,6 +7,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
+import PropTypes from 'prop-types';
 
 
 const OrderInfo = (props) => {
@@ -29,6 +30,12 @@ const OrderInfo = (props) => {
     );
 }
 
+OrderInfo.propTypes = {
+    openModal: PropTypes.func.isRequired,
+    summ: PropTypes.number.isRequired
+  }; 
+
+
 const BurgerConstructor = (props) => {
     const { data } = props;
     const [openModal, setOpenModal] = useState(false);
@@ -37,8 +44,8 @@ const BurgerConstructor = (props) => {
         <div className={burgerConstructorStyles.burger_constructor_panel}>
             <div className={burgerConstructorStyles.burger_components}>
 
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
+                <div className={burgerConstructorStyles.burger_component + " pl-4"}>
+                    
                     <ConstructorElement
                         type="top"
                         isLocked={true}
@@ -93,8 +100,7 @@ const BurgerConstructor = (props) => {
                     />
                 </div>
 
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
+                <div className={burgerConstructorStyles.burger_component + " pl-4"} >
                     <ConstructorElement
                         type="bottom"
                         isLocked={true}
@@ -139,5 +145,11 @@ const BurgerConstructor = (props) => {
         </div>
     );
 };
+
+BurgerConstructor.propTypes = {
+    data: PropTypes.array.isRequired,
+  }; 
+
+
 
 export default BurgerConstructor;

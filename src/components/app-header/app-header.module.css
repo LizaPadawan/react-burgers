@@ -64,6 +64,9 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+
+    text-decoration:none;
+    color: rgb(255, 255, 255) !important;
 }
 
 .navigation_link_order{
@@ -90,6 +93,7 @@
     flex: none;
     order: 1;
     flex-grow: 0;
+    text-decoration:none;
 }
 
 .navigation_link_profile{
@@ -114,6 +118,7 @@
     
     /* interface/accent */
     border-radius: 40px;
+    text-decoration:none;
 
 }
 

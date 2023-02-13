@@ -20,7 +20,7 @@
     left: 16px;
     top: 100px;
 
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     /* border: 1px dashed #4C4CFF; */
 
 }

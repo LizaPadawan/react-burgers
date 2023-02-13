@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Tab, CurrencyIcon,CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import modalStyles from './modal.module.css';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import PropTypes from 'prop-types';
 
 function Modal(props) {
   // const [current, setCurrent] = React.useState('one')
@@ -38,6 +39,14 @@ function Modal(props) {
     </>
   , modal);
 }
+
+Modal.propTypes = {
+  modalId: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+  overflow: PropTypes.string,
+  caption: PropTypes.string,
+  children: PropTypes.element.isRequired
+}; 
 
 
 

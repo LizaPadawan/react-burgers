@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
+import PropTypes from 'prop-types';
 
 // change test 2
 
@@ -55,6 +56,11 @@ function IngredientDetails(props){
   )
 }
 
+IngredientDetails.propTypes = {
+  data: PropTypes.array.isRequired,
+  ingredientKey: PropTypes.string.isRequired
+}; 
+
 function IngredientsTabs(){
     const [current, setCurrent] = useState('one');
     
@@ -95,6 +101,19 @@ function IngredientCard(props){
   );
 };
 
+IngredientCard.propTypes = {
+  setIsOpen: PropTypes.func.isRequired,
+  setIngredientKey: PropTypes.number.isRequired,
+  _id: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  count: PropTypes.number,
+  price: PropTypes.number,
+  name: PropTypes.string
+}; 
+
+
+
+
 function IngredientGroup(props){
 
   const data = props.data;
@@ -107,11 +126,17 @@ function IngredientGroup(props){
       <p className="text text_type_main-medium">{groupTitle}</p>
       </div>
     {
-      data.filter(item => item.type == groupName).map(jtem => <IngredientCard  setIsOpen={props.setIsOpen} setIngredientKey={props.setIngredientKey} {...jtem} />)
+      data.filter(item => item.type == groupName).map(jtem => <IngredientCard  setIsOpen={props.setIsOpen} setIngredientKey={props.setIngredientKey} key={jtem._id} {...jtem} />)
     }
     </>
   );
 }
+
+IngredientGroup.propTypes = {
+  data: PropTypes.array.isRequired,
+  groupName: PropTypes.string.isRequired,
+  groupTitle: PropTypes.string.isRequired
+}; 
 
 
 // function BurgerIngredients(props) {
@@ -158,6 +183,10 @@ function BurgerIngredients(props) {
       </>
   );
 }
+
+BurgerIngredients.propTypes = {
+  data: PropTypes.array.isRequired
+}; 
 
 export default BurgerIngredients;
 

@@ -52,8 +52,12 @@ function App() {
     
     {/* <BurgerIngredients data={fetchedData.data}/> */}
     <main>
-    <BurgerIngredients data={fetchedData.data}/>
-    <BurgerConstructor data={fetchedData.data}/>
+      {(fetchedData.success) ? <>
+      <BurgerIngredients data={fetchedData.data}/>
+      <BurgerConstructor data={fetchedData.data}/>
+      </> :
+      <></>
+      }
     </main>
 
     <div id="portal"></div>

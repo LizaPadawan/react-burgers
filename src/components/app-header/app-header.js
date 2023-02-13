@@ -10,7 +10,45 @@ function AppHeader() {
     return (
         <header>
             <nav className={appHeaderStyles.navigation_panel}>
-                <div className={appHeaderStyles.content}>
+
+            <div className={appHeaderStyles.content}>
+                    <nav className={appHeaderStyles.navigation_internal_panel}>
+
+
+                    <a href="#" className={appHeaderStyles.navigation_link_constructor}>
+                            <BurgerIcon type="primary" />
+                            <p className="text text_type_main-default">
+                                Конструктор
+                            </p>
+                        </a>
+
+                        <a href="#" className={appHeaderStyles.navigation_link_order}>
+                        
+                            <ListIcon type="secondary" />
+                            <p className="text text_type_main-default  text_color_inactive" type="secondary">
+                                Лента заказов
+                            </p>
+                        
+                        </a>
+                    </nav>
+
+
+                    <section className={appHeaderStyles.logo}>
+                        <Logo />
+                    </section>
+
+                    <a href="#" className={appHeaderStyles.navigation_link_profile}>
+                        <ProfileIcon type="secondary" />
+                        <p className="text text_type_main-default text_color_inactive">
+                            Личный кабинет
+                        </p>
+                    </a>
+
+                </div>
+
+
+
+                {/* <div className={appHeaderStyles.content}>
                     <nav className={appHeaderStyles.navigation_internal_panel}>
 
                         <a>
@@ -46,7 +84,7 @@ function AppHeader() {
                     </section>
                     </a>
 
-                </div>
+                </div> */}
             </nav>
         </header >
 
