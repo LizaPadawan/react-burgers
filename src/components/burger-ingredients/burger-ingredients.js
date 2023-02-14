@@ -3,6 +3,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import PropTypes from 'prop-types';
+import ingredientPropTypes from '../ingredients-proptypes';
 
 // change test 2
 
@@ -101,14 +102,22 @@ function IngredientCard(props){
   );
 };
 
+
+// IngredientCard.propTypes = {
+//   setIsOpen: PropTypes.func.isRequired,
+//   setIngredientKey: PropTypes.number.isRequired,
+//   _id: PropTypes.string.isRequired,
+//   image: PropTypes.string,
+//   count: PropTypes.number,
+//   price: PropTypes.number,
+//   name: PropTypes.string
+// }; 
+
+
 IngredientCard.propTypes = {
+  ...ingredientPropTypes.isRequired,
   setIsOpen: PropTypes.func.isRequired,
-  setIngredientKey: PropTypes.number.isRequired,
-  _id: PropTypes.string.isRequired,
-  image: PropTypes.string,
-  count: PropTypes.number,
-  price: PropTypes.number,
-  name: PropTypes.string
+  setIngredientKey: PropTypes.func.isRequired
 }; 
 
 

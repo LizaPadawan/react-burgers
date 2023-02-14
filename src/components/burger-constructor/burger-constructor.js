@@ -8,25 +8,42 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
+import ingredientPropTypes from "../ingredients-proptypes";
 
 
 const OrderInfo = (props) => {
     return (
-        // <section className={'mt-10' + burgerConstructorStyles.burger_info}>
-        <>
-            <div className={'mt-10' + burgerConstructorStyles.burger_price}>
-                <p className='text text_type_digits-medium'>
-                    {props.summ}
-                </p>
-            </div>
-                <CurrencyIcon type='primary' />
+        
+        // <>
+        //     <div className={'mt-10' + burgerConstructorStyles.burger_price}>
+        //         <p className='text text_type_digits-medium'>
+        //             {props.summ}
+        //         </p>
+        //     </div>
+        //         <CurrencyIcon type='primary' />
            
-        <Button htmlType="button" type="primary" size="medium" onClick={e => { props.openModal(true) }}>
-          Оформить заказ
-        </Button>
+        // <Button htmlType="button" type="primary" size="medium" onClick={e => { props.openModal(true) }}>
+        //   Оформить заказ
+        // </Button>
             
-            </>
-        // </section>
+        //     </>
+
+        <div className='p-4' style={{ display: 'flex',justifyContent: 'center',
+    alignItems: 'center',
+    width:"600px"}}>
+        
+        <p className={`text text_type_digits-medium p-6`} style={{gap:'10px'}}> 
+        {props.summ}
+          <CurrencyIcon style={{width: '22', height: '22'}} type='primary' />
+      </p>
+        
+          <Button htmlType="button" type="primary" size="medium" onClick={e => {props.openModal(true)}}>
+                Оформить заказ
+          </Button>
+
+
+      </div>
+       
     );
 }
 
@@ -145,6 +162,10 @@ const BurgerConstructor = (props) => {
         </div>
     );
 };
+
+ConstructorElement.propTypes = {
+    ...ingredientPropTypes.isRequired,
+}
 
 BurgerConstructor.propTypes = {
     data: PropTypes.array.isRequired,
