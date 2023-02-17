@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -9,156 +9,182 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
+import { DataContext } from '../../services/data-context';
 
+
+const OrderDetails = (props) => {
+
+    const data = useContext(DataContext);
+
+    const [orderData, setOrderData] = useState(0);
+    
+    const sendOrder = () => {
+        console.log("send order");
+        const ingredients = data.map((item) => item._id);
+
+        const formData = new FormData();
+
+        const ingredientsData = '[' + ingredients.join(', ') + ']';
+        formData.append("ingredients", ingredientsData);
+
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                const fl = xhr.responseText;
+                if (fl > 0) {
+                    console.log("успешный успех");
+                } else  {
+                    console.log("неуспех :(");
+                    alert(xhr.responseText);
+                }
+            } else {
+                console.log("идет загрузка");
+            }
+        }
+
+        xhr.open("POST", "https://norma.nomoreparties.space/api/orders");
+        xhr.send(formData);
+    };
+
+    useEffect(
+        () => {
+          console.log("useEffect");
+          sendOrder();
+        },
+        []
+      );
+
+    return (
+        <Modal modalId="portal" overflow="visible" caption="" close={props.setOpenModal} >
+                    <div className={burgerConstructorStyles.in_modal}>
+                        <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
+                            {orderData}
+                        </p>
+                        <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
+                            идентификатор заказа
+                        </p>
+                        <div className={'p-12 ' + burgerConstructorStyles.colored}>
+                            <p className='p-15' style={{ transform: 'scale(2)' }}>
+                                <CheckMarkIcon style={{ width: '120px', height: '120px' }} type='primary' />
+                            </p>
+                        </div>
+                        <p className={burgerConstructorStyles.colored + ' text text_type_main-default'}>
+                            Ваш заказ начали готовить
+                        </p>
+                        <p className={burgerConstructorStyles.colored + ' text text_type_main-default  text_color_inactive p-2'}>
+                            Дождитесь готовности на орбитальной станции
+                        </p>
+                    </div>
+
+                </Modal>
+    );
+}
 
 const OrderInfo = (props) => {
+    const data = useContext(DataContext);
+    const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => {return a + b;});
+
     return (
-        
-        // <>
-        //     <div className={'mt-10' + burgerConstructorStyles.burger_price}>
-        //         <p className='text text_type_digits-medium'>
-        //             {props.summ}
-        //         </p>
-        //     </div>
-        //         <CurrencyIcon type='primary' />
-           
-        // <Button htmlType="button" type="primary" size="medium" onClick={e => { props.openModal(true) }}>
-        //   Оформить заказ
-        // </Button>
-            
-        //     </>
 
-        <div className='p-4' style={{ display: 'flex',justifyContent: 'center',
-    alignItems: 'center',
-    width:"600px"}}>
-        
-        <p className={`text text_type_digits-medium p-6`} style={{gap:'10px'}}> 
-        {props.summ}
-          <CurrencyIcon style={{width: '22', height: '22'}} type='primary' />
-      </p>
-        
-          <Button htmlType="button" type="primary" size="medium" onClick={e => {props.openModal(true)}}>
+        <div className='p-4' style={{
+            display: 'flex', justifyContent: 'center',
+            alignItems: 'center',
+            width: "600px"
+        }}>
+
+            <p className={`text text_type_digits-medium p-6`} style={{ gap: '10px' }}>
+                {summ}
+                <CurrencyIcon style={{ width: '22', height: '22' }} type='primary' />
+            </p>
+
+            <Button htmlType="button" type="primary" size="medium" onClick={e => { props.openModal(true) }}>
                 Оформить заказ
-          </Button>
+            </Button>
 
 
-      </div>
-       
+        </div>
+
     );
 }
 
 OrderInfo.propTypes = {
     openModal: PropTypes.func.isRequired,
-    summ: PropTypes.number.isRequired
-  }; 
+    //summ: PropTypes.number.isRequired
+};
+
+function ConstructorBunElement(props) {
+    const data = useContext(DataContext);
+    const type = props.type;
+    const item = data.find(item => item.type == 'bun');
+
+        return(
+            <div className={"ml-5" + burgerConstructorStyles.burger_component}>
+
+               
+                    <ConstructorElement
+                        type={type}
+                        isLocked={true}
+                        text={item.name + ((type == "top") ? " (верх)" : " (низ)")}
+                        price={item.price}
+                        thumbnail={item.image_mobile}
+                        extraClass='ml-6'
+                    />
+                
+                
+            </div>
+        );
+
+}
+
+ConstructorBunElement.propTypes = {
+    type: PropTypes.string.isRequired
+};
 
 
-const BurgerConstructor = (props) => {
-    const { data } = props;
+const BurgerConstructor = () => {
+    //const { data } = props;
+
+    const data = useContext(DataContext);
     const [openModal, setOpenModal] = useState(false);
 
     return (
         <div className={burgerConstructorStyles.burger_constructor_panel}>
             <div className={burgerConstructorStyles.burger_components}>
 
-                <div className={burgerConstructorStyles.burger_component + " pl-4"}>
-                    
-                    <ConstructorElement
-                        type="top"
-                        isLocked={true}
-                        text={data.find(item => item.type === 'bun').name + ' (верх)'}
-                        price={data.find(item => item.type === 'bun').price}
-                        thumbnail={data.find(item => item.type === 'bun').image_mobile}
-                    />
+                <ConstructorBunElement type="top" />
+
+                <div style={{
+                    display: 'flex', flexDirection: 'column', overflowY: "scroll", gap: '10px',
+                }}>
+
+                    {
+                        data.map(item => item.type !== 'bun' && (
+                            <section key={data.indexOf(item)} className={burgerConstructorStyles.burger_component}>
+                                <DragIcon type='primary' />
+                                <ConstructorElement
+                                    text={item.name}
+                                    price={item.price}
+                                    thumbnail={item.image_mobile}
+
+                                />
+                            </section>
+                        ))
+                    }
+
                 </div>
 
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                        text={data[2].name}
-                        price={data[2].price}
-                        thumbnail={data[2].image_mobile}
-                    />
-                </div>
-
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                        text={data[4].name}
-                        price={data[4].price}
-                        thumbnail={data[4].image_mobile}
-                    />
-                </div>
-
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                        text={data[5].name}
-                        price={data[5].price}
-                        thumbnail={data[5].image_mobile}
-                    />
-                </div>
-
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                        text={data[6].name}
-                        price={data[6].price}
-                        thumbnail={data[6].image_mobile}
-                    />
-                </div>
-
-                <div className={burgerConstructorStyles.burger_component}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                        text={data[7].name}
-                        price={data[7].price}
-                        thumbnail={data[7].image_mobile}
-                    />
-                </div>
-
-                <div className={burgerConstructorStyles.burger_component + " pl-4"} >
-                    <ConstructorElement
-                        type="bottom"
-                        isLocked={true}
-                        text={data.find(item => item.type === 'bun').name + ' (низ)'}
-                        price={data.find(item => item.type === 'bun').price}
-                        thumbnail={data.find(item => item.type === 'bun').image_mobile}
-                    />
-                </div>
+                <ConstructorBunElement type="bottom" />
 
             </div>
 
             <div className={burgerConstructorStyles.burger_info_panel}>
-                <OrderInfo summ={610} openModal={setOpenModal}/>
+                <OrderInfo openModal={setOpenModal} />
             </div>
 
-        {openModal  && 
-            <Modal modalId="portal" overflow = "visible" caption="" close= {setOpenModal} >
-                <div className={burgerConstructorStyles.in_modal}>
-                <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
-                    034536
-                </p>
-                <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
-                    идентификатор заказа
-                </p>
-                <div className={'p-12 ' +  burgerConstructorStyles.colored}> 
-                    <p className='p-15' style={{transform: 'scale(2)'}}> 
-                    <CheckMarkIcon style={{width: '120px', height: '120px'}} type='primary' />
-                    </p>
-                </div>
-                <p className={burgerConstructorStyles.colored + ' text text_type_main-default'}>
-                    Ваш заказ начали готовить
-                </p>
-                <p className={burgerConstructorStyles.colored + ' text text_type_main-default  text_color_inactive p-2'}>
-                    Дождитесь готовности на орбитальной станции
-                </p>
-                </div>
-              
-        </Modal>}
-    
+            {openModal &&
+                <OrderDetails setOpenModal={setOpenModal} />
+            }
 
-            
         </div>
     );
 };
@@ -167,9 +193,9 @@ ConstructorElement.propTypes = {
     ...ingredientPropTypes.isRequired,
 }
 
-BurgerConstructor.propTypes = {
-    data: PropTypes.array.isRequired,
-  }; 
+// BurgerConstructor.propTypes = {
+//     data: PropTypes.array.isRequired,
+// };
 
 
 

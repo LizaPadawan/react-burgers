@@ -4,8 +4,10 @@ import './App.css';
 import AppHeader from './components/app-header/app-header';
 import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from './components/burger-constructor/burger-constructor';
+import { DataContext } from './services/data-context';
 
-import data1 from '../src/utils/data.json';
+
+//import data1 from '../src/utils/data.json';
 
 async function getDataJson(url : string, callback : any) {
   //console.log("getDataJson",url);
@@ -36,7 +38,6 @@ function App() {
 
   // let modal ;
 
-
   useEffect(
     () => {
       console.log("useEffect");
@@ -53,8 +54,10 @@ function App() {
     {/* <BurgerIngredients data={fetchedData.data}/> */}
     <main>
       {(fetchedData.success) ? <>
-      <BurgerIngredients data={fetchedData.data}/>
-      <BurgerConstructor data={fetchedData.data}/>
+      <DataContext.Provider value={fetchedData.data}>
+        <BurgerIngredients/>
+        <BurgerConstructor/>
+      </DataContext.Provider>
       </> :
       <></>
       }
