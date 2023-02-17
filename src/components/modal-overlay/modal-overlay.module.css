@@ -1,0 +1,9 @@
+.main {
+    width: 100vw;
+    height: 200vh;
+    background:#E5E5E5;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    z-index: 10;
+  }

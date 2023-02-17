@@ -1,0 +1,175 @@
+.burger_ingredients_panel{
+    position: absolute;
+    width: 600px;
+    height: 912px;
+    left: calc(50% - 620px);
+    top: 128px;
+    
+    /* interface/bg */
+    background: #131316;
+    
+    /* interface/accent */
+    /* border: 2px solid #4C4CFF; */
+
+}
+
+.burger_ingredients_header{
+    position: absolute;
+    width: 600px;
+    height: 40px;
+    left: 0px;
+    top: 40px;
+
+    /* interface/bg */
+    background: #131316;
+}
+
+.burger_ingredients_tabs{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+
+    position: absolute;
+    width: 600px;
+    height: 56px;
+    left: 0px;
+    top: 100px;
+}
+
+/* .burger_ingredients_body{
+    position: absolute;
+    width: 600px;
+    height: 756px;
+    left: 0px;
+    top: 156px;
+    overflow-y: scroll;
+    
+    border-radius: 0px;
+
+
+} */
+
+.burger_ingredients_body{
+    position: absolute;
+    width: 600px;
+    height: 756px;
+    left: 0px;
+    top: 156px;
+    overflow-y: scroll;
+    
+    border-radius: 0px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/* .burger_ingredient_card{
+    width: 272px;
+    height: 208px;
+
+
+    
+    border: 1px dashed #4C4CFF;
+    
+
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+} */
+
+.burger_ingredient_card{
+    width: 272px;
+    /* width: 100px; */
+    height: 208px;
+
+    display: flex;
+
+
+    
+    /* interface/accent */
+    
+   
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.burger_ingredient_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    padding: 0px;
+    gap: 8px;
+
+    /* position: absolute; */
+    height: 208px;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+
+
+}
+
+.burger_ingredient_image{
+    width: 240px;
+    height: 120px;
+}
+
+.burger_ingredient_price{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.burger_ingredient_text{
+    text-align: center;
+}
+
+/* .ingredient_group_title{
+    position: absolute;
+    width: 600px;
+    height: 30px;
+    left: 0px;
+    top: 40px;
+    
+    
+    background: #131316;
+    
+    border: 1px dashed #4C4CFF;
+
+} */
+
+.ingredient_group_title{
+    width: 600px;
+    height: 30px;
+    margin-top: 40px;
+
+    background: #131316;
+
+    display: flex;
+
+
+    
+    /* interface/accent */
+    
+    /* border: 1px dashed #4C4CFF; */
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+
