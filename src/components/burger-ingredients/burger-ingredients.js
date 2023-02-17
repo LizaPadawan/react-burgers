@@ -6,8 +6,6 @@ import PropTypes from 'prop-types';
 import ingredientPropTypes from '../ingredients-proptypes';
 import { DataContext } from '../../services/data-context';
 
-// change test 2
-
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
 function IngredientDetails(props){
@@ -116,7 +114,6 @@ IngredientCard.propTypes = {
 
 function IngredientGroup(props){
 
-  //const data = props.data;
   const data = useContext(DataContext);
   const groupName = props.groupName;
   const groupTitle = props.groupTitle;
@@ -138,34 +135,6 @@ IngredientGroup.propTypes = {
   groupName: PropTypes.string.isRequired,
   groupTitle: PropTypes.string.isRequired
 }; 
-
-
-// function BurgerIngredients(props) {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [ingredientKey, setIngredientKey] = useState("");
-
-//   return (
-//     <>
-//       <div className={burgerIngredientsStyles.burger_ingredients_panel}>
-//           <div className={burgerIngredientsStyles.burger_ingredients_header}>
-//                   <p className="text text_type_main-large">
-//                       Соберите бургер
-//                   </p>
-//           </div>
-//           <IngredientsTabs/>
-//           <div className={burgerIngredientsStyles.burger_ingredients_body}>
-//           <IngredientGroup groupTitle = "Булки" groupName = "bun" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey} {...props}/>
-//           <IngredientGroup groupTitle = "Соусы" groupName = "sauce" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey}  {...props}/>
-//           <IngredientGroup groupTitle = "Начинки" groupName = "main" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey}  {...props}/>
-//           </div>
-//       </div>
-//       {isOpen  && 
-//         <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" close= {setIsOpen} >  
-//         <IngredientDetails data={props.data} ingredientKey={ingredientKey}/>     
-//       </Modal>}
-//       </>
-//   );
-// }
 
 function BurgerIngredients() {
   const [isOpen, setIsOpen] = useState(false);

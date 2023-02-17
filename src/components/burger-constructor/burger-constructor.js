@@ -17,72 +17,68 @@ const OrderDetails = (props) => {
     const data = useContext(DataContext);
 
     const [orderData, setOrderData] = useState(0);
-    
-    const sendOrder = () => {
-        console.log("send order");
-        const ingredients = data.map((item) => item._id);
 
-        const formData = new FormData();
+    const sendOrder = async (callback) => {
+        const ingredients = data.map(item => item._id);
 
-        const ingredientsData = '[' + ingredients.join(', ') + ']';
-        formData.append("ingredients", ingredientsData);
-
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                const fl = xhr.responseText;
-                if (fl > 0) {
-                    console.log("успешный успех");
-                } else  {
-                    console.log("неуспех :(");
-                    alert(xhr.responseText);
-                }
-            } else {
-                console.log("идет загрузка");
-            }
+        const orderBurger = (ingredients) => {
+            return fetch("https://norma.nomoreparties.space/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    ingredients,
+                }),
+            });
         }
 
-        xhr.open("POST", "https://norma.nomoreparties.space/api/orders");
-        xhr.send(formData);
-    };
+        const response = await orderBurger(ingredients);
+        if (response.ok) { 
+            const json = await response.json();
+            console.log("json=", json);
+            callback(json.order.number);
+        } else {
+            alert(`Ошибка HTTP: ${response.status}`);
+        }
+    }
 
     useEffect(
         () => {
-          console.log("useEffect");
-          sendOrder();
+            sendOrder(setOrderData);
         },
         []
-      );
+    );
 
     return (
         <Modal modalId="portal" overflow="visible" caption="" close={props.setOpenModal} >
-                    <div className={burgerConstructorStyles.in_modal}>
-                        <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
-                            {orderData}
-                        </p>
-                        <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
-                            идентификатор заказа
-                        </p>
-                        <div className={'p-12 ' + burgerConstructorStyles.colored}>
-                            <p className='p-15' style={{ transform: 'scale(2)' }}>
-                                <CheckMarkIcon style={{ width: '120px', height: '120px' }} type='primary' />
-                            </p>
-                        </div>
-                        <p className={burgerConstructorStyles.colored + ' text text_type_main-default'}>
-                            Ваш заказ начали готовить
-                        </p>
-                        <p className={burgerConstructorStyles.colored + ' text text_type_main-default  text_color_inactive p-2'}>
-                            Дождитесь готовности на орбитальной станции
-                        </p>
-                    </div>
+            <div className={burgerConstructorStyles.in_modal}>
+                <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
+                    {orderData}
+                </p>
+                <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
+                    идентификатор заказа
+                </p>
+                <div className={'p-12 ' + burgerConstructorStyles.colored}>
+                    <p className='p-15' style={{ transform: 'scale(2)' }}>
+                        <CheckMarkIcon style={{ width: '120px', height: '120px' }} type='primary' />
+                    </p>
+                </div>
+                <p className={burgerConstructorStyles.colored + ' text text_type_main-default'}>
+                    Ваш заказ начали готовить
+                </p>
+                <p className={burgerConstructorStyles.colored + ' text text_type_main-default  text_color_inactive p-2'}>
+                    Дождитесь готовности на орбитальной станции
+                </p>
+            </div>
 
-                </Modal>
+        </Modal>
     );
 }
 
 const OrderInfo = (props) => {
     const data = useContext(DataContext);
-    const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => {return a + b;});
+    const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; });
 
     return (
 
@@ -117,22 +113,22 @@ function ConstructorBunElement(props) {
     const type = props.type;
     const item = data.find(item => item.type == 'bun');
 
-        return(
-            <div className={"ml-5" + burgerConstructorStyles.burger_component}>
+    return (
+        <div className={"ml-5" + burgerConstructorStyles.burger_component}>
 
-               
-                    <ConstructorElement
-                        type={type}
-                        isLocked={true}
-                        text={item.name + ((type == "top") ? " (верх)" : " (низ)")}
-                        price={item.price}
-                        thumbnail={item.image_mobile}
-                        extraClass='ml-6'
-                    />
-                
-                
-            </div>
-        );
+
+            <ConstructorElement
+                type={type}
+                isLocked={true}
+                text={item.name + ((type == "top") ? " (верх)" : " (низ)")}
+                price={item.price}
+                thumbnail={item.image_mobile}
+                extraClass='ml-6'
+            />
+
+
+        </div>
+    );
 
 }
 

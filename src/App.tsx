@@ -7,36 +7,21 @@ import BurgerConstructor from './components/burger-constructor/burger-constructo
 import { DataContext } from './services/data-context';
 
 
-//import data1 from '../src/utils/data.json';
-
 async function getDataJson(url : string, callback : any) {
-  //console.log("getDataJson",url);
   const response = await fetch(url); 
-      if (response.ok) {  //   если HTTP-статус в диапазоне 200-299
-        //  получаем тело ответа (см. про этот метод ниже)
-        // console.log("url",url);
+      if (response.ok) {  
         const json = await response.json();
-        //console.log("json",json);
-        //  console.log("resJson",json);
-        console.log("json=", json);
         callback(json);
       } else {
         alert(`Ошибка HTTP: ${response.status}`);
-        //callback(default);
       }
 }
 
-//export default getDataJson;
-
-
 function App() {
-
-  console.log("App");
 
   const [fetchedData, setFetchedData] = useState({success: false, data: []});
   const url = 'https://norma.nomoreparties.space/api/ingredients';
 
-  // let modal ;
 
   useEffect(
     () => {
@@ -51,14 +36,13 @@ function App() {
     <>
     <AppHeader/>
     
-    {/* <BurgerIngredients data={fetchedData.data}/> */}
     <main>
-      {(fetchedData.success) ? <>
+      {(fetchedData.success) ? 
       <DataContext.Provider value={fetchedData.data}>
         <BurgerIngredients/>
         <BurgerConstructor/>
       </DataContext.Provider>
-      </> :
+       :
       <></>
       }
     </main>
