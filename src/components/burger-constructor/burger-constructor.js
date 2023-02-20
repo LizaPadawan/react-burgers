@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,45 +10,12 @@ import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
 import { DataContext } from '../../services/data-context';
+import { OrderContext } from '../../services/order-context';
+import { sendOrder } from "./burger-constructor-service";
 
 
 const OrderDetails = (props) => {
-
-    const data = useContext(DataContext);
-
-    const [orderData, setOrderData] = useState(0);
-
-    const sendOrder = async (callback) => {
-        const ingredients = data.map(item => item._id);
-
-        const orderBurger = (ingredients) => {
-            return fetch("https://norma.nomoreparties.space/api/orders", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    ingredients,
-                }),
-            });
-        }
-
-        const response = await orderBurger(ingredients);
-        if (response.ok) { 
-            const json = await response.json();
-            console.log("json=", json);
-            callback(json.order.number);
-        } else {
-            alert(`Ошибка HTTP: ${response.status}`);
-        }
-    }
-
-    useEffect(
-        () => {
-            sendOrder(setOrderData);
-        },
-        []
-    );
+    const { orderData } = useContext(OrderContext); 
 
     return (
         <Modal modalId="portal" overflow="visible" caption="" close={props.setOpenModal} >
@@ -76,8 +43,13 @@ const OrderDetails = (props) => {
     );
 }
 
+OrderDetails.propTypes = {
+    setOpenModal: PropTypes.func.isRequired,
+};
+
 const OrderInfo = (props) => {
     const data = useContext(DataContext);
+    const { setOrderData } = useContext(OrderContext); 
     const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; });
 
     return (
@@ -93,7 +65,7 @@ const OrderInfo = (props) => {
                 <CurrencyIcon style={{ width: '22', height: '22' }} type='primary' />
             </p>
 
-            <Button htmlType="button" type="primary" size="medium" onClick={e => { props.openModal(true) }}>
+            <Button htmlType="button" type="primary" size="medium" onClick={e => { sendOrder(data, setOrderData); props.openModal(true) }}>
                 Оформить заказ
             </Button>
 
@@ -105,7 +77,6 @@ const OrderInfo = (props) => {
 
 OrderInfo.propTypes = {
     openModal: PropTypes.func.isRequired,
-    //summ: PropTypes.number.isRequired
 };
 
 function ConstructorBunElement(props) {
@@ -138,10 +109,10 @@ ConstructorBunElement.propTypes = {
 
 
 const BurgerConstructor = () => {
-    //const { data } = props;
 
     const data = useContext(DataContext);
     const [openModal, setOpenModal] = useState(false);
+    const [orderData, setOrderData] = useState(0);
 
     return (
         <div className={burgerConstructorStyles.burger_constructor_panel}>
@@ -173,13 +144,15 @@ const BurgerConstructor = () => {
 
             </div>
 
-            <div className={burgerConstructorStyles.burger_info_panel}>
-                <OrderInfo openModal={setOpenModal} />
-            </div>
+            <OrderContext.Provider value={{orderData, setOrderData}}>
+                <div className={burgerConstructorStyles.burger_info_panel}>
+                    <OrderInfo openModal={setOpenModal} />
+                </div>
 
-            {openModal &&
-                <OrderDetails setOpenModal={setOpenModal} />
-            }
+                {((openModal) && (orderData > 0)) &&
+                    <OrderDetails setOpenModal={setOpenModal} />
+                }
+            </OrderContext.Provider>
 
         </div>
     );
@@ -188,10 +161,6 @@ const BurgerConstructor = () => {
 ConstructorElement.propTypes = {
     ...ingredientPropTypes.isRequired,
 }
-
-// BurgerConstructor.propTypes = {
-//     data: PropTypes.array.isRequired,
-// };
 
 
 

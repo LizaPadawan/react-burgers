@@ -30,7 +30,7 @@ function Modal(props) {
       <div className={modalStyles.panel} >
       <div className={modalStyles.title} >
         <p className="text text_type_main-medium">{props.caption}</p>
-        <div onClick={e => {props.close(false)}}>
+        <div style={{zIndex:10}} onClick={() => {props.close(false)}}>
         <CloseIcon type="primary" />
         </div>
       </div>

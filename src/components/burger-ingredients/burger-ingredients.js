@@ -15,7 +15,7 @@ function IngredientDetails(props){
     <div>
       {
         data.filter(item => item._id == props.ingredientKey).map(jtem => 
-        <div  style={{display:'flex', justifyContent:'center'}}>
+        <div  key={jtem._id} style={{display:'flex', justifyContent:'center'}}>
               <div style={{width:"520px"}} >
               <img style={{width:"480px"}} src={jtem.image} alt=''/>
               <div  style={{display:'flex', justifyContent:'center'}}>
