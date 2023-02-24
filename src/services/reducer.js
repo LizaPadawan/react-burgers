@@ -30,7 +30,7 @@ export const rootReduser = ( state = initialState, action) => {
         case DELETE_INGREDIENT_DETAILS:
             return {
                 ...state,
-                currentIngredient: {},
+                currentIngredient: "",
             }
 
         case FETCH_ORDER:

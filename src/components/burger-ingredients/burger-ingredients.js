@@ -9,7 +9,7 @@ import ingredientPropTypes from '../ingredients-proptypes';
 import { actionCreators } from '../../services/action-creator';
 
 import burgerIngredientsStyles from './burger-ingredients.module.css';
-import { ingredientsSelector, openModalSelector, currentIngredientSelector } from '../../services/selectors';
+import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
 
 function IngredientDetails(){
   // const data = useContext(DataContext);
@@ -94,7 +94,7 @@ function IngredientCard(props){
           onClick = {() => {
             // props.setIsOpen(true); 
             // props.setIngredientKey(props._id);
-            dispatch(actionCreators.openModal(true));
+            //dispatch(actionCreators.openModal(true));
             dispatch(actionCreators.addIngredientDetails(props._id));
             console.log("click");
           }}
@@ -152,9 +152,8 @@ function IngredientGroup(props){
 function BurgerIngredients() {
   //const [isOpen, setIsOpen] = useState(false);
   //const [ingredientKey, setIngredientKey] = useState("");
-  const isOpen = useSelector(openModalSelector);
-
-
+  //const isOpen = useSelector(openModalSelector);
+  const ingredientKey = useSelector(currentIngredientSelector);
   //const 
 
   return (
@@ -167,29 +166,20 @@ function BurgerIngredients() {
           </div>
           <IngredientsTabs/>
           <div className={burgerIngredientsStyles.burger_ingredients_body}>
-          {/* <IngredientGroup groupTitle = "Булки" groupName = "bun" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey} />
-          <IngredientGroup groupTitle = "Соусы" groupName = "sauce" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey} />
-          <IngredientGroup groupTitle = "Начинки" groupName = "main" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey} /> */}
           <IngredientGroup groupTitle = "Булки" groupName = "bun" />
           <IngredientGroup groupTitle = "Соусы" groupName = "sauce" />
           <IngredientGroup groupTitle = "Начинки" groupName = "main" />
           </div>
       </div>
-      {isOpen  && 
+      {(ingredientKey !== "")  && 
         <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" 
-        // close= {setIsOpen} 
         >  
-        <IngredientDetails 
-        //ingredientKey={ingredientKey}
-        />     
+        <IngredientDetails />     
       </Modal>}
       </>
   );
 }
 
-// BurgerIngredients.propTypes = {
-//   data: PropTypes.array.isRequired
-// }; 
 
 export default BurgerIngredients;
 

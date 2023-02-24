@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useMemo } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -12,16 +12,20 @@ import ingredientPropTypes from "../ingredients-proptypes";
 import { DataContext } from '../../services/data-context';
 import { OrderContext } from '../../services/order-context';
 import { sendOrder } from "./burger-constructor-service";
+import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
+import { actionCreators } from "../../services/action-creator";
+import { fetchOrderData } from "../../services/thunk";
 
-
-const OrderDetails = (props) => {
+const OrderDetails = () => {
     const { orderData } = useContext(OrderContext); 
+    //const orderData = useSelector(currentOrderSelector);
+    console.log(orderData);
 
     return (
-        <Modal modalId="portal" overflow="visible" caption="" close={props.setOpenModal} >
+        <Modal modalId="portal" overflow="visible" caption="" >
             <div className={burgerConstructorStyles.in_modal}>
                 <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
-                    {orderData}
+                    {orderData.number}
                 </p>
                 <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
                     идентификатор заказа
@@ -43,13 +47,15 @@ const OrderDetails = (props) => {
     );
 }
 
-OrderDetails.propTypes = {
-    setOpenModal: PropTypes.func.isRequired,
-};
+// OrderDetails.propTypes = {
+//     setOpenModal: PropTypes.func.isRequired,
+// };
 
 const OrderInfo = (props) => {
-    const data = useContext(DataContext);
+    //const data = useContext(DataContext);
     const { setOrderData } = useContext(OrderContext); 
+    const dispatch = useDispatch();
+    const data = useSelector(constructorSelector);
     const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; });
 
     return (
@@ -65,7 +71,12 @@ const OrderInfo = (props) => {
                 <CurrencyIcon style={{ width: '22', height: '22' }} type='primary' />
             </p>
 
-            <Button htmlType="button" type="primary" size="medium" onClick={e => { sendOrder(data, setOrderData); props.openModal(true) }}>
+            <Button htmlType="button" type="primary" size="medium" onClick={e => { 
+                sendOrder(data, setOrderData); 
+                //props.openModal(true) 
+                //dispatch(fetchOrderData(data));
+                //dispatch(actionCreators.openModal(true));
+                }}>
                 Оформить заказ
             </Button>
 
@@ -75,12 +86,13 @@ const OrderInfo = (props) => {
     );
 }
 
-OrderInfo.propTypes = {
-    openModal: PropTypes.func.isRequired,
-};
+// OrderInfo.propTypes = {
+//     openModal: PropTypes.func.isRequired,
+// };
 
 function ConstructorBunElement(props) {
-    const data = useContext(DataContext);
+    //const data = useContext(DataContext);
+    const data = useSelector(constructorSelector);
     const type = props.type;
     const item = data.find(item => item.type == 'bun');
 
@@ -103,15 +115,17 @@ function ConstructorBunElement(props) {
 
 }
 
-ConstructorBunElement.propTypes = {
-    type: PropTypes.string.isRequired
-};
+// ConstructorBunElement.propTypes = {
+//     type: PropTypes.string.isRequired
+// };
 
 
 const BurgerConstructor = () => {
+    const isOpen = useSelector(openModalSelector);
+    const data = useSelector(constructorSelector);
 
-    const data = useContext(DataContext);
-    const [openModal, setOpenModal] = useState(false);
+    //const data = useContext(DataContext);
+    //const [openModal, setOpenModal] = useState(false);
     const [orderData, setOrderData] = useState(0);
 
     return (
@@ -145,22 +159,29 @@ const BurgerConstructor = () => {
             </div>
 
             <OrderContext.Provider value={{orderData, setOrderData}}>
+            <>
                 <div className={burgerConstructorStyles.burger_info_panel}>
-                    <OrderInfo openModal={setOpenModal} />
+                    <OrderInfo 
+                    //openModal={setOpenModal} 
+                    />
                 </div>
 
-                {((openModal) && (orderData > 0)) &&
-                    <OrderDetails setOpenModal={setOpenModal} />
+                {/* {((isOpen) && (orderData > 0)) && */}
+                {(isOpen) &&
+                    <OrderDetails 
+                        //setOpenModal={setOpenModal} 
+                    />
                 }
-            </OrderContext.Provider>
+            </>
+           </OrderContext.Provider>
 
         </div>
     );
 };
 
-ConstructorElement.propTypes = {
-    ...ingredientPropTypes.isRequired,
-}
+// ConstructorElement.propTypes = {
+//     ...ingredientPropTypes.isRequired,
+// }
 
 
 

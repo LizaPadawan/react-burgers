@@ -55,13 +55,13 @@ function Modal(props) {
   , modal);
 }
 
-Modal.propTypes = {
-  modalId: PropTypes.string.isRequired,
-  close: PropTypes.func.isRequired,
-  overflow: PropTypes.string,
-  caption: PropTypes.string,
-  children: PropTypes.element.isRequired
-}; 
+// Modal.propTypes = {
+//   modalId: PropTypes.string.isRequired,
+//   close: PropTypes.func.isRequired,
+//   overflow: PropTypes.string,
+//   caption: PropTypes.string,
+//   children: PropTypes.element.isRequired
+// }; 
 
 
 

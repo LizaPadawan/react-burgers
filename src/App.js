@@ -38,7 +38,10 @@ function App() {
       //   <BurgerIngredients/>
       //   <BurgerConstructor/>
       // </DataContext.Provider>
+      <>
       <BurgerIngredients/>
+      <BurgerConstructor/>
+      </>
        :
       <></>
       }
