@@ -9,6 +9,8 @@ import BurgerConstructor from './components/burger-constructor/burger-constructo
 import { actionCreators } from './services/action-creator';
 import { fetchIngredientsSelector } from './services/selectors';
 import { fetchData } from './services/thunk';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
 
@@ -39,8 +41,10 @@ function App() {
       //   <BurgerConstructor/>
       // </DataContext.Provider>
       <>
+      <DndProvider backend={HTML5Backend}>
       <BurgerIngredients/>
       <BurgerConstructor/>
+      </DndProvider>
       </>
        :
       <></>

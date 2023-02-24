@@ -47,7 +47,7 @@ export const sendOrder = async (data, callback) => {
       console.log("json=", json);
       callback(json.order);
   } else {
-      alert(`Ошибка HTTP: ${response.status}`);
+      // alert(`Ошибка HTTP: ${response.status}`);
   }
 }
 

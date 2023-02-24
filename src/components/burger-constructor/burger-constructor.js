@@ -17,8 +17,8 @@ import { actionCreators } from "../../services/action-creator";
 import { fetchOrderData } from "../../services/thunk";
 
 const OrderDetails = () => {
-    const { orderData } = useContext(OrderContext); 
-    //const orderData = useSelector(currentOrderSelector);
+    //const { orderData } = useContext(OrderContext); 
+    const orderData = useSelector(currentOrderSelector);
     console.log(orderData);
 
     return (
@@ -51,12 +51,13 @@ const OrderDetails = () => {
 //     setOpenModal: PropTypes.func.isRequired,
 // };
 
-const OrderInfo = (props) => {
+const OrderInfo = () => {
     //const data = useContext(DataContext);
-    const { setOrderData } = useContext(OrderContext); 
+    //const { setOrderData } = useContext(OrderContext); 
     const dispatch = useDispatch();
     const data = useSelector(constructorSelector);
-    const summ = data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; });
+    const summ = (data.length > 0) ? data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): 0;
+
 
     return (
 
@@ -72,10 +73,10 @@ const OrderInfo = (props) => {
             </p>
 
             <Button htmlType="button" type="primary" size="medium" onClick={e => { 
-                sendOrder(data, setOrderData); 
+                //sendOrder(data, setOrderData); 
                 //props.openModal(true) 
-                //dispatch(fetchOrderData(data));
-                //dispatch(actionCreators.openModal(true));
+                dispatch(fetchOrderData(data));
+                dispatch(actionCreators.openModal(true));
                 }}>
                 Оформить заказ
             </Button>
@@ -91,15 +92,13 @@ const OrderInfo = (props) => {
 // };
 
 function ConstructorBunElement(props) {
-    //const data = useContext(DataContext);
+  
     const data = useSelector(constructorSelector);
     const type = props.type;
-    const item = data.find(item => item.type == 'bun');
+    const item = (data.length > 0) ? data.find(item => item.type == 'bun') : undefined;
 
     return (
-        <div className={"ml-5" + burgerConstructorStyles.burger_component}>
-
-
+        (item) ? <div className={"ml-5" + burgerConstructorStyles.burger_component}>
             <ConstructorElement
                 type={type}
                 isLocked={true}
@@ -108,9 +107,7 @@ function ConstructorBunElement(props) {
                 thumbnail={item.image_mobile}
                 extraClass='ml-6'
             />
-
-
-        </div>
+        </div> : <></>
     );
 
 }
@@ -126,7 +123,7 @@ const BurgerConstructor = () => {
 
     //const data = useContext(DataContext);
     //const [openModal, setOpenModal] = useState(false);
-    const [orderData, setOrderData] = useState(0);
+    //const [orderData, setOrderData] = useState(0);
 
     return (
         <div className={burgerConstructorStyles.burger_constructor_panel}>
@@ -158,7 +155,7 @@ const BurgerConstructor = () => {
 
             </div>
 
-            <OrderContext.Provider value={{orderData, setOrderData}}>
+            {/* <OrderContext.Provider value={{orderData, setOrderData}}> */}
             <>
                 <div className={burgerConstructorStyles.burger_info_panel}>
                     <OrderInfo 
@@ -173,7 +170,7 @@ const BurgerConstructor = () => {
                     />
                 }
             </>
-           </OrderContext.Provider>
+           {/* </OrderContext.Provider> */}
 
         </div>
     );
