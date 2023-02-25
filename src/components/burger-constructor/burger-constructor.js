@@ -24,7 +24,7 @@ import uuid from 'react-uuid';
 
 const OrderDetails = () => {
     const orderData = useSelector(currentOrderSelector);
-    console.log(orderData);
+    //console.log(orderData);
 
     return (
         <Modal modalId="portal" overflow="visible" caption="" >
