@@ -58,12 +58,13 @@ const OrderDetails = () => {
 // };
 
 const OrderInfo = () => {
-    //const data = useContext(DataContext);
-    //const { setOrderData } = useContext(OrderContext); 
+
     const dispatch = useDispatch();
     const data = useSelector(constructorSelector);
-    //const summ = (data.length > 0) ? data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): 0;
-    const summ = "123";
+    const bun = data.find(item => item.type == 'bun');
+    const bunPrice = (bun) ? bun.price : 0;
+    const noBunIngredients = data.filter(item => item.type !== 'bun');
+    const summ = (noBunIngredients.length > 0) ? bunPrice * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): bunPrice * 2;
 
     return (
 
@@ -82,7 +83,7 @@ const OrderInfo = () => {
                 //sendOrder(data, setOrderData); 
                 //props.openModal(true) 
                 dispatch(fetchOrderData(data));
-                dispatch(actionCreators.openModal(true));
+                
                 }}>
                 Оформить заказ
             </Button>
@@ -126,18 +127,21 @@ function ConstructorIngredientsList() {
     const dispatch = useDispatch();
     const data = useSelector(constructorSelector);
     const ingredients = data.filter(item => item.type !== 'bun');
+    const bun = data.find(item => item.type == 'bun');
 
     const moveCard = useCallback((dragIndex, hoverIndex) => {
         const dragCard = ingredients[dragIndex];
-        const newCards = [...ingredients]
+        const newCards = [...ingredients];
+        if (bun) newCards.push(bun);
         newCards.splice(dragIndex, 1)
         newCards.splice(hoverIndex, 0, dragCard)
 
 
-        dispatch({
-            type: GET_CONSTRUCTOR,
-            payload: newCards,
-        })
+        // dispatch({
+        //     type: GET_CONSTRUCTOR,
+        //     payload: newCards,
+        // })
+        dispatch(actionCreators.getConstructor(newCards))
     }, [ingredients, dispatch]);
 
     return (
@@ -148,6 +152,9 @@ function ConstructorIngredientsList() {
 }
 
 function OrderedIngredient({ item, index, moveCard }) {
+    const dispatch = useDispatch();
+    const data = useSelector(constructorSelector);
+
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: 'component',
@@ -197,6 +204,11 @@ function OrderedIngredient({ item, index, moveCard }) {
     drag(drop(ref));
 
     const preventDefault = (e) => e.preventDefault();
+
+    const close = (dragId) => {
+        dispatch(actionCreators.getConstructor(data.filter(item => item.dragId !== dragId)))
+    }
+
     return (
         <div
             ref={ref}
@@ -210,7 +222,7 @@ function OrderedIngredient({ item, index, moveCard }) {
                 text={item.name}
                 price={item.price}
                 thumbnail={item.image_mobile}
-
+                handleClose={() => close(item.dragId)}
                 />
             </section>
         </div>
@@ -233,16 +245,33 @@ const BurgerConstructor = () => {
         }),
 
         drop(item) {
-            console.log("drop");
-            console.log(item);
-            dispatch({
-                type: GET_CONSTRUCTOR,
-                payload:
-                    [
-                        ...data,
-                        { ...item, dragId: uuid() }
-                    ]
-            })
+            //console.log("drop");
+            //console.log(item);
+
+            if (item.type !== 'bun'){
+                // dispatch({
+                //     type: GET_CONSTRUCTOR,
+                //     payload:
+                //         [
+                //             ...data,
+                //             { ...item, dragId: uuid() }
+                //         ]
+                // })
+
+                dispatch(actionCreators.getConstructor([...data, { ...item, dragId: uuid()}]))
+            } else { // если перетаскивается булка, стираются все булки в списке
+                const newData = data.filter(item => item.type !== 'bun');
+                // dispatch({
+                //     type: GET_CONSTRUCTOR,
+                //     payload:
+                //         [
+                //             ...newData,
+                //             { ...item, dragId: uuid() }
+                //         ]
+                // })
+                dispatch(actionCreators.getConstructor([...newData, { ...item, dragId: uuid()}]))
+                
+            }
         }
     });
 

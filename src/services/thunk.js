@@ -53,13 +53,11 @@ export const sendOrder = async (data, callback) => {
 
 export const fetchOrderData = (data) => {
 	return ((dispatch, getState, extra) => {
-		console.info("start fetching...");
-        //dispatch(actionCreators.fetchIngredientsState("process"));
 
         const setOrder = (incomingData) => 
             {
                 dispatch(actionCreators.fetchOrder(incomingData));
-                //dispatch(actionCreators.fetchIngredientsState("success"));           
+                dispatch(actionCreators.openModal(true));        
             } 
         sendOrder(data, setOrder);	
 	});

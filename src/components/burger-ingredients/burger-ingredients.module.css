@@ -124,6 +124,12 @@
     height: 120px;
 }
 
+.burger_ingredient_count{
+    position: absolute;
+    width: 240px;
+    height: 120px;
+}
+
 .burger_ingredient_price{
     display: flex;
     justify-content: center;

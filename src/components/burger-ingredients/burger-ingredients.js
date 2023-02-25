@@ -11,6 +11,7 @@ import { actionCreators } from '../../services/action-creator';
 
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
+import { InView } from 'react-intersection-observer';
 
 function IngredientDetails(){
   // const data = useContext(DataContext);
@@ -68,18 +69,18 @@ function IngredientDetails(){
 //   ingredientKey: PropTypes.string.isRequired
 // }; 
 
-function IngredientsTabs(){
-    const [current, setCurrent] = useState('one');
+function IngredientsTabs( props ){
+    const current = props.currentGroup;
     
     return (
     <div className={burgerIngredientsStyles.burger_ingredients_tabs}>
-      <Tab value="Булки" active={current === true} onClick={setCurrent}>
+      <Tab value="buns" active={current === "buns"} >
         Булки
       </Tab>
-      <Tab value="Соусы" active={current === false} onClick={setCurrent}>
+      <Tab value="sauses" active={current === "souses"} >
         Соусы
       </Tab>
-      <Tab value="Начинки" active={current === false} onClick={setCurrent}>
+      <Tab value="fillings" active={current === "fillings"} >
         Начинки
       </Tab>
     </div>
@@ -88,6 +89,9 @@ function IngredientsTabs(){
 
 function IngredientCard(props){
   const dispatch = useDispatch();
+  const constructorElements = useSelector(constructorSelector);
+  let count = constructorElements.filter(item => item._id == props._id).length;
+  if (props.type == 'bun') count = count * 2;
 
   const [{ opacity }, dragRef] = useDrag({
     type: 'ingredient', 
@@ -109,7 +113,10 @@ function IngredientCard(props){
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />
-          {props.count > 0 && <Counter count={props.count} className='m-1' size='default'/>}
+          {/* {props.count > 0 && <Counter count={props.count} className='m-1' size='default'/>} */}
+          <div className={burgerIngredientsStyles.burger_ingredient_count}>
+            {count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>}
+          </div>
           <p className={'text text_type_digits-default m-1 ' + burgerIngredientsStyles.burger_ingredient_price}>
               {props.price}
               <CurrencyIcon type='primary' />
@@ -162,7 +169,18 @@ function BurgerIngredients() {
   //const [ingredientKey, setIngredientKey] = useState("");
   //const isOpen = useSelector(openModalSelector);
   const ingredientKey = useSelector(currentIngredientSelector);
+  const [currentGroup, setCurrentGroup] = useState('buns');
   //const 
+
+  // const onChangeView = (isView, entry) => {
+  //   const nameIngredient = entry.target.id;
+  //   console.log("nameIngredient= ", nameIngredient);
+  //   if (isView) {
+  //     setCurrentGroup(nameIngredient);
+  //   }
+  // }
+
+ 
 
   return (
     <>
@@ -172,11 +190,13 @@ function BurgerIngredients() {
                       Соберите бургер
                   </p>
           </div>
-          <IngredientsTabs/>
-          <div className={burgerIngredientsStyles.burger_ingredients_body}>
-          <IngredientGroup groupTitle = "Булки" groupName = "bun" />
-          <IngredientGroup groupTitle = "Соусы" groupName = "sauce" />
-          <IngredientGroup groupTitle = "Начинки" groupName = "main" />
+          <IngredientsTabs currentGroup={currentGroup}/>
+          <div className={burgerIngredientsStyles.burger_ingredients_body} id="scrollbody">
+          {/* <InView threshold={0.5} onChange={onChangeView}  className={burgerIngredientsStyles.burger_ingredients_body}> */}
+            <IngredientGroup groupTitle = "Булки" groupName = "bun" id="buns"/>
+            <IngredientGroup groupTitle = "Соусы" groupName = "sauce" id="sauses"/>
+            <IngredientGroup groupTitle = "Начинки" groupName = "main" id="fillings"/>
+          {/* </InView>  */}
           </div>
       </div>
       {(ingredientKey !== "")  && 
