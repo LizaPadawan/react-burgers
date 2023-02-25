@@ -1,5 +1,6 @@
 import React, { useState, useContext} from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
@@ -88,16 +89,23 @@ function IngredientsTabs(){
 function IngredientCard(props){
   const dispatch = useDispatch();
 
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'ingredient', 
+    item: { ...props },
+    collect: monitor => ({
+        opacity: monitor.isDragging() ? 0.5 : 1
+    })
+})
+
   return (
       <div
           className={burgerIngredientsStyles.burger_ingredient_card}
           onClick = {() => {
-            // props.setIsOpen(true); 
-            // props.setIngredientKey(props._id);
-            //dispatch(actionCreators.openModal(true));
             dispatch(actionCreators.addIngredientDetails(props._id));
             console.log("click");
           }}
+          ref={dragRef} 
+          style={{ opacity }}
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />

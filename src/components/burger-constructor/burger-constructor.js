@@ -1,4 +1,7 @@
 import { useState, useContext, useEffect, useMemo } from "react";
+import { useCallback } from "react";
+import { useRef } from "react";
+import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -15,6 +18,9 @@ import { sendOrder } from "./burger-constructor-service";
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
 import { actionCreators } from "../../services/action-creator";
 import { fetchOrderData } from "../../services/thunk";
+import { GET_CONSTRUCTOR } from "../../services/action-types";
+import { useDrop } from "react-dnd";
+import uuid from 'react-uuid';
 
 const OrderDetails = () => {
     //const { orderData } = useContext(OrderContext); 
@@ -56,8 +62,8 @@ const OrderInfo = () => {
     //const { setOrderData } = useContext(OrderContext); 
     const dispatch = useDispatch();
     const data = useSelector(constructorSelector);
-    const summ = (data.length > 0) ? data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): 0;
-
+    //const summ = (data.length > 0) ? data.find(item => item.type == 'bun').price * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): 0;
+    const summ = "123";
 
     return (
 
@@ -116,17 +122,133 @@ function ConstructorBunElement(props) {
 //     type: PropTypes.string.isRequired
 // };
 
+function ConstructorIngredientsList() {
+    const dispatch = useDispatch();
+    const data = useSelector(constructorSelector);
+    const ingredients = data.filter(item => item.type !== 'bun');
+
+    const moveCard = useCallback((dragIndex, hoverIndex) => {
+        const dragCard = ingredients[dragIndex];
+        const newCards = [...ingredients]
+        newCards.splice(dragIndex, 1)
+        newCards.splice(hoverIndex, 0, dragCard)
+
+
+        dispatch({
+            type: GET_CONSTRUCTOR,
+            payload: newCards,
+        })
+    }, [ingredients, dispatch]);
+
+    return (
+        ingredients.map((item, index) => (
+            <OrderedIngredient key={item.dragId} index={index} item={item} moveCard={moveCard} />
+        ))
+    )
+}
+
+function OrderedIngredient({ item, index, moveCard }) {
+    const ref = useRef(null);
+    const [{ handlerId }, drop] = useDrop({
+        accept: 'component',
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId()
+            }
+        },
+
+        hover(item, monitor) {
+            if (!ref.current) {
+                return;
+            }
+   
+            const dragIndex = item.index;
+            const hoverIndex = index;
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+            
+            const hoverBoundingRect = ref.current?.getBoundingClientRect();
+
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                return;
+            }
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                return;
+            }
+
+            moveCard(dragIndex, hoverIndex);
+            item.index = hoverIndex;
+        }
+    })
+
+    const [{ isDragging }, drag] = useDrag({
+        type: 'component',
+        item: () => ({ id: item.id, index }),
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+
+    const opacity = isDragging ? 0 : 1;
+    drag(drop(ref));
+
+    const preventDefault = (e) => e.preventDefault();
+    return (
+        <div
+            ref={ref}
+            style={{ opacity }}
+            onDrop={preventDefault}
+            data-handler-id={handlerId}
+        >
+            <section className={burgerConstructorStyles.burger_component}>
+                <DragIcon type='primary' />
+                <ConstructorElement
+                text={item.name}
+                price={item.price}
+                thumbnail={item.image_mobile}
+
+                />
+            </section>
+        </div>
+    )
+}
+
+
+
+
 
 const BurgerConstructor = () => {
     const isOpen = useSelector(openModalSelector);
     const data = useSelector(constructorSelector);
+    const dispatch = useDispatch();
 
-    //const data = useContext(DataContext);
-    //const [openModal, setOpenModal] = useState(false);
-    //const [orderData, setOrderData] = useState(0);
+    const [{ isHover }, dropTargerRef] = useDrop({
+        accept: 'ingredient',
+        collect: monitor => ({
+            isHover: monitor.isOver()
+        }),
+
+        drop(item) {
+            console.log("drop");
+            console.log(item);
+            dispatch({
+                type: GET_CONSTRUCTOR,
+                payload:
+                    [
+                        ...data,
+                        { ...item, dragId: uuid() }
+                    ]
+            })
+        }
+    });
 
     return (
-        <div className={burgerConstructorStyles.burger_constructor_panel}>
+        <div className={burgerConstructorStyles.burger_constructor_panel + ' ' + `${isHover ? burgerConstructorStyles.onHover : ''}`}  ref={dropTargerRef}>
+         {/* </div><div className={burgerConstructorStyles.burger_constructor_panel}> */}
             <div className={burgerConstructorStyles.burger_components}>
 
                 <ConstructorBunElement type="top" />
@@ -135,7 +257,7 @@ const BurgerConstructor = () => {
                     display: 'flex', flexDirection: 'column', overflowY: "scroll", gap: '10px',
                 }}>
 
-                    {
+                    {/* {(data.length > 0) ?
                         data.map(item => item.type !== 'bun' && (
                             <section key={data.indexOf(item)} className={burgerConstructorStyles.burger_component}>
                                 <DragIcon type='primary' />
@@ -146,8 +268,10 @@ const BurgerConstructor = () => {
 
                                 />
                             </section>
-                        ))
-                    }
+                        )) : <></>
+                    } */}
+                    {/* <ConstructorIngredientsList ingredients={data.filter(item => item.type !== 'bun')}/> */}
+                    <ConstructorIngredientsList />
 
                 </div>
 
@@ -155,31 +279,19 @@ const BurgerConstructor = () => {
 
             </div>
 
-            {/* <OrderContext.Provider value={{orderData, setOrderData}}> */}
             <>
                 <div className={burgerConstructorStyles.burger_info_panel}>
-                    <OrderInfo 
-                    //openModal={setOpenModal} 
-                    />
+                    <OrderInfo />
                 </div>
 
-                {/* {((isOpen) && (orderData > 0)) && */}
                 {(isOpen) &&
-                    <OrderDetails 
-                        //setOpenModal={setOpenModal} 
-                    />
+                    <OrderDetails />
                 }
             </>
-           {/* </OrderContext.Provider> */}
 
         </div>
     );
 };
-
-// ConstructorElement.propTypes = {
-//     ...ingredientPropTypes.isRequired,
-// }
-
 
 
 export default BurgerConstructor;

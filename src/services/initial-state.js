@@ -1,8 +1,6 @@
 export const initialState = { 
-	ingredients: [
-	],
-	constructor: [
-	],
+	ingredients: [],
+	constructor: [],
 	fetchIngredients: "none",
 	isOpenModal: false,
     currentIngredient: "",
