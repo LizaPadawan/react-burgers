@@ -23,7 +23,6 @@ import { useDrop } from "react-dnd";
 import uuid from 'react-uuid';
 
 const OrderDetails = () => {
-    //const { orderData } = useContext(OrderContext); 
     const orderData = useSelector(currentOrderSelector);
     console.log(orderData);
 
@@ -53,9 +52,6 @@ const OrderDetails = () => {
     );
 }
 
-// OrderDetails.propTypes = {
-//     setOpenModal: PropTypes.func.isRequired,
-// };
 
 const OrderInfo = () => {
 
@@ -80,8 +76,6 @@ const OrderInfo = () => {
             </p>
 
             <Button htmlType="button" type="primary" size="medium" onClick={e => { 
-                //sendOrder(data, setOrderData); 
-                //props.openModal(true) 
                 dispatch(fetchOrderData(data));
                 
                 }}>
@@ -94,9 +88,6 @@ const OrderInfo = () => {
     );
 }
 
-// OrderInfo.propTypes = {
-//     openModal: PropTypes.func.isRequired,
-// };
 
 function ConstructorBunElement(props) {
   
@@ -119,9 +110,7 @@ function ConstructorBunElement(props) {
 
 }
 
-// ConstructorBunElement.propTypes = {
-//     type: PropTypes.string.isRequired
-// };
+
 
 function ConstructorIngredientsList() {
     const dispatch = useDispatch();
@@ -136,11 +125,6 @@ function ConstructorIngredientsList() {
         newCards.splice(dragIndex, 1)
         newCards.splice(hoverIndex, 0, dragCard)
 
-
-        // dispatch({
-        //     type: GET_CONSTRUCTOR,
-        //     payload: newCards,
-        // })
         dispatch(actionCreators.getConstructor(newCards))
     }, [ingredients, dispatch]);
 
@@ -245,30 +229,11 @@ const BurgerConstructor = () => {
         }),
 
         drop(item) {
-            //console.log("drop");
-            //console.log(item);
 
             if (item.type !== 'bun'){
-                // dispatch({
-                //     type: GET_CONSTRUCTOR,
-                //     payload:
-                //         [
-                //             ...data,
-                //             { ...item, dragId: uuid() }
-                //         ]
-                // })
-
                 dispatch(actionCreators.getConstructor([...data, { ...item, dragId: uuid()}]))
             } else { // если перетаскивается булка, стираются все булки в списке
                 const newData = data.filter(item => item.type !== 'bun');
-                // dispatch({
-                //     type: GET_CONSTRUCTOR,
-                //     payload:
-                //         [
-                //             ...newData,
-                //             { ...item, dragId: uuid() }
-                //         ]
-                // })
                 dispatch(actionCreators.getConstructor([...newData, { ...item, dragId: uuid()}]))
                 
             }
@@ -277,7 +242,6 @@ const BurgerConstructor = () => {
 
     return (
         <div className={burgerConstructorStyles.burger_constructor_panel + ' ' + `${isHover ? burgerConstructorStyles.onHover : ''}`}  ref={dropTargerRef}>
-         {/* </div><div className={burgerConstructorStyles.burger_constructor_panel}> */}
             <div className={burgerConstructorStyles.burger_components}>
 
                 <ConstructorBunElement type="top" />
@@ -285,21 +249,6 @@ const BurgerConstructor = () => {
                 <div style={{
                     display: 'flex', flexDirection: 'column', overflowY: "scroll", gap: '10px',
                 }}>
-
-                    {/* {(data.length > 0) ?
-                        data.map(item => item.type !== 'bun' && (
-                            <section key={data.indexOf(item)} className={burgerConstructorStyles.burger_component}>
-                                <DragIcon type='primary' />
-                                <ConstructorElement
-                                    text={item.name}
-                                    price={item.price}
-                                    thumbnail={item.image_mobile}
-
-                                />
-                            </section>
-                        )) : <></>
-                    } */}
-                    {/* <ConstructorIngredientsList ingredients={data.filter(item => item.type !== 'bun')}/> */}
                     <ConstructorIngredientsList />
 
                 </div>

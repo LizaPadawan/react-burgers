@@ -1,12 +1,9 @@
-import React, { useState, useContext} from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
-import PropTypes from 'prop-types';
-import ingredientPropTypes from '../ingredients-proptypes';
-//  import { DataContext } from '../../services/data-context';
 import { actionCreators } from '../../services/action-creator';
 
 import burgerIngredientsStyles from './burger-ingredients.module.css';
@@ -14,7 +11,7 @@ import { ingredientsSelector, openModalSelector, currentIngredientSelector, cons
 import { InView } from 'react-intersection-observer';
 
 function IngredientDetails(){
-  // const data = useContext(DataContext);
+  
   const data = useSelector(ingredientsSelector);
   const ingredientKey = useSelector(currentIngredientSelector);
 
@@ -65,10 +62,6 @@ function IngredientDetails(){
   )
 }
 
-// IngredientDetails.propTypes = {
-//   ingredientKey: PropTypes.string.isRequired
-// }; 
-
 function IngredientsTabs( props ){
     const current = props.currentGroup;
     
@@ -77,7 +70,7 @@ function IngredientsTabs( props ){
       <Tab value="buns" active={current === "buns"} >
         Булки
       </Tab>
-      <Tab value="sauses" active={current === "souses"} >
+      <Tab value="sauses" active={current === "sauses"} >
         Соусы
       </Tab>
       <Tab value="fillings" active={current === "fillings"} >
@@ -130,57 +123,43 @@ function IngredientCard(props){
 };
 
 
-// IngredientCard.propTypes = {
-//   ...ingredientPropTypes.isRequired,
-//   setIsOpen: PropTypes.func.isRequired,
-//   setIngredientKey: PropTypes.func.isRequired
-// }; 
-
-
 
 function IngredientGroup(props){
 
-  // const data = useContext(DataContext);
   const data = useSelector(ingredientsSelector);
   const groupName = props.groupName;
   const groupTitle = props.groupTitle;
 
   return (
     <>
-    <div  className={burgerIngredientsStyles.ingredient_group_title}>
+    <div id={props.tab} className={burgerIngredientsStyles.ingredient_group_title}>
       <p className="text text_type_main-medium">{groupTitle}</p>
       </div>
     {
       data.filter(item => item.type == groupName).map(jtem => <IngredientCard  
-        // setIsOpen={props.setIsOpen} setIngredientKey={props.setIngredientKey}
         key={jtem._id} {...jtem} />)
     }
     </>
   );
 }
 
-// IngredientGroup.propTypes = {
-//   groupName: PropTypes.string.isRequired,
-//   groupTitle: PropTypes.string.isRequired
-// }; 
+
 
 function BurgerIngredients() {
-  //const [isOpen, setIsOpen] = useState(false);
-  //const [ingredientKey, setIngredientKey] = useState("");
-  //const isOpen = useSelector(openModalSelector);
+
   const ingredientKey = useSelector(currentIngredientSelector);
   const [currentGroup, setCurrentGroup] = useState('buns');
-  //const 
+  const tabsArr = ["buns", "sauses", "fillings"];
+  const min = (values) => values.reduce((x, y) => Math.min(x, y));
 
-  // const onChangeView = (isView, entry) => {
-  //   const nameIngredient = entry.target.id;
-  //   console.log("nameIngredient= ", nameIngredient);
-  //   if (isView) {
-  //     setCurrentGroup(nameIngredient);
-  //   }
-  // }
+  const scroll = () => {
+    const scrolltop = document.getElementById("scrollbody").scrollTop;
 
- 
+    const tabDiffs = tabsArr.map((item) => (Math.abs(scrolltop - document.getElementById(item).offsetTop)));
+    const minDiff = min(tabDiffs);
+    const minIndex = tabDiffs.indexOf(minDiff);
+    if (minIndex !== -1) setCurrentGroup(tabsArr[minIndex]);  
+  }
 
   return (
     <>
@@ -191,12 +170,10 @@ function BurgerIngredients() {
                   </p>
           </div>
           <IngredientsTabs currentGroup={currentGroup}/>
-          <div className={burgerIngredientsStyles.burger_ingredients_body} id="scrollbody">
-          {/* <InView threshold={0.5} onChange={onChangeView}  className={burgerIngredientsStyles.burger_ingredients_body}> */}
-            <IngredientGroup groupTitle = "Булки" groupName = "bun" id="buns"/>
-            <IngredientGroup groupTitle = "Соусы" groupName = "sauce" id="sauses"/>
-            <IngredientGroup groupTitle = "Начинки" groupName = "main" id="fillings"/>
-          {/* </InView>  */}
+          <div className={burgerIngredientsStyles.burger_ingredients_body} onScroll={scroll} id="scrollbody">
+            <IngredientGroup groupTitle = "Булки" groupName = "bun" tab="buns"/>
+            <IngredientGroup groupTitle = "Соусы" groupName = "sauce" tab="sauses"/>
+            <IngredientGroup groupTitle = "Начинки" groupName = "main" tab="fillings"/>
           </div>
       </div>
       {(ingredientKey !== "")  && 
