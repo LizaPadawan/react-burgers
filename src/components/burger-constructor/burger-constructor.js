@@ -30,7 +30,7 @@ const OrderDetails = () => {
         <Modal modalId="portal" overflow="visible" caption="" >
             <div className={burgerConstructorStyles.in_modal}>
                 <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
-                    {orderData.number}
+                    {orderData}
                 </p>
                 <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
                     идентификатор заказа
