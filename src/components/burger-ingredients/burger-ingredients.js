@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
-import { actionCreators } from '../../services/action-creator';
-
+import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
+import ingredientPropTypes from '../ingredients-proptypes';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
 import { InView } from 'react-intersection-observer';
@@ -80,6 +81,10 @@ function IngredientsTabs( props ){
   )
 }
 
+IngredientsTabs.propTypes = {
+  currentGroup: PropTypes.string.isRequired,
+}; 
+
 function IngredientCard(props){
   const dispatch = useDispatch();
   const constructorElements = useSelector(constructorSelector);
@@ -98,7 +103,7 @@ function IngredientCard(props){
       <div
           className={burgerIngredientsStyles.burger_ingredient_card}
           onClick = {() => {
-            dispatch(actionCreators.addIngredientDetails(props._id));
+            dispatch(currentIngredientActions.setCurrentIngredient(props._id));
             console.log("click");
           }}
           ref={dragRef} 
@@ -106,7 +111,6 @@ function IngredientCard(props){
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />
-          {/* {props.count > 0 && <Counter count={props.count} className='m-1' size='default'/>} */}
           <div className={burgerIngredientsStyles.burger_ingredient_count}>
             {count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>}
           </div>
@@ -122,6 +126,9 @@ function IngredientCard(props){
   );
 };
 
+IngredientCard.propTypes = {
+  ...ingredientPropTypes.isRequired
+};
 
 
 function IngredientGroup(props){
@@ -143,6 +150,11 @@ function IngredientGroup(props){
   );
 }
 
+IngredientGroup.propTypes = {
+  groupName: PropTypes.string.isRequired,
+  groupTitle: PropTypes.string.isRequired,
+  tab: PropTypes.string.isRequired
+}; 
 
 
 function BurgerIngredients() {

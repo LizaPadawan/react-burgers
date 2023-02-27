@@ -5,26 +5,20 @@ import './App.css';
 import AppHeader from './components/app-header/app-header';
 import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from './components/burger-constructor/burger-constructor';
-// import { DataContext } from './services/data-context';
-import { actionCreators } from './services/action-creator';
+// import { actionCreators } from './services/action-creator';
 import { fetchIngredientsSelector } from './services/selectors';
+import { ingredientsSelector } from './services/selectors';
 import { fetchData } from './services/thunk';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
 
-  const fetchDataState = useSelector(fetchIngredientsSelector);
-
-  //const [fetchedData, setFetchedData] = useState({success: false, data: []});
-  //const url = 'https://norma.nomoreparties.space/api/ingredients';
-
+  const fetchedIngredients = useSelector(ingredientsSelector);
   const dispatch = useDispatch();
 
   useEffect(
     () => {
-      console.log("useEffect");
-      //getDataJson(url, setFetchedData);
       dispatch(fetchData());
     },
     []
@@ -35,11 +29,7 @@ function App() {
     <AppHeader/>
     
     <main>
-      {(fetchDataState) ? 
-      // <DataContext.Provider value={fetchedData.data}>
-      //   <BurgerIngredients/>
-      //   <BurgerConstructor/>
-      // </DataContext.Provider>
+      {(fetchedIngredients.length > 0) ? 
       <>
       <DndProvider backend={HTML5Backend}>
       <BurgerIngredients/>

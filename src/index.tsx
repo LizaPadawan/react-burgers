@@ -8,7 +8,7 @@ import { initialState } from './services/initial-state';
 import { configureStore } from './services/store';
 
 const store = configureStore(initialState);
-
+//const store = configureStore();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

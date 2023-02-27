@@ -1,4 +1,7 @@
-import { actionCreators } from "./action-creator";
+import { ingredientsActions } from "./actions/ingredients-actions-creator";
+import { modalActions } from "./actions/modal-actions-creator";
+import { constructorActions } from "./actions/constructor-actions-creator";
+import { orderActions } from "./actions/order-actions-creator";
 
 async function getDataJson(url, callback, dispatch) {
     const response = await fetch(url); 
@@ -6,27 +9,25 @@ async function getDataJson(url, callback, dispatch) {
           const json = await response.json();
           callback(json);
         } else {
-          alert(`Ошибка HTTP: ${response.status}`);
-          dispatch(actionCreators.fetchIngredientsState("error")); 
+            dispatch(ingredientsActions.initialIngredients()); 
         }
   }
 
 export const fetchData = () => {
 	return ((dispatch, getState, extra) => {
 		console.info("start fetching...");
-        dispatch(actionCreators.fetchIngredientsState("process"));
+        dispatch(ingredientsActions.requestIngredients()); 
 
         const setIngredients = (incomingData) => 
             {
-                dispatch(actionCreators.fetchIngredients(incomingData.data));
-                dispatch(actionCreators.fetchIngredientsState("success"));           
+                dispatch(ingredientsActions.setIngredients(incomingData.data));          
             } 
         getDataJson('https://norma.nomoreparties.space/api/ingredients', setIngredients, dispatch);	
 	});
 }
 
 
-export const sendOrder = async (data, callback) => {
+export const sendOrder = async (data, callback, dispatch) => {
   const ingredients = data.map(item => item._id);
 
   const orderBurger = (ingredients) => {
@@ -44,22 +45,25 @@ export const sendOrder = async (data, callback) => {
   const response = await orderBurger(ingredients);
   if (response.ok) { 
       const json = await response.json();
-      console.log("json=", json);
-      callback(json.order);
+      callback(json.order.number);
   } else {
-      // alert(`Ошибка HTTP: ${response.status}`);
+        dispatch(orderActions.initialOrder());
   }
 }
 
 export const fetchOrderData = (data) => {
 	return ((dispatch, getState, extra) => {
+        dispatch(orderActions.requestOrder());
 
         const setOrder = (incomingData) => 
             {
-                dispatch(actionCreators.fetchOrder(incomingData));
-                dispatch(actionCreators.openModal(true));        
+                console.log(incomingData);
+                dispatch(orderActions.setOrder({...incomingData}));
+                dispatch(modalActions.openModal());
+                dispatch(constructorActions.cleanConstructor());
             } 
-        sendOrder(data, setOrder);	
+
+        sendOrder(data, setOrder, dispatch);	
 	});
 }
 

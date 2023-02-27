@@ -12,19 +12,19 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
-import { DataContext } from '../../services/data-context';
-import { OrderContext } from '../../services/order-context';
 import { sendOrder } from "./burger-constructor-service";
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
-import { actionCreators } from "../../services/action-creator";
+
 import { fetchOrderData } from "../../services/thunk";
 import { GET_CONSTRUCTOR } from "../../services/action-types";
 import { useDrop } from "react-dnd";
 import uuid from 'react-uuid';
 
+import { constructorActions } from "../../services/actions/constructor-actions-creator";
+
 const OrderDetails = () => {
     const orderData = useSelector(currentOrderSelector);
-    //console.log(orderData);
+    console.log("orderData=", orderData);
 
     return (
         <Modal modalId="portal" overflow="visible" caption="" >
@@ -110,6 +110,9 @@ function ConstructorBunElement(props) {
 
 }
 
+ConstructorBunElement.propTypes = {
+    type: PropTypes.string.isRequired,
+}; 
 
 
 function ConstructorIngredientsList() {
@@ -125,7 +128,8 @@ function ConstructorIngredientsList() {
         newCards.splice(dragIndex, 1)
         newCards.splice(hoverIndex, 0, dragCard)
 
-        dispatch(actionCreators.getConstructor(newCards))
+        //dispatch(actionCreators.getConstructor(newCards))
+        dispatch( constructorActions.setConstructor(newCards) )
     }, [ingredients, dispatch]);
 
     return (
@@ -190,7 +194,8 @@ function OrderedIngredient({ item, index, moveCard }) {
     const preventDefault = (e) => e.preventDefault();
 
     const close = (dragId) => {
-        dispatch(actionCreators.getConstructor(data.filter(item => item.dragId !== dragId)))
+        //dispatch(actionCreators.getConstructor(data.filter(item => item.dragId !== dragId)))
+        dispatch(constructorActions.setConstructor(data.filter(item => item.dragId !== dragId)))
     }
 
     return (
@@ -213,6 +218,12 @@ function OrderedIngredient({ item, index, moveCard }) {
     )
 }
 
+OrderedIngredient.propTypes = {
+    item: ingredientPropTypes.isRequired,
+    index: PropTypes.number.isRequired,
+    moveCard: PropTypes.func.isRequired,
+}
+
 
 
 
@@ -231,10 +242,12 @@ const BurgerConstructor = () => {
         drop(item) {
 
             if (item.type !== 'bun'){
-                dispatch(actionCreators.getConstructor([...data, { ...item, dragId: uuid()}]))
+                //dispatch(actionCreators.getConstructor([...data, { ...item, dragId: uuid()}]))
+                dispatch(constructorActions.setConstructor([...data, { ...item, dragId: uuid()}]))
             } else { // если перетаскивается булка, стираются все булки в списке
                 const newData = data.filter(item => item.type !== 'bun');
-                dispatch(actionCreators.getConstructor([...newData, { ...item, dragId: uuid()}]))
+                //dispatch(actionCreators.getConstructor([...newData, { ...item, dragId: uuid()}]))
+                dispatch(constructorActions.setConstructor([...newData, { ...item, dragId: uuid()}]))
                 
             }
         }
@@ -242,6 +255,7 @@ const BurgerConstructor = () => {
 
     return (
         <div className={burgerConstructorStyles.burger_constructor_panel + ' ' + `${isHover ? burgerConstructorStyles.onHover : ''}`}  ref={dropTargerRef}>
+            {(data.length > 0) ? 
             <div className={burgerConstructorStyles.burger_components}>
 
                 <ConstructorBunElement type="top" />
@@ -256,6 +270,12 @@ const BurgerConstructor = () => {
                 <ConstructorBunElement type="bottom" />
 
             </div>
+            :           
+            <div className={burgerConstructorStyles.burger_constructor_header}>
+                <p className="text text_type_main-medium">
+                    Перетащите элементы сюда
+                </p>
+            </div>}
 
             <>
                 <div className={burgerConstructorStyles.burger_info_panel}>
