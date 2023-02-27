@@ -57,10 +57,10 @@ export const fetchOrderData = (data) => {
 
         const setOrder = (incomingData) => 
             {
-                console.log(incomingData);
-                dispatch(orderActions.setOrder(incomingData));
                 dispatch(modalActions.openModal());
                 dispatch(constructorActions.cleanConstructor());
+                dispatch(orderActions.setOrder(incomingData));                
+                
             } 
 
         sendOrder(data, setOrder, dispatch);	
