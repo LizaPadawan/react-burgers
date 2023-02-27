@@ -3,5 +3,5 @@ export const initialState = {
 	constructorReduser: [],
 	modalReduser: false,
     currentIngredientReduser: "",
-    orderReduser: "",
+    orderReduser: { orderNumber: null}
 };

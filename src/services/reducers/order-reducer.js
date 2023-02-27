@@ -10,7 +10,9 @@ export const orderReduser = ( state = initialStateOrder, action) => {
 
 		case FETCH_ORDER_SUCCESS:
 			console.log("orderReducerSuccess", action.payload);
-			return action.payload;
+			return { ...state, 
+				orderNumber: action.payload
+			}
 
 		case FETCH_ORDER_ERROR:
 			return initialStateOrder;
