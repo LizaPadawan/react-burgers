@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from "react-redux";
+import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
-import PropTypes from 'prop-types';
+import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
 import ingredientPropTypes from '../ingredients-proptypes';
-
-// change test 2
-
 import burgerIngredientsStyles from './burger-ingredients.module.css';
+import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
+import { InView } from 'react-intersection-observer';
 
-function IngredientDetails(props){
+function IngredientDetails(){
+  
+  const data = useSelector(ingredientsSelector);
+  const ingredientKey = useSelector(currentIngredientSelector);
+
   return(
     <div>
       {
-        props.data.filter(item => item._id == props.ingredientKey).map(jtem => 
-        <div  style={{display:'flex', justifyContent:'center'}}>
+        data.filter(item => item._id == ingredientKey).map(jtem => 
+        <div  key={jtem._id} style={{display:'flex', justifyContent:'center'}}>
               <div style={{width:"520px"}} >
               <img style={{width:"480px"}} src={jtem.image} alt=''/>
               <div  style={{display:'flex', justifyContent:'center'}}>
@@ -57,39 +63,57 @@ function IngredientDetails(props){
   )
 }
 
-IngredientDetails.propTypes = {
-  data: PropTypes.array.isRequired,
-  ingredientKey: PropTypes.string.isRequired
-}; 
-
-function IngredientsTabs(){
-    const [current, setCurrent] = useState('one');
+function IngredientsTabs( props ){
+    const current = props.currentGroup;
     
     return (
     <div className={burgerIngredientsStyles.burger_ingredients_tabs}>
-      <Tab value="Булки" active={current === true} onClick={setCurrent}>
+      <Tab value="buns" active={current === "buns"} >
         Булки
       </Tab>
-      <Tab value="Соусы" active={current === false} onClick={setCurrent}>
+      <Tab value="sauses" active={current === "sauses"} >
         Соусы
       </Tab>
-      <Tab value="Начинки" active={current === false} onClick={setCurrent}>
+      <Tab value="fillings" active={current === "fillings"} >
         Начинки
       </Tab>
     </div>
   )
 }
 
+IngredientsTabs.propTypes = {
+  currentGroup: PropTypes.string.isRequired,
+}; 
+
 function IngredientCard(props){
+  const dispatch = useDispatch();
+  const constructorElements = useSelector(constructorSelector);
+  let count = constructorElements.filter(item => item._id == props._id).length;
+  if (props.type == 'bun') count = count * 2;
+
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'ingredient', 
+    item: { ...props },
+    collect: monitor => ({
+        opacity: monitor.isDragging() ? 0.5 : 1
+    })
+})
+
   return (
       <div
           className={burgerIngredientsStyles.burger_ingredient_card}
-          onClick = {() => {props.setIsOpen(true); props.setIngredientKey(props._id);
+          onClick = {() => {
+            dispatch(currentIngredientActions.setCurrentIngredient(props._id));
+            console.log("click");
           }}
+          ref={dragRef} 
+          style={{ opacity }}
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />
-          {props.count > 0 && <Counter count={props.count} className='m-1' size='default'/>}
+          <div className={burgerIngredientsStyles.burger_ingredient_count}>
+            {count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>}
+          </div>
           <p className={'text text_type_digits-default m-1 ' + burgerIngredientsStyles.burger_ingredient_price}>
               {props.price}
               <CurrencyIcon type='primary' />
@@ -102,73 +126,52 @@ function IngredientCard(props){
   );
 };
 
-
-// IngredientCard.propTypes = {
-//   setIsOpen: PropTypes.func.isRequired,
-//   setIngredientKey: PropTypes.number.isRequired,
-//   _id: PropTypes.string.isRequired,
-//   image: PropTypes.string,
-//   count: PropTypes.number,
-//   price: PropTypes.number,
-//   name: PropTypes.string
-// }; 
-
-
 IngredientCard.propTypes = {
-  ...ingredientPropTypes.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
-  setIngredientKey: PropTypes.func.isRequired
-}; 
-
-
+  ...ingredientPropTypes.isRequired
+};
 
 
 function IngredientGroup(props){
 
-  const data = props.data;
+  const data = useSelector(ingredientsSelector);
   const groupName = props.groupName;
   const groupTitle = props.groupTitle;
 
   return (
     <>
-    <div  className={burgerIngredientsStyles.ingredient_group_title}>
+    <div id={props.tab} className={burgerIngredientsStyles.ingredient_group_title}>
       <p className="text text_type_main-medium">{groupTitle}</p>
       </div>
     {
-      data.filter(item => item.type == groupName).map(jtem => <IngredientCard  setIsOpen={props.setIsOpen} setIngredientKey={props.setIngredientKey} key={jtem._id} {...jtem} />)
+      data.filter(item => item.type == groupName).map(jtem => <IngredientCard  
+        key={jtem._id} {...jtem} />)
     }
     </>
   );
 }
 
 IngredientGroup.propTypes = {
-  data: PropTypes.array.isRequired,
   groupName: PropTypes.string.isRequired,
-  groupTitle: PropTypes.string.isRequired
+  groupTitle: PropTypes.string.isRequired,
+  tab: PropTypes.string.isRequired
 }; 
 
 
-// function BurgerIngredients(props) {
-//     return (
-//         <div className={burgerIngredientsStyles.burger_ingredients_panel}>
-//             <div className={burgerIngredientsStyles.burger_ingredients_header}>
-//                     <p className="text text_type_main-medium">
-//                         Соберите бургер
-//                     </p>
-//             </div>
-//             <IngredientsTabs/>
-//             <div className={burgerIngredientsStyles.burger_ingredients_body}>
-//             {
-//               props.data.map(item => IngredientCard( {...item}))
-//             }
-//             </div>
-//         </div>
-//     );
-// }
+function BurgerIngredients() {
 
-function BurgerIngredients(props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [ingredientKey, setIngredientKey] = useState("");
+  const ingredientKey = useSelector(currentIngredientSelector);
+  const [currentGroup, setCurrentGroup] = useState('buns');
+  const tabsArr = ["buns", "sauses", "fillings"];
+  const min = (values) => values.reduce((x, y) => Math.min(x, y));
+
+  const scroll = () => {
+    const scrolltop = document.getElementById("scrollbody").scrollTop;
+
+    const tabDiffs = tabsArr.map((item) => (Math.abs(scrolltop - document.getElementById(item).offsetTop)));
+    const minDiff = min(tabDiffs);
+    const minIndex = tabDiffs.indexOf(minDiff);
+    if (minIndex !== -1) setCurrentGroup(tabsArr[minIndex]);  
+  }
 
   return (
     <>
@@ -178,24 +181,22 @@ function BurgerIngredients(props) {
                       Соберите бургер
                   </p>
           </div>
-          <IngredientsTabs/>
-          <div className={burgerIngredientsStyles.burger_ingredients_body}>
-          <IngredientGroup groupTitle = "Булки" groupName = "bun" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey} {...props}/>
-          <IngredientGroup groupTitle = "Соусы" groupName = "sauce" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey}  {...props}/>
-          <IngredientGroup groupTitle = "Начинки" groupName = "main" setIsOpen={setIsOpen} setIngredientKey={setIngredientKey}  {...props}/>
+          <IngredientsTabs currentGroup={currentGroup}/>
+          <div className={burgerIngredientsStyles.burger_ingredients_body} onScroll={scroll} id="scrollbody">
+            <IngredientGroup groupTitle = "Булки" groupName = "bun" tab="buns"/>
+            <IngredientGroup groupTitle = "Соусы" groupName = "sauce" tab="sauses"/>
+            <IngredientGroup groupTitle = "Начинки" groupName = "main" tab="fillings"/>
           </div>
       </div>
-      {isOpen  && 
-        <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" close= {setIsOpen} >  
-        <IngredientDetails data={props.data} ingredientKey={ingredientKey}/>     
+      {(ingredientKey !== "")  && 
+        <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" 
+        >  
+        <IngredientDetails />     
       </Modal>}
       </>
   );
 }
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.array.isRequired
-}; 
 
 export default BurgerIngredients;
 

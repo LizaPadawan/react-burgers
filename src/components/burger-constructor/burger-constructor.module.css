@@ -7,6 +7,17 @@
 
 }
 
+.burger_constructor_header{
+    position: absolute;
+    width: 600px;
+    height: 40px;
+    left: 0px;
+    top: 40px;
+
+    /* interface/bg */
+    background: #131316;   
+}
+
 .burger_components{
     display: flex;
     flex-direction: column;
