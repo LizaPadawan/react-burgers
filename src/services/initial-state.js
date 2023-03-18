@@ -3,5 +3,13 @@ export const initialState = {
 	constructorReduser: [],
 	modalReduser: false,
     currentIngredientReduser: "",
-    orderReduser: { orderNumber: null}
+    orderReduser: { orderNumber: null},
+	userReducer: {
+		"accessToken": "",
+		"refreshToken": "",
+		"user": {
+		  "email": "",
+		  "name": ""
+		}
+	},
 };

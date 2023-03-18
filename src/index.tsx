@@ -8,7 +8,6 @@ import { initialState } from './services/initial-state';
 import { configureStore } from './services/store';
 
 const store = configureStore(initialState);
-//const store = configureStore();
 
 store.subscribe(() => {
   console.log(store.getState());
