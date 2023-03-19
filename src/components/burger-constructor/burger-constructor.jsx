@@ -12,7 +12,6 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
-import { sendOrder } from "./burger-constructor-service";
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
 
 import { fetchOrderData } from "../../services/thunk";
