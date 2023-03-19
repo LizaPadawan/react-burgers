@@ -30,6 +30,7 @@ export const fetchData = () => {
 
 
 export const sendOrder = async (data, callback, dispatch) => {
+    //console.log(data);
     const ingredients = data.map(item => item._id);
 
     const orderBurger = (ingredients) => {

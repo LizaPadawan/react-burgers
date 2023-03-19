@@ -24,7 +24,7 @@ function Profile() {
         <p className="pb-4">
           <Link
             to="/profile"
-            className={commonStyles.white + " text text_type_main-medium"}
+            className={commonStyles.profilelink + ' ' + commonStyles.white + " text text_type_main-medium"}
           >
             Профиль
           </Link>
@@ -32,7 +32,7 @@ function Profile() {
         <p className="pb-4">
           <Link
             to="/profile/orders"
-            className="text text_type_main-medium text_color_inactive"
+            className={commonStyles.profilelink + ' ' + "text text_type_main-medium text_color_inactive"}
           >
             История заказов
           </Link>
@@ -40,7 +40,7 @@ function Profile() {
         <p className="pb-4">
           <Link
             to="/login"
-            className="text text_type_main-medium text_color_inactive"
+            className={commonStyles.profilelink + ' ' + "text text_type_main-medium text_color_inactive"}
           >
             Выход
           </Link>
