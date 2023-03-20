@@ -25,9 +25,9 @@ function Profile() {
 
   const isAuthChecked = useSelector(isAuthSelector);
 
-  //useEffect(() => {
-  //  dispatch(getProfileInfo());
-  //}, []);
+  useEffect(() => {
+   dispatch(getProfileInfo());
+  }, []);
 
   useEffect(() => {
     setForm({ password: "", email: user.email, name: user.name });
