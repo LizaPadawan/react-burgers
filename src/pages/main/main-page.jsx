@@ -10,14 +10,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 function Main() {
 
   const fetchedIngredients = useSelector(ingredientsSelector);
-  const dispatch = useDispatch();
-
-  useEffect(
-    () => {
-      dispatch(fetchData());
-    },
-    []
-  );
 
   return (
     (fetchedIngredients.length > 0) ? 

@@ -5,11 +5,8 @@ export const initialState = {
     currentIngredientReduser: "",
     orderReduser: { orderNumber: null},
 	userReducer: {
-		"accessToken": "",
-		"refreshToken": "",
-		"user": {
 		  "email": "",
 		  "name": ""
-		}
 	},
+	authCheckReducer: false
 };

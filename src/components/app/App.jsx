@@ -17,24 +17,43 @@ import Register from '../../pages/register/register-page';
 import ForgotPassword from '../../pages/forgot-password/forgot-password-page';
 import ResetPassword from '../../pages/reset-password/reset-password-page';
 import Profile from '../../pages/profile/profile-page';
+import ProtectedRoute from '../protected-route/protected-route';
+import { checkUserAuth } from '../../services/thunk';
+import { isAuthSelector } from '../../services/selectors';
 
 function App() {
 
+  const dispatch = useDispatch();
+
+  useEffect(
+    () => {
+      dispatch(fetchData());
+      dispatch(checkUserAuth());
+    },
+    []
+  );
+
+  const isAuthChecked = useSelector(isAuthSelector);
+
   return (
     <>
-    
+
     <main>
+
+    { isAuthChecked &&
     <BrowserRouter>
       <AppHeader/>
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<ProtectedRoute element={<Login />}  onlyUnAuth={true}/>} />
+            {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/register" element={<Register />} /> 
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} /> 
-            <Route path="/profile" element={<Profile />} /> 
+            <Route path="/profile" element={<ProtectedRoute element={<Profile />}  onlyUnAuth={false}/>} /> 
           </Routes>
     </BrowserRouter>
+}
     </main>
 
     <div id="portal"></div>
@@ -43,7 +62,5 @@ function App() {
   );
 
 }
-
-
 
 export default App;

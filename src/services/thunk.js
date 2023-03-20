@@ -3,6 +3,7 @@ import { modalActions } from "./actions/modal-actions-creator";
 import { constructorActions } from "./actions/constructor-actions-creator";
 import { orderActions } from "./actions/order-actions-creator";
 import { userActions } from "./actions/user-actions-creator";
+import { authCheckActions } from "./actions/auth-check-actions-creator";
 import { getCookie, setCookie } from "../utils/cookie";
 
 async function getDataJson(url, callback, dispatch) {
@@ -30,7 +31,6 @@ export const fetchData = () => {
 
 
 export const sendOrder = async (data, callback, dispatch) => {
-    //console.log(data);
     const ingredients = data.map(item => item._id);
 
     const orderBurger = (ingredients) => {
@@ -74,29 +74,31 @@ const sendForm = (form, url) => {
     return fetch(
         url,
         {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          referrerPolicy: "no-referrer",
-          body: JSON.stringify(form),
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(form),
         }
-      );
+    );
 }
 
-const sendRefreshToken = (url) => {
-    return fetch(url, {
+const sendRefreshToken = () => {
+    return fetch("https://norma.nomoreparties.space/api/auth/logout", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({"token": getCookie("refreshToken")}),
-      })
+        body: JSON.stringify({ "token": getCookie("refreshToken") }),
+    })
 }
+
+
 
 export const registerUser = async (form, callback, dispatch, navigate) => {
     const response = await sendForm(form, "https://norma.nomoreparties.space/api/auth/register");
@@ -113,7 +115,7 @@ export const register = (form, navigate) => {
     return ((dispatch, getState, extra) => {
         dispatch(userActions.requestUser());
         const setUser = (incomingData) => {
-            dispatch(userActions.setUser(incomingData));
+            dispatch(userActions.setUser(incomingData.user));
             saveTokens(incomingData.refreshToken, incomingData.accessToken);
         }
         registerUser(form, setUser, dispatch, navigate);
@@ -152,8 +154,9 @@ export const loginUser = async (form, callback, dispatch, navigate) => {
     const response = await sendForm(form, "https://norma.nomoreparties.space/api/auth/login");
     if (response.ok) {
         const json = await response.json();
-        callback(json);
-        if (json.success) navigate("/", { replace: true });
+        //  callback(json);
+        //  if (json.success) navigate("/", { replace: true });
+        if (json.success) callback(json);
     } else {
         dispatch(userActions.initialUser());
     }
@@ -163,7 +166,8 @@ export const login = (form, navigate) => {
     return ((dispatch, getState, extra) => {
         dispatch(userActions.requestUser());
         const setUser = (incomingData) => {
-            dispatch(userActions.setUser(incomingData));
+            //console.log("incoming data = ", incomingData);
+            dispatch(userActions.setUser(incomingData.user));
             saveTokens(incomingData.refreshToken, incomingData.accessToken);
         }
         loginUser(form, setUser, dispatch, navigate);
@@ -192,3 +196,100 @@ export const logout = (navigate) => {
     });
 }
 
+// profile
+
+
+
+export const getProfileInfo = () => (dispatch) => {
+    dispatch(userActions.requestUser());
+    getProfileRequest()
+        .then((res) => {
+            dispatch(userActions.setUser(res.user));
+            dispatch(authCheckActions.isChecked());
+        })
+        .catch((err) => {
+            if (err.message === 'jwt expired') {
+                dispatch(refreshToken(getProfileInfo()));
+            } else {
+                dispatch(userActions.initialUser());
+                dispatch(authCheckActions.isChecked());
+            }
+        });
+}
+
+export const updateProfileInfo = (form) => (dispatch) => {
+    dispatch(userActions.requestUser());
+    updateProfileRequest(form)
+        .then((res) => {
+            dispatch(userActions.setUser(res.user));
+        })
+        .catch((err) => {
+            if (err.message === 'jwt expired') {
+                dispatch(refreshToken(updateProfileInfo(form)));
+            } else {
+                dispatch(userActions.initialUser());
+            }
+        });
+}
+
+const updateProfileRequest = (form) => {
+    //console.log("get profile request");
+    return fetch("https://norma.nomoreparties.space/api/auth/user", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getCookie('accessToken'),
+        },
+        body: JSON.stringify(form),
+      })
+    .then(checkResponse)
+}
+
+const getProfileRequest = () => {
+    //console.log("get profile request");
+    return fetch("https://norma.nomoreparties.space/api/auth/user", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: getCookie('accessToken'),
+        },
+    })
+    .then(checkResponse)
+}
+
+const refreshToken = (afterRefresh) => (dispatch) => {
+    refreshTokenRequest()
+        .then((res) => {
+            saveTokens(res.refreshToken, res.accessToken);
+            dispatch(afterRefresh);
+        })
+}
+
+const refreshTokenRequest = () => {
+    return fetch("https://norma.nomoreparties.space/api/auth/token", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            token: localStorage.getItem('refreshToken')
+        })
+    })
+    .then(checkResponse)
+}
+
+const checkResponse = (res) => {
+    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+}
+
+export const checkUserAuth = () => (dispatch) => {
+  if (getCookie("accessToken")) {
+    //dispatch(authCheckActions.isChecked());
+    dispatch(getProfileInfo())
+    //.finally(() => {
+    //  dispatch(authCheckActions.isChecked());
+    //});
+  } else {
+    dispatch(authCheckActions.isChecked());
+  }
+};
