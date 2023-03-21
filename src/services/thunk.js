@@ -4,7 +4,9 @@ import { constructorActions } from "./actions/constructor-actions-creator";
 import { orderActions } from "./actions/order-actions-creator";
 import { userActions } from "./actions/user-actions-creator";
 import { authCheckActions } from "./actions/auth-check-actions-creator";
-import { getCookie, setCookie } from "../utils/cookie";
+import { getCookie, setCookie, deleteCookie } from "../utils/cookie";
+
+const BURGER_API_URL = 'https://norma.nomoreparties.space/api/';
 
 async function getDataJson(url, callback, dispatch) {
     const response = await fetch(url);
@@ -25,25 +27,40 @@ export const fetchData = () => {
             dispatch(ingredientsActions.setIngredients(incomingData.data));
         }
 
-        getDataJson('https://norma.nomoreparties.space/api/ingredients', setIngredients, dispatch);
+        getDataJson(BURGER_API_URL + 'ingredients', setIngredients, dispatch);
     });
 }
 
 
 export const sendOrder = async (data, callback, dispatch) => {
     const ingredients = data.map(item => item._id);
+    console.log("I try to send order");
 
     const orderBurger = (ingredients) => {
-        return fetch("https://norma.nomoreparties.space/api/orders", {
+        return fetch(BURGER_API_URL + "orders", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
+            Authorization: getCookie('accessToken'),
             body: JSON.stringify({
                 ingredients,
             }),
-        });
+        })
+        //.then(checkResponse);
     }
+
+    // orderBurger(ingredients)
+    //     .then((res) => {
+    //         callback(res.order.number);
+    //     })
+    //     .catch((err) => {
+    //         if (err.message === 'jwt expired') {
+    //             dispatch(refreshToken(sendOrder(data, callback, dispatch)));
+    //         } else {
+    //             dispatch(orderActions.initialOrder());
+    //         }
+    //     });
 
     const response = await orderBurger(ingredients);
     if (response.ok) {
@@ -54,7 +71,7 @@ export const sendOrder = async (data, callback, dispatch) => {
     }
 }
 
-export const fetchOrderData = (data) => {
+export const fetchOrderData = (data, navigate) => {
     return ((dispatch, getState, extra) => {
         dispatch(orderActions.requestOrder());
 
@@ -64,7 +81,34 @@ export const fetchOrderData = (data) => {
             dispatch(orderActions.setOrder(incomingData));
         }
 
-        sendOrder(data, setOrder, dispatch);
+        //new
+
+        getProfileRequest()
+        .then((res) => {
+            //dispatch(authCheckActions.isChecked());
+            //dispatch(userActions.setUser(res.user));  
+            if (res.success) {
+                console.log("continue");
+                console.log(data);
+                sendOrder(data, setOrder, dispatch); 
+                dispatch(userActions.setUser(res.user));       
+            }   
+        })
+        .catch((err) => {
+            if (err.message === 'jwt expired') {
+                dispatch(refreshToken(fetchOrderData(data, navigate)));
+            } else {
+                console.log("go to login");
+                navigate("/login", { replace: true });
+                //dispatch(authCheckActions.isChecked());
+                //dispatch(userActions.initialUser());
+                
+                
+            }
+        });
+
+
+        //sendOrder(data, setOrder, dispatch);
     });
 }
 
@@ -89,19 +133,19 @@ const sendForm = (form, url) => {
 }
 
 const sendRefreshToken = () => {
-    return fetch("https://norma.nomoreparties.space/api/auth/logout", {
+    return fetch(BURGER_API_URL + "auth/logout", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "token": getCookie("refreshToken") }),
+        body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
     })
 }
 
 
 
 export const registerUser = async (form, callback, dispatch, navigate) => {
-    const response = await sendForm(form, "https://norma.nomoreparties.space/api/auth/register");
+    const response = await sendForm(form, BURGER_API_URL + "auth/register");
     if (response.ok) {
         const json = await response.json();
         callback(json);
@@ -123,10 +167,10 @@ export const register = (form, navigate) => {
 }
 
 export const sendCode = async (form, dispatch, navigate) => {
-    const response = await sendForm(form, "https://norma.nomoreparties.space/api/password-reset");
+    const response = await sendForm(form, BURGER_API_URL + "password-reset");
     if (response.ok) {
         const json = await response.json();
-        if (json.success) navigate('/reset-password', { replace: true });
+        if (json.success) navigate('/reset-password', { replace: true, state: "reset_password" });
     };
 }
 
@@ -137,7 +181,7 @@ export const forgotPasswordRequest = (form, navigate) => {
 }
 
 export const sendNewPassword = async (form, dispatch, navigate) => {
-    const response = await sendForm(form, "https://norma.nomoreparties.space/api/password-reset/reset");
+    const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
     if (response.ok) {
         const json = await response.json();
         if (json.success) navigate('/login', { replace: true });
@@ -151,7 +195,7 @@ export const resetPasswordRequest = (form, navigate) => {
 }
 
 export const loginUser = async (form, callback, dispatch, navigate) => {
-    const response = await sendForm(form, "https://norma.nomoreparties.space/api/auth/login");
+    const response = await sendForm(form, BURGER_API_URL + "auth/login");
     if (response.ok) {
         const json = await response.json();
         //  callback(json);
@@ -175,24 +219,27 @@ export const login = (form, navigate) => {
 }
 
 const saveTokens = (refreshToken, accessToken) => {
+    deleteCookie('accessToken');
     setCookie('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 }
 
-export const logoutUser = async (dispatch, navigate) => {
-    const response = await sendRefreshToken("https://norma.nomoreparties.space/api/auth/logout");
+export const logoutUser = async (dispatch) => {
+    const response = await sendRefreshToken(BURGER_API_URL + "auth/logout");
     if (response.ok) {
         const json = await response.json();
         if (json.success) {
             dispatch(userActions.initialUser());
-            navigate("/login", { replace: true });
+            dispatch(orderActions.initialOrder());
+            deleteCookie('accessToken');
+            //console.log("logout ok");
         }
     }
 }
 
-export const logout = (navigate) => {
+export const logout = () => {
     return ((dispatch, getState, extra) => {
-        logoutUser(dispatch, navigate);
+        logoutUser(dispatch);
     });
 }
 
@@ -204,15 +251,17 @@ export const getProfileInfo = () => (dispatch) => {
     dispatch(userActions.requestUser());
     getProfileRequest()
         .then((res) => {
-            dispatch(userActions.setUser(res.user));
             dispatch(authCheckActions.isChecked());
+            dispatch(userActions.setUser(res.user));
+            
         })
         .catch((err) => {
             if (err.message === 'jwt expired') {
                 dispatch(refreshToken(getProfileInfo()));
             } else {
-                dispatch(userActions.initialUser());
                 dispatch(authCheckActions.isChecked());
+                dispatch(userActions.initialUser());
+                
             }
         });
 }
@@ -234,7 +283,7 @@ export const updateProfileInfo = (form) => (dispatch) => {
 
 const updateProfileRequest = (form) => {
     //console.log("get profile request");
-    return fetch("https://norma.nomoreparties.space/api/auth/user", {
+    return fetch(BURGER_API_URL + "auth/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -247,7 +296,7 @@ const updateProfileRequest = (form) => {
 
 const getProfileRequest = () => {
     //console.log("get profile request");
-    return fetch("https://norma.nomoreparties.space/api/auth/user", {
+    return fetch(BURGER_API_URL + "auth/user", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -263,10 +312,14 @@ const refreshToken = (afterRefresh) => (dispatch) => {
             saveTokens(res.refreshToken, res.accessToken);
             dispatch(afterRefresh);
         })
+        .catch((err) => {
+            //console.log(err.message);
+            dispatch(authCheckActions.isChecked());
+        });
 }
 
 const refreshTokenRequest = () => {
-    return fetch("https://norma.nomoreparties.space/api/auth/token", {
+    return fetch(BURGER_API_URL + "auth/token", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -284,11 +337,7 @@ const checkResponse = (res) => {
 
 export const checkUserAuth = () => (dispatch) => {
   if (getCookie("accessToken")) {
-    //dispatch(authCheckActions.isChecked());
     dispatch(getProfileInfo())
-    //.finally(() => {
-    //  dispatch(authCheckActions.isChecked());
-    //});
   } else {
     dispatch(authCheckActions.isChecked());
   }

@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../services/thunk";
 
 import {
   EmailInput,
@@ -67,8 +68,8 @@ function Profile() {
           </p>
           <p className="pb-4">
             <Link
-              to="/login"
               className={commonStyles.profilelink + ' ' + "text text_type_main-medium text_color_inactive"}
+              onClick={() => {dispatch(logout());}}
             >
               Выход
             </Link>

@@ -11,15 +11,17 @@ const ProtectedRoute = ({
     const user = useSelector(userSelector);
     //const location = useLocation<{ from: Location}>();
     const location = useLocation();
+    console.log("in protected route location", location);
   
     if (onlyUnAuth && (user.name !== "")) {
-      const { from } = location.state || { from: { pathname: "/" } };
+      //const { from } = location.state || { from: { pathname: "/" } };
+      const from = location.state?.from || '/';
       return <Navigate to={from} />;
     }
   
     if (!onlyUnAuth && (user.name == "")) {
       return (
-        <Navigate to={{ pathname: "/login", state: { from: location } }} />
+        <Navigate to="/login" state={{ from: location.pathname } }/>
       );
     }
   

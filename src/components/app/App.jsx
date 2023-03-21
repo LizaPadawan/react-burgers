@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import './App.css';
 import AppHeader from '../app-header/app-header';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-// import { actionCreators } from './services/action-creator';
 import { fetchIngredientsSelector } from '../../services/selectors';
 import { ingredientsSelector } from '../../services/selectors';
 import { fetchData } from '../../services/thunk';
@@ -20,6 +17,14 @@ import Profile from '../../pages/profile/profile-page';
 import ProtectedRoute from '../protected-route/protected-route';
 import { checkUserAuth } from '../../services/thunk';
 import { isAuthSelector } from '../../services/selectors';
+import { List } from '../../pages/list/list-page';
+import { Ingredient } from '../../pages/ingredient/ingredient-page';
+import { Error } from '../../pages/error/error-page';
+import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
+import { useLocation } from 'react-router-dom';
+import Modal from '../modal/modal';
+import { useNavigate } from 'react-router-dom';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
 function App() {
 
@@ -35,6 +40,49 @@ function App() {
 
   const isAuthChecked = useSelector(isAuthSelector);
 
+  const ModalSwitch = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  let background = location.state && location.state.background;
+ 
+  const handleModalClose = () => {
+    dispatch(currentIngredientActions.cleanCurrentIngredient());
+    navigate(-1);
+  };
+ 
+  return (
+     <>
+       <AppHeader />
+       <Routes location={background || location}>
+       <Route path="/" element={<Main />} />
+            <Route path="/login" element={<ProtectedRoute element={<Login />}  onlyUnAuth={true}/>} />
+            {/* <Route path="/login" element={<Login />} /> */}
+            <Route path="/register" element={<Register />}  onlyUnAuth={true}/> 
+            <Route path="/forgot-password" element={<ForgotPassword />}  onlyUnAuth={true}/>
+            <Route path="/reset-password" element={<ResetPassword />}  onlyUnAuth={true}/> 
+            <Route path="/profile" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+            <Route path="/profile/:orders" element={<ProtectedRoute element={<List />} onlyUnAuth={false}/>} /> 
+            <Route path="/profile/:orders/:id" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+            <Route path="/list" element={<List />} />
+            <Route path="/ingredients/:ingredientId" element={<Ingredient />}></Route>
+            <Route path="*" element={<Error />} />
+       </Routes>
+   
+       {background && (
+        <Routes>
+         <Route
+           path='/ingredients/:ingredientId'
+           element={
+             <Modal onClose={handleModalClose} modalId="portal" overflow = "visible" caption="Детали ингредиента" >
+               <IngredientDetails />
+             </Modal>
+           }
+         /></Routes>
+       )}
+     </>
+    );
+   };
+
   return (
     <>
 
@@ -42,25 +90,128 @@ function App() {
 
     { isAuthChecked &&
     <BrowserRouter>
-      <AppHeader/>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/login" element={<ProtectedRoute element={<Login />}  onlyUnAuth={true}/>} />
-            {/* <Route path="/login" element={<Login />} /> */}
-            <Route path="/register" element={<Register />} /> 
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} /> 
-            <Route path="/profile" element={<ProtectedRoute element={<Profile />}  onlyUnAuth={false}/>} /> 
-          </Routes>
+      <ModalSwitch/>
     </BrowserRouter>
-}
+  }
     </main>
 
-    <div id="portal"></div>
-    
+    <div id="portal"></div>    
     </>
   );
-
 }
 
 export default App;
+
+
+
+
+
+// function App() {
+
+//   const dispatch = useDispatch();
+
+//   useEffect(
+//     () => {
+//       dispatch(fetchData());
+//       dispatch(checkUserAuth());
+//     },
+//     []
+//   );
+
+//   const isAuthChecked = useSelector(isAuthSelector);
+
+//   return (
+//     <>
+
+//     <main>
+
+//     { isAuthChecked &&
+//     <BrowserRouter>
+//       <AppHeader/>
+//           <Routes>
+//             <Route path="/" element={<Main />} />
+//             <Route path="/login" element={<ProtectedRoute element={<Login />}  onlyUnAuth={true}/>} />
+//             {/* <Route path="/login" element={<Login />} /> */}
+//             <Route path="/register" element={<Register />}  onlyUnAuth={true}/> 
+//             <Route path="/forgot-password" element={<ForgotPassword />}  onlyUnAuth={true}/>
+//             <Route path="/reset-password" element={<ResetPassword />}  onlyUnAuth={true}/> 
+//             <Route path="/profile" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+//             <Route path="/profile/:orders" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+//             <Route path="/profile/:orders/:id" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+//             <Route path="/list" element={<List />} />
+//             <Route path="/ingredients/:id" element={<Ingredient />}></Route>
+//             <Route path="*" element={<Error />} />
+//           </Routes>
+//     </BrowserRouter>
+//   }
+//     </main>
+
+//     <div id="portal"></div>    
+//     </>
+//   );
+// }
+
+// export default App;
+
+// function App() {
+//   const ModalSwitch = () => {
+//   const location = useLocation();
+//   const navigate = useNavigate();
+//   let background = location.state && location.state.background;
+ 
+//   const handleModalClose = () => {
+//     dispatch({
+//      type: RESET_ITEM_TO_VIEW,
+//     });
+//     navigate(-1);
+//   };
+ 
+//   return (
+//      <>
+//        <AppHeader />
+//        <Routes location={background || location}>
+//          <Route path='/' element={<Main />} />
+//          <Route
+//            path='/profile/orders/:orderNumber'
+//            element={
+//              <ProtectedRoute>
+//                <OrderPage />
+//              </ProtectedRoute>
+//            }
+//          />
+//          <Route path='/ingredients/:ingredientId' element={<IngredientsDetails />} />
+//          <Route element={<NotFound404 />} />
+//        </Routes>
+   
+//        {background && (
+//          <Route
+//            path='/ingredients/:ingredientId'
+//            element={
+//              <Modal onClose={handleModalClose}>
+//                <IngredientsDetails />
+//              </Modal>
+//            }
+//          />
+//        )}
+//        {background && (
+//          <Route
+//            path='/profile/orders/:orderNumber'
+//            element={
+//              <ProtectedRoute>
+//                <Modal onClose={handleModalClose}>
+//                  <OrderPage />
+//                </Modal>
+//              </ProtectedRoute>
+//            }
+//          />
+//        )}
+//      </>
+//     );
+//    };
+   
+//    return (
+//      <Router>
+//        <ModalSwitch />
+//      </Router>
+//    );
+//  }

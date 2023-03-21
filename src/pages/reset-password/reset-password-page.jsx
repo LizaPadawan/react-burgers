@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import {
   PasswordInput,
@@ -15,9 +17,13 @@ function ResetPassword() {
   const [form, setForm] = useState({ password: "", token: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const incomingState = useLocation().state;
+  //console.log("resetpasswordlocaton", incomingState);
 
-  return (
-    <div
+  return ( 
+    <>
+    {incomingState ?
+      <div
       className={commonStyles.center + " " + commonStyles.column}
     >
       <>
@@ -60,6 +66,10 @@ function ResetPassword() {
         </Link>
       </p>
     </div>
+    : <Navigate to="/login"/>
+    }
+    </>
+    
   );
 }
 

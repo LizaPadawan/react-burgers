@@ -13,10 +13,12 @@ function Modal(props) {
   let modal = document.getElementById(props.modalId);
   const dispatch = useDispatch();
 
-  const closeModal = () => {
-    dispatch(modalActions.closeModal());
-    dispatch(currentIngredientActions.cleanCurrentIngredient());
-  }
+  // const closeModal = () => {
+  //   dispatch(modalActions.closeModal());
+  //   dispatch(currentIngredientActions.cleanCurrentIngredient());
+  // }
+
+  const closeModal = props.onClose;
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -55,6 +57,7 @@ function Modal(props) {
 
 Modal.propTypes = {
   modalId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
   overflow: PropTypes.string,
   caption: PropTypes.string,
   children: PropTypes.element.isRequired

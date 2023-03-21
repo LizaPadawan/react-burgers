@@ -84,7 +84,8 @@
    
     
     /* Inside auto layout */
-    
+    text-decoration: none;
+    color: white;
     flex: none;
     order: 0;
     flex-grow: 0;
