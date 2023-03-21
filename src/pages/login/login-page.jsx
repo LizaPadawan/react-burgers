@@ -15,9 +15,9 @@ function Login() {
   const isAuthChecked = useSelector(isAuthSelector);
 
   return (
-    //<form 
-    //onSubmit={() => { dispatch(login(form, navigate)) }}
-    //>
+    <form 
+      onSubmit={(e) => { e.preventDefault(); dispatch(login(form, navigate)) }}
+    >
     <div className={commonStyles.center + ' ' + commonStyles.column}>
       {isAuthChecked ?
         <>
@@ -68,7 +68,7 @@ function Login() {
         <div>Идет загрузка ...</div>
       }
     </div>
-    //</form>
+    </form>
   );
 }
 

@@ -17,6 +17,9 @@ function ForgotPassword() {
   const dispatch = useDispatch();
 
   return (
+    <form 
+      onSubmit={(e) => { e.preventDefault(); dispatch(forgotPasswordRequest(form, navigate)) }}
+    >
     <div
       className={commonStyles.center + " " + commonStyles.column}
     >
@@ -32,10 +35,10 @@ function ForgotPassword() {
           isIcon={false}
         />
         <Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={() => {dispatch(forgotPasswordRequest(form, navigate))}}
+          //onClick={() => {dispatch(forgotPasswordRequest(form, navigate))}}
         >
           Восстановить
         </Button>
@@ -47,6 +50,7 @@ function ForgotPassword() {
         </Link>
       </p>
     </div>
+    </form>
   );
 }
 

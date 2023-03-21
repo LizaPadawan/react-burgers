@@ -23,6 +23,9 @@ function ResetPassword() {
   return ( 
     <>
     {incomingState ?
+    <form 
+    onSubmit={(e) => { e.preventDefault(); dispatch(resetPasswordRequest(form, navigate)) }}
+  >
       <div
       className={commonStyles.center + " " + commonStyles.column}
     >
@@ -51,10 +54,10 @@ function ResetPassword() {
           extraClass="ml-1"
         />
         <Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={() => dispatch(resetPasswordRequest(form, navigate))}
+          //onClick={() => dispatch(resetPasswordRequest(form, navigate))}
         >
           Сохранить
         </Button>
@@ -66,6 +69,7 @@ function ResetPassword() {
         </Link>
       </p>
     </div>
+    </form>
     : <Navigate to="/login"/>
     }
     </>

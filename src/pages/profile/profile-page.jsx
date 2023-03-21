@@ -44,6 +44,10 @@ function Profile() {
   }
 
   return (
+    <form 
+      onSubmit={(e) => { e.preventDefault(); dispatch(updateProfileInfo(form)) }}
+      onReset={(e) => { e.preventDefault(); cancel() }}
+    >
     <div className={commonStyles.center}>
 
       { (isAuthChecked && form.name !== "") ?
@@ -118,20 +122,20 @@ function Profile() {
           { buttonsOpen &&
           <div className={commonStyles.centercontent}>
             <Button
-              htmlType="button"
+              htmlType="reset"
               type="primary"
               size="medium"
-              onClick={cancel}
+              //onClick={cancel}
               extraClass="ml-10 mr-10"
             >
               Отменить
             </Button>
             <Button
-              htmlType="button"
+              htmlType="submit"
               type="primary"
               size="medium"
-              onClick={() => {
-                dispatch(updateProfileInfo(form))}}
+              //onClick={() => {
+              //  dispatch(updateProfileInfo(form))}}
             >
               Сохранить
             </Button>
@@ -142,6 +146,7 @@ function Profile() {
           <div>Идет загрузка ...</div>
         }
     </div>
+    </form>
   );
 }
 
