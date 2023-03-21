@@ -15,10 +15,14 @@ function Login() {
   const isAuthChecked = useSelector(isAuthSelector);
 
   return (
+    //<form 
+    //onSubmit={() => { dispatch(login(form, navigate)) }}
+    //>
     <div className={commonStyles.center + ' ' + commonStyles.column}>
       {isAuthChecked ?
         <>
           <>
+          
             <p className="text text_type_main-medium pt-20">Вход</p>
 
             <EmailInput
@@ -40,13 +44,16 @@ function Login() {
             />
 
             <Button
-              htmlType="button"
+              //htmlType="button"
+              htmlType="submit"
               type="primary"
               size="medium"
+            
               onClick={() => { dispatch(login(form, navigate)) }}
             >
               Войти
             </Button>
+            
           </>
           <div className={commonStyles.column}>
             <p className="text text_type_main-default text_color_inactive pt-4 mt-10">
@@ -61,6 +68,7 @@ function Login() {
         <div>Идет загрузка ...</div>
       }
     </div>
+    //</form>
   );
 }
 

@@ -10,7 +10,7 @@ import { configureStore } from './services/store';
 const store = configureStore(initialState);
 
 store.subscribe(() => {
-  console.log(store.getState());
+  //console.log(store.getState());
 })
 
 const root = ReactDOM.createRoot(

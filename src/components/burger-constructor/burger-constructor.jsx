@@ -26,7 +26,7 @@ import { constructorActions } from "../../services/actions/constructor-actions-c
 const OrderDetails = () => {
     const dispatch = useDispatch();
     const orderData = useSelector(currentOrderSelector);
-    console.log("orderData=", orderData);
+    //console.log("orderData=", orderData);
     const onClose = () => {dispatch(modalActions.closeModal())};
 
     return (

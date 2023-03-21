@@ -20,7 +20,7 @@ async function getDataJson(url, callback, dispatch) {
 
 export const fetchData = () => {
     return ((dispatch, getState, extra) => {
-        console.info("start fetching...");
+        //console.info("start fetching...");
         dispatch(ingredientsActions.requestIngredients());
 
         const setIngredients = (incomingData) => {
@@ -34,7 +34,7 @@ export const fetchData = () => {
 
 export const sendOrder = async (data, callback, dispatch) => {
     const ingredients = data.map(item => item._id);
-    console.log("I try to send order");
+    //console.log("I try to send order");
 
     const orderBurger = (ingredients) => {
         return fetch(BURGER_API_URL + "orders", {
@@ -85,11 +85,7 @@ export const fetchOrderData = (data, navigate) => {
 
         getProfileRequest()
         .then((res) => {
-            //dispatch(authCheckActions.isChecked());
-            //dispatch(userActions.setUser(res.user));  
             if (res.success) {
-                console.log("continue");
-                console.log(data);
                 sendOrder(data, setOrder, dispatch); 
                 dispatch(userActions.setUser(res.user));       
             }   
@@ -98,10 +94,7 @@ export const fetchOrderData = (data, navigate) => {
             if (err.message === 'jwt expired') {
                 dispatch(refreshToken(fetchOrderData(data, navigate)));
             } else {
-                console.log("go to login");
                 navigate("/login", { replace: true });
-                //dispatch(authCheckActions.isChecked());
-                //dispatch(userActions.initialUser());
                 
                 
             }

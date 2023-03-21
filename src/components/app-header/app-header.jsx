@@ -4,49 +4,68 @@ import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
 import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { NavLink } from 'react-router-dom';
 
 import appHeaderStyles from './app-header.module.css';
 
 function AppHeader() {
 
-    const navigate = useNavigate();
-
     return (
         <header>
             <nav className={appHeaderStyles.navigation_panel}>
 
-            <div className={appHeaderStyles.content}>
+                <div className={appHeaderStyles.content}>
                     <nav className={appHeaderStyles.navigation_internal_panel}>
 
+                        <NavLink
+                            to='/'
+                            className={appHeaderStyles.navigation_link_constructor}
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    <BurgerIcon type={isActive ? "primary" : "secondary"} />
+                                    <p className={`text text_type_main-default ${isActive ? "" : "text_color_inactive"}`}>
+                                        Конструктор
+                                    </p>
+                                </>
+                            )
+                            }
+                        </NavLink>
 
-                    <a href="#" className={appHeaderStyles.navigation_link_constructor} onClick={() => navigate('/', {replace: true})}>
-                            <BurgerIcon type="primary" />
-                            <p className="text text_type_main-default">
-                                Конструктор
-                            </p>
-                        </a>
-
-                        <a href="#" className={appHeaderStyles.navigation_link_order} onClick={() => navigate('/', {replace: true})}>
-                        
-                            <ListIcon type="secondary" />
-                            <p className="text text_type_main-default  text_color_inactive" type="secondary">
-                                Лента заказов
-                            </p>
-                        
-                        </a>
+                        <NavLink
+                            to='/list'
+                            className={appHeaderStyles.navigation_link_order}
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    <ListIcon type={isActive ? "primary" : "secondary"} />
+                                    <p className={`text text_type_main-default ${isActive ? "" : "text_color_inactive"}`}>
+                                        Лента заказов
+                                    </p>
+                                </>
+                            )
+                            }
+                        </NavLink>
                     </nav>
-
 
                     <section className={appHeaderStyles.logo}>
                         <Logo />
                     </section>
 
-                    <a href="#" className={appHeaderStyles.navigation_link_profile}  onClick={() => navigate('/profile', {replace: true})}>
-                        <ProfileIcon type="secondary" />
-                        <p className="text text_type_main-default text_color_inactive">
-                            Личный кабинет
-                        </p>
-                    </a>
+                    <NavLink
+                            to='/profile'
+                            className={appHeaderStyles.navigation_link_profile}
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    <ProfileIcon type={isActive ? "primary" : "secondary"} />
+                                    <p className={`text text_type_main-default ${isActive ? "" : "text_color_inactive"}`}>
+                                        Личный кабинет
+                                    </p>
+                                </>
+                            )
+                            }
+                        </NavLink>
 
                 </div>
             </nav>

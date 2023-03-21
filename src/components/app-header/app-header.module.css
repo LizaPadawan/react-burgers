@@ -94,6 +94,7 @@
     order: 1;
     flex-grow: 0;
     text-decoration:none;
+    color: rgb(255, 255, 255) !important;
 }
 
 .navigation_link_profile{
@@ -119,6 +120,7 @@
     /* interface/accent */
     border-radius: 40px;
     text-decoration:none;
+    color: rgb(255, 255, 255) !important;
 
 }
 

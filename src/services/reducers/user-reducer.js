@@ -9,7 +9,7 @@ export const userReducer = ( state = initialStateUser, action) => {
 			return state;
 
 		case FETCH_USER_SUCCESS:
-			console.log("userReduserSuccess", action.payload);
+			//console.log("userReduserSuccess", action.payload);
 			return action.payload;
 
 		case FETCH_USER_ERROR:

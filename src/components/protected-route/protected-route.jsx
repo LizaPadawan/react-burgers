@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { userSelector, isAuthSelector } from "../../services/selectors";
+import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({
     onlyUnAuth = false,
@@ -11,7 +12,7 @@ const ProtectedRoute = ({
     const user = useSelector(userSelector);
     //const location = useLocation<{ from: Location}>();
     const location = useLocation();
-    console.log("in protected route location", location);
+    //console.log("in protected route location", location);
   
     if (onlyUnAuth && (user.name !== "")) {
       //const { from } = location.state || { from: { pathname: "/" } };
@@ -27,5 +28,10 @@ const ProtectedRoute = ({
   
     return element;
   };
+
+  ProtectedRoute.propTypes = {
+    onlyUnAuth: PropTypes.bool,
+    children: PropTypes.element
+  }; 
 
   export default ProtectedRoute;
