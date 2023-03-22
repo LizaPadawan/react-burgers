@@ -32,7 +32,7 @@ export const fetchData = () => {
 }
 
 
-export const sendOrder = async (data, callback, dispatch) => {
+export const sendOrder = async (data, callback, dispatch, navigate) => {
     const ingredients = data.map(item => item._id);
     //console.log("I try to send order");
 
@@ -41,34 +41,28 @@ export const sendOrder = async (data, callback, dispatch) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
+                Authorization: getCookie('accessToken'),
             },
-            Authorization: getCookie('accessToken'),
+            //Authorization: getCookie('accessToken'),
             body: JSON.stringify({
                 ingredients,
             }),
         })
-        //.then(checkResponse);
+        .then(checkResponse);
     }
 
-    // orderBurger(ingredients)
-    //     .then((res) => {
-    //         callback(res.order.number);
-    //     })
-    //     .catch((err) => {
-    //         if (err.message === 'jwt expired') {
-    //             dispatch(refreshToken(sendOrder(data, callback, dispatch)));
-    //         } else {
-    //             dispatch(orderActions.initialOrder());
-    //         }
-    //     });
-
-    const response = await orderBurger(ingredients);
-    if (response.ok) {
-        const json = await response.json();
-        callback(json.order.number);
-    } else {
-        dispatch(orderActions.initialOrder());
-    }
+    orderBurger(ingredients)
+        .then((res) => {
+            callback(res.order.number);
+        })
+        .catch((err) => {
+            if (err.message === 'jwt expired') {
+                dispatch(refreshToken(sendOrder(data, callback, dispatch, navigate)));
+            } else {
+                //dispatch(orderActions.initialOrder());
+                navigate("/login", { replace: true });
+            }
+        });
 }
 
 export const fetchOrderData = (data, navigate) => {
@@ -86,7 +80,7 @@ export const fetchOrderData = (data, navigate) => {
         getProfileRequest()
         .then((res) => {
             if (res.success) {
-                sendOrder(data, setOrder, dispatch); 
+                sendOrder(data, setOrder, dispatch, navigate); 
                 dispatch(userActions.setUser(res.user));       
             }   
         })
@@ -101,7 +95,7 @@ export const fetchOrderData = (data, navigate) => {
         });
 
 
-        //sendOrder(data, setOrder, dispatch);
+        //sendOrder(data, setOrder, dispatch, navigate);
     });
 }
 

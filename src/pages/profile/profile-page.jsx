@@ -15,10 +15,12 @@ import commonStyles from "../common.module.css";
 import { userSelector } from "../../services/selectors";
 import { getProfileInfo, updateProfileInfo } from "../../services/thunk";
 import { isAuthSelector } from "../../services/selectors";
+import { useParams } from "react-router-dom";
 
 function Profile() {
+  const pageParams = useParams();
+  //console.log("params=", pageParams.orders);
   
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const [form, setForm] = useState({ password: "", email: "", name:  ""});
@@ -57,7 +59,7 @@ function Profile() {
           <p className="pb-4">
             <Link
               to="/profile"
-              className={commonStyles.profilelink + ' ' + commonStyles.white + " text text_type_main-medium"}
+              className={commonStyles.profilelink + ' ' + (pageParams.orders ? "text text_type_main-medium text_color_inactive" : commonStyles.white + " text text_type_main-medium")}
             >
               Профиль
             </Link>
@@ -65,7 +67,7 @@ function Profile() {
           <p className="pb-4">
             <Link
               to="/profile/orders"
-              className={commonStyles.profilelink + ' ' + "text text_type_main-medium text_color_inactive"}
+              className={commonStyles.profilelink + ' ' + (pageParams.orders ? commonStyles.white + " text text_type_main-medium" : "text text_type_main-medium text_color_inactive")}
             >
               История заказов
             </Link>
@@ -84,10 +86,13 @@ function Profile() {
               " text text_type_main-default text_color_inactive mt-10"
             }
           >
-            В этом разделе вы можете изменить свои персональные данные
+            {pageParams.orders ? "В этом разделе вы можете просматривать историю заказов" : "В этом разделе вы можете изменить свои персональные данные"}
           </p>
         </div>
+        
         <div className={commonStyles.columnstart + " pt-20"}>
+        {!(pageParams.orders) ?
+        <>
           <Input
             type={"text"}
             placeholder={"Имя"}
@@ -141,6 +146,7 @@ function Profile() {
             </Button>
           </div>
           }
+        </> : <div style={{width: '485px'}}/>}
         </div>
       </div> :
           <div>Идет загрузка ...</div>

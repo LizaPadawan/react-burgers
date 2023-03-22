@@ -31,7 +31,7 @@ export function IngredientDetails(){
                 </p>
           </div>
           
-      <div style={{display:'flex', justifyContent:'space-between'}}>
+      <div style={{display:'flex', justifyContent:'space-between', marginTop: '25px'}}>
 
 
         
