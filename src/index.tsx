@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import { initialState } from './services/initial-state';
 import { configureStore } from './services/store';
 
 const store = configureStore(initialState);
-//const store = configureStore();
 
 store.subscribe(() => {
-  console.log(store.getState());
+  //console.log(store.getState());
 })
 
 const root = ReactDOM.createRoot(

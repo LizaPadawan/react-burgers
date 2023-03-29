@@ -12,22 +12,25 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
-import { sendOrder } from "./burger-constructor-service";
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
-
+import { modalActions } from "../../services/actions/modal-actions-creator";
 import { fetchOrderData } from "../../services/thunk";
 import { GET_CONSTRUCTOR } from "../../services/action-types";
 import { useDrop } from "react-dnd";
 import uuid from 'react-uuid';
+import { useNavigate } from "react-router-dom";
+
 
 import { constructorActions } from "../../services/actions/constructor-actions-creator";
 
 const OrderDetails = () => {
+    const dispatch = useDispatch();
     const orderData = useSelector(currentOrderSelector);
-    console.log("orderData=", orderData);
+    //console.log("orderData=", orderData);
+    const onClose = () => {dispatch(modalActions.closeModal())};
 
     return (
-        <Modal modalId="portal" overflow="visible" caption="" >
+        <Modal modalId="portal" overflow="visible" caption="" onClose={onClose}>
             <div className={burgerConstructorStyles.in_modal}>
                 <p className={'text text_type_digits-large p-4 ' + burgerConstructorStyles.colored}>
                     {orderData}
@@ -35,11 +38,11 @@ const OrderDetails = () => {
                 <p className={'text text_type_main-medium p-8 ' + burgerConstructorStyles.colored}>
                     идентификатор заказа
                 </p>
+
                 <div className={'p-12 ' + burgerConstructorStyles.colored}>
-                    <p className='p-15' style={{ transform: 'scale(2)' }}>
-                        <CheckMarkIcon style={{ width: '120px', height: '120px' }} type='primary' />
-                    </p>
-                </div>
+                 <div className={'p-12 ' + burgerConstructorStyles.check_img}/>
+                 </div>
+
                 <p className={burgerConstructorStyles.colored + ' text text_type_main-default'}>
                     Ваш заказ начали готовить
                 </p>
@@ -61,6 +64,8 @@ const OrderInfo = () => {
     const bunPrice = (bun) ? bun.price : 0;
     const noBunIngredients = data.filter(item => item.type !== 'bun');
     const summ = (noBunIngredients.length > 0) ? bunPrice * 2 + data.filter(item => item.type !== 'bun').map((item) => item.price).reduce((a, b) => { return a + b; }): bunPrice * 2;
+    const toFetchData = (bun) ? [bun, ...noBunIngredients, bun] : noBunIngredients;
+    const navigate = useNavigate();
 
     return (
 
@@ -76,7 +81,7 @@ const OrderInfo = () => {
             </p>
 
             <Button htmlType="button" type="primary" size="medium" onClick={e => { 
-                dispatch(fetchOrderData(data));
+                dispatch(fetchOrderData(toFetchData, navigate));
                 
                 }}>
                 Оформить заказ

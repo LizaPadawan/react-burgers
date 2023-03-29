@@ -10,58 +10,8 @@ import ingredientPropTypes from '../ingredients-proptypes';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
 import { InView } from 'react-intersection-observer';
-
-function IngredientDetails(){
-  
-  const data = useSelector(ingredientsSelector);
-  const ingredientKey = useSelector(currentIngredientSelector);
-
-  return(
-    <div>
-      {
-        data.filter(item => item._id == ingredientKey).map(jtem => 
-        <div  key={jtem._id} style={{display:'flex', justifyContent:'center'}}>
-              <div style={{width:"520px"}} >
-              <img style={{width:"480px"}} src={jtem.image} alt=''/>
-              <div  style={{display:'flex', justifyContent:'center'}}>
-                <p  className="text text_type_main-medium">
-                {jtem.name}
-                </p>
-          </div>
-          
-      <div style={{display:'flex', justifyContent:'center'}}>
-
-
-        
-          <div style={{display:'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
-          <p className='text text_type_main-default text_color_inactive'> Калории, ккал </p>
-          <p className='text text_type_digits-default text_color_inactive'> {jtem.calories} </p>
-          </div>
-        
-        <div style={{display:'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
-          <p className='text text_type_main-default text_color_inactive'> Белки, г </p>
-          <p className='text text_type_digits-default text_color_inactive'> {jtem.proteins} </p>
-          </div>
-        
-        <div style={{display:'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
-          <p className='text text_type_main-default text_color_inactive'> Жиры, г </p>
-          <p className='text text_type_digits-default text_color_inactive'> {jtem.fat} </p>
-          </div>
-        
-        <div style={{display:'flex', flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
-          <p className='text text_type_main-default text_color_inactive'> Углеводы, г </p>
-          <p className='text text_type_digits-default text_color_inactive'> {jtem.carbohydrates} </p>
-          </div>
-      
-
-      </div>
-    </div>
-        </div>
-        )
-      }
-    </div> 
-  )
-}
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function IngredientsTabs( props ){
     const current = props.currentGroup;
@@ -99,13 +49,23 @@ function IngredientCard(props){
     })
 })
 
+  const location = useLocation();
+  const ingredientId = props._id;
+
   return (
-      <div
+    <Link
+    key={ingredientId}
+    to={`/ingredients/${ingredientId}`}
+    state={{ background: location }}
+    
+
+    //>
+    //  <div
           className={burgerIngredientsStyles.burger_ingredient_card}
-          onClick = {() => {
-            dispatch(currentIngredientActions.setCurrentIngredient(props._id));
-            console.log("click");
-          }}
+          //onClick = {() => {
+          //  dispatch(currentIngredientActions.setCurrentIngredient(props._id));
+          //  console.log("click");
+          //}}
           ref={dragRef} 
           style={{ opacity }}
       >
@@ -122,7 +82,8 @@ function IngredientCard(props){
               {props.name}
           </p>
         </div>
-      </div>
+      {/* </div> */}
+    </Link>
   );
 };
 
@@ -188,11 +149,11 @@ function BurgerIngredients() {
             <IngredientGroup groupTitle = "Начинки" groupName = "main" tab="fillings"/>
           </div>
       </div>
-      {(ingredientKey !== "")  && 
+      {/* {(ingredientKey !== "")  && 
         <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" 
         >  
         <IngredientDetails />     
-      </Modal>}
+      </Modal>} */}
       </>
   );
 }

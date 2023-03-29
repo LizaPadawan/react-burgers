@@ -142,18 +142,13 @@ top: 796px;
 }
 
 .check_img{
-    position: absolute;
-width: 120px;
-height: 120px;
-left: 300px;
-top: 362px;
-
-background: url('../../img/check.svg');
-/* interface/accent */
-
-/* border: 1px dashed #4C4CFF; */
-
-
+display: flex;
+width: 110px;
+height: 200px;
+justify-content: center;
+background: url('../../img/order-ok.svg');
+background-position: center;
+background-repeat: no-repeat;
 }
 
 .in_modal{
@@ -173,6 +168,5 @@ background: url('../../img/check.svg');
 
 .colored{
     display: flex;
-    /* border: 1px dashed #4C4CFF; */
     justify-content: center;
 }

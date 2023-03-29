@@ -1,7 +1,27 @@
+
 export const initialState = { 
-	ingredientsReduser: [],
-	constructorReduser: [],
-	modalReduser: false,
-    currentIngredientReduser: "",
-    orderReduser: { orderNumber: null}
+	ingredientsReduser: {
+		ingredients: [],
+	},
+	constructorReduser: {
+		constructor: [],
+	},
+	modalReduser: {
+		isModalOpen: false,
+	},
+    currentIngredientReduser: {
+		currentIngredient: "",
+	},
+    orderReduser: { 
+		orderNumber: null
+	},
+	userReducer: {
+		user: {
+		  email: "",
+		  name: ""
+		}
+	},
+	authCheckReducer: {
+		isAuthChecked: false
+	}
 };
