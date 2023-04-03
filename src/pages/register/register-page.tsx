@@ -14,7 +14,7 @@ import commonStyles from "../common.module.css";
 
 function Register() {
   const [form, setForm] = useState({ password: "", email: "", name: "" });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as any;
   const navigate = useNavigate();
 
   return (
@@ -35,7 +35,7 @@ function Register() {
           placeholder={"E-mail"}
           onChange={(e) => {setForm({ ...form, email: e.target.value });}}
           value={form.email}
-          error={false}
+          //error={false}
           size={"default"}
           extraClass="ml-1"
         />
@@ -44,7 +44,7 @@ function Register() {
           placeholder={"Пароль"}
           onChange={(e) => {setForm({ ...form, password: e.target.value })}}
           value={form.password}
-          error={false}
+          //error={false}
           size={"default"}
           extraClass="ml-1"
         />

@@ -12,10 +12,11 @@ import { InView } from 'react-intersection-observer';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { TIngredient } from '../ingredients-proptypes';
 
 export function IngredientDetails(){
   
-  const data = useSelector(ingredientsSelector);
+  const data : Array<TIngredient>  = useSelector(ingredientsSelector);
   const ingredientKey = useParams().ingredientId;
 
   return(

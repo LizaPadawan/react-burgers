@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, EmailInput, PasswordInput, Preloader } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from "../common.module.css";
 import { login } from "../../services/thunk";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { isAuthSelector } from "../../services/selectors";
 
 function Login() {
   const [form, setForm] = useState({ password: "", email: "" });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()as any;
   const navigate = useNavigate();
   const isAuthChecked = useSelector(isAuthSelector);
 
@@ -29,7 +29,7 @@ function Login() {
               placeholder={"E-mail"}
               onChange={(e) => { setForm({ ...form, email: e.target.value }); }}
               value={form.email}
-              error={false}
+              //error={false}
               size={"default"}
               extraClass="ml-1"
             />
@@ -38,7 +38,7 @@ function Login() {
               placeholder={"Password"}
               onChange={(e) => { setForm({ ...form, password: e.target.value }) }}
               value={form.password}
-              error={false}
+              //error={false}
               size={"default"}
               extraClass="ml-1"
             />

@@ -21,7 +21,7 @@ function Profile() {
   const pageParams = useParams();
   //console.log("params=", pageParams.orders);
   
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as any;
   const user = useSelector(userSelector);
   const [form, setForm] = useState({ password: "", email: "", name:  ""});
   const [buttonsOpen, setButtonsOpen] = useState(false);
@@ -74,6 +74,7 @@ function Profile() {
           </p>
           <p className="pb-4">
             <Link
+              to="/login"
               className={commonStyles.profilelink + ' ' + "text text_type_main-medium text_color_inactive"}
               onClick={() => {dispatch(logout());}}
             >
@@ -110,7 +111,7 @@ function Profile() {
               setForm({ ...form, email: e.target.value });
             }}
             value={form.email}
-            error={false}
+            //error={false}
             size={"default"}
             extraClass="ml-1 pb-6"
           />
@@ -120,7 +121,7 @@ function Profile() {
               setForm({ ...form, password: e.target.value });
             }}
             value={form.password}
-            error={false}
+            //error={false}
             size={"default"}
             extraClass="ml-1 pb-6"
           />

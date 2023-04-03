@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect, FC} from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from 'react-dnd';
@@ -12,33 +12,34 @@ import { ingredientsSelector, openModalSelector, currentIngredientSelector, cons
 import { InView } from 'react-intersection-observer';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { TIngredient } from '../ingredients-proptypes';
 
-function IngredientsTabs( props ){
-    const current = props.currentGroup;
+export type TIngredientsTabsProps = {
+  currentGroup: string;
+};
+
+const IngredientsTabs  : FC<TIngredientsTabsProps> = ( { currentGroup } ) => {
+    const current = currentGroup;
     
     return (
     <div className={burgerIngredientsStyles.burger_ingredients_tabs}>
-      <Tab value="buns" active={current === "buns"} >
+      <Tab value="buns" active={current === "buns"} onClick={() => {}}>
         Булки
       </Tab>
-      <Tab value="sauses" active={current === "sauses"} >
+      <Tab value="sauses" active={current === "sauses"} onClick={() => {}}>
         Соусы
       </Tab>
-      <Tab value="fillings" active={current === "fillings"} >
+      <Tab value="fillings" active={current === "fillings"} onClick={() => {}}>
         Начинки
       </Tab>
     </div>
   )
-}
+} 
 
-IngredientsTabs.propTypes = {
-  currentGroup: PropTypes.string.isRequired,
-}; 
-
-function IngredientCard(props){
-  const dispatch = useDispatch();
-  const constructorElements = useSelector(constructorSelector);
-  let count = constructorElements.filter(item => item._id == props._id).length;
+const IngredientCard: FC<TIngredient>  = (props) => {
+  //const dispatch = useDispatch();
+  const constructorElements  : Array<TIngredient> = useSelector(constructorSelector);
+  let count : number = constructorElements.filter(item => item._id == props._id).length;
   if (props.type == 'bun') count = count * 2;
 
   const [{ opacity }, dragRef] = useDrag({
@@ -54,25 +55,20 @@ function IngredientCard(props){
 
   return (
     <Link
-    key={ingredientId}
-    to={`/ingredients/${ingredientId}`}
-    state={{ background: location }}
-    
-
-    //>
-    //  <div
+          key={ingredientId}
+          to={`/ingredients/${ingredientId}`}
+          state={{ background: location }}
           className={burgerIngredientsStyles.burger_ingredient_card}
-          //onClick = {() => {
-          //  dispatch(currentIngredientActions.setCurrentIngredient(props._id));
-          //  console.log("click");
-          //}}
           ref={dragRef} 
           style={{ opacity }}
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
           <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />
           <div className={burgerIngredientsStyles.burger_ingredient_count}>
-            {count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>}
+            {
+            //count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>
+            count > 0 && <Counter count={count} size='default'/>
+            }
           </div>
           <p className={'text text_type_digits-default m-1 ' + burgerIngredientsStyles.burger_ingredient_price}>
               {props.price}
@@ -87,14 +83,15 @@ function IngredientCard(props){
   );
 };
 
-IngredientCard.propTypes = {
-  ...ingredientPropTypes.isRequired
+export type TIngredientGroupProps = {
+  groupName: string,
+  groupTitle: string,
+  tab: string
 };
 
+const IngredientGroup : FC <TIngredientGroupProps> = (props) =>{
 
-function IngredientGroup(props){
-
-  const data = useSelector(ingredientsSelector);
+  const data   : Array<TIngredient> = useSelector(ingredientsSelector);
   const groupName = props.groupName;
   const groupTitle = props.groupTitle;
 
@@ -111,24 +108,18 @@ function IngredientGroup(props){
   );
 }
 
-IngredientGroup.propTypes = {
-  groupName: PropTypes.string.isRequired,
-  groupTitle: PropTypes.string.isRequired,
-  tab: PropTypes.string.isRequired
-}; 
-
 
 function BurgerIngredients() {
 
   const ingredientKey = useSelector(currentIngredientSelector);
   const [currentGroup, setCurrentGroup] = useState('buns');
   const tabsArr = ["buns", "sauses", "fillings"];
-  const min = (values) => values.reduce((x, y) => Math.min(x, y));
+  const min = (values : Array<number>)  => values.reduce((x, y) => Math.min(x, y));
 
   const scroll = () => {
-    const scrolltop = document.getElementById("scrollbody").scrollTop;
+    const scrolltop = document.getElementById("scrollbody")?.scrollTop;
 
-    const tabDiffs = tabsArr.map((item) => (Math.abs(scrolltop - document.getElementById(item).offsetTop)));
+    const tabDiffs = tabsArr.map((item) => (Math.abs((scrolltop ? scrolltop : 0) - Number(document.getElementById(item)?.offsetTop))));
     const minDiff = min(tabDiffs);
     const minIndex = tabDiffs.indexOf(minDiff);
     if (minIndex !== -1) setCurrentGroup(tabsArr[minIndex]);  
@@ -149,11 +140,6 @@ function BurgerIngredients() {
             <IngredientGroup groupTitle = "Начинки" groupName = "main" tab="fillings"/>
           </div>
       </div>
-      {/* {(ingredientKey !== "")  && 
-        <Modal modalId="portal" overflow = "visible" caption="Детали ингредиента" 
-        >  
-        <IngredientDetails />     
-      </Modal>} */}
       </>
   );
 }
