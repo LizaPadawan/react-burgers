@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import './App.css';
 import AppHeader from '../app-header/app-header';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { fetchIngredientsSelector } from '../../services/selectors';
-import { ingredientsSelector } from '../../services/selectors';
 import { fetchData } from '../../services/thunk';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import Main from '../../pages/main/main-page';
 import Login from '../../pages/login/login-page';
 import Register from '../../pages/register/register-page';
@@ -28,7 +24,7 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
 function App() {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as any;
 
   useEffect(
     () => {
@@ -56,10 +52,9 @@ function App() {
        <Routes location={background || location}>
        <Route path="/" element={<Main />} />
             <Route path="/login" element={<ProtectedRoute element={<Login />}  onlyUnAuth={true}/>} />
-            {/* <Route path="/login" element={<Login />} /> */}
-            <Route path="/register" element={<Register />}  onlyUnAuth={true}/> 
-            <Route path="/forgot-password" element={<ForgotPassword />}  onlyUnAuth={true}/>
-            <Route path="/reset-password" element={<ResetPassword />}  onlyUnAuth={true}/> 
+            <Route path="/register" element={<ProtectedRoute element={<Register />} onlyUnAuth={true}/>} /> 
+            <Route path="/forgot-password" element={<ProtectedRoute element={<ForgotPassword  />} onlyUnAuth={true}/>} />
+            <Route path="/reset-password"  element={<ProtectedRoute element={<ResetPassword  />} onlyUnAuth={true}/>} /> 
             <Route path="/profile" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
             <Route path="/profile/:orders" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
             <Route path="/profile/:orders/:id" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 

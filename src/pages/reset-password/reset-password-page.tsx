@@ -16,7 +16,7 @@ import { resetPasswordRequest } from "../../services/thunk";
 function ResetPassword() {
   const [form, setForm] = useState({ password: "", token: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as any;
   const incomingState = useLocation().state;
   //console.log("resetpasswordlocaton", incomingState);
 
@@ -38,7 +38,7 @@ function ResetPassword() {
           onChange={(e) => {
             setForm({ ...form, password: e.target.value });}}
           value={form.password}
-          error={false}
+          //error={false}
           size={"default"}
           extraClass="ml-1"
         />
@@ -49,7 +49,7 @@ function ResetPassword() {
           onChange={(e) => {
             setForm({ ...form, token: e.target.value });}}
           value={form.token}
-          error={false}
+          //error={false}
           size={"default"}
           extraClass="ml-1"
         />

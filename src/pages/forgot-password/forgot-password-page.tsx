@@ -14,7 +14,7 @@ import { forgotPasswordRequest } from "../../services/thunk";
 function ForgotPassword() {
   const [form, setForm] = useState({ email: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch() as any;
 
   return (
     <form 
