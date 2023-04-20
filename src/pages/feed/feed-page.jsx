@@ -12,6 +12,7 @@ import styles from './feed-page.module.css';
 //import Loader from '../../components/Loader/Loader';
 import { feedSelector } from '../../services/selectors';
 import OrderListInfo from '../../components/order-list-info/order-list-info';
+import commonStyles from "../common.module.css";
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -28,7 +29,8 @@ const Feed = () => {
     const feed = useSelector(feedSelector);
 
     return (
-        <>
+
+        <div className={commonStyles.content_panel}>
             {feed.orders ? (
                 <div className={styles.Feed}>
                     <section className={styles.OrderList}>
@@ -40,7 +42,7 @@ const Feed = () => {
             ) : (
                 <p> Идет загрузка... </p>
             )}
-        </>
+        </div>
     );
 };
 

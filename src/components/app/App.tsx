@@ -22,6 +22,10 @@ import Modal from '../modal/modal';
 import { useNavigate } from 'react-router-dom';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import Feed from '../../pages/feed/feed-page';
+import OrderPage from '../../pages/order/order-page';
+import OrderIngredients from '../order-ingredients/order-ingredients';
+import styles from './app.module.css';
+import ProfileOrders from '../../pages/profile-orders/profile-orders';
 
 function App() {
 
@@ -57,9 +61,10 @@ function App() {
             <Route path="/forgot-password" element={<ProtectedRoute element={<ForgotPassword  />} onlyUnAuth={true}/>} />
             <Route path="/reset-password"  element={<ProtectedRoute element={<ResetPassword  />} onlyUnAuth={true}/>} /> 
             <Route path="/profile" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
-            <Route path="/profile/:orders" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
-            <Route path="/profile/:orders/:id" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
+            <Route path="/profile/:orders" element={<ProtectedRoute element={<ProfileOrders />} onlyUnAuth={false}/>} /> 
+            <Route path="/profile/:orders/:orderId" element={<ProtectedRoute element={<OrderPage />}  onlyUnAuth={false}/>} /> 
             <Route path="/list" element={<Feed />} />
+            <Route path="/list/:orderId" element={<OrderPage />} />
             <Route path="/ingredients/:ingredientId" element={<Ingredient />}></Route>
             <Route path="*" element={<Error />} />
        </Routes>
@@ -73,7 +78,29 @@ function App() {
                <IngredientDetails />
              </Modal>
            }
-         /></Routes>
+         />
+         <Route
+           path="/list/:orderId"
+           element={
+             <Modal onClose={handleModalClose} modalId="portal" overflow = "visible" >
+              <div className={styles.MiddleModal}>
+               <OrderIngredients />
+               </div>
+             </Modal>
+           }
+         />
+         <Route path="/profile/:orders/:orderId" 
+              element={<ProtectedRoute element={              
+                <Modal onClose={handleModalClose} modalId="portal" overflow = "visible" >
+                <div className={styles.MiddleModal}>
+                 <OrderIngredients />
+                 </div>
+               </Modal>            
+            }  onlyUnAuth={false}/>} 
+          /> 
+
+
+         </Routes>
        )}
      </>
     );

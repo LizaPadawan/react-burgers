@@ -6,6 +6,15 @@
     padding: 0px;
     gap: 24px;
   }
+
+  .center_orders {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 40px;
+    gap: 24px;
+  }
   
   .column {
     display: flex;
