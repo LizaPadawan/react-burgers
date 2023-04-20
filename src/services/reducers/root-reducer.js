@@ -6,6 +6,8 @@ import { modalReduser } from './open-modal-reducer';
 import { orderReduser } from './order-reducer';
 import { userReducer } from './user-reducer';
 import { authCheckReducer } from './auth-check-reducer';
+import { feedReducer } from './feed-reducer';
+import { userFeedReducer } from './user-feed-reducer';
 
 export const rootReducer = combineReducers({
     constructorReduser,
@@ -15,4 +17,6 @@ export const rootReducer = combineReducers({
     modalReduser,
     userReducer,
     authCheckReducer,
+    feedReducer,
+    userFeedReducer
 }) 

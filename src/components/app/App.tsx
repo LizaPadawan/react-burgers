@@ -21,6 +21,7 @@ import { useLocation } from 'react-router-dom';
 import Modal from '../modal/modal';
 import { useNavigate } from 'react-router-dom';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import Feed from '../../pages/feed/feed-page';
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
             <Route path="/profile" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
             <Route path="/profile/:orders" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
             <Route path="/profile/:orders/:id" element={<ProtectedRoute element={<Profile />} onlyUnAuth={false}/>} /> 
-            <Route path="/list" element={<List />} />
+            <Route path="/list" element={<Feed />} />
             <Route path="/ingredients/:ingredientId" element={<Ingredient />}></Route>
             <Route path="*" element={<Error />} />
        </Routes>

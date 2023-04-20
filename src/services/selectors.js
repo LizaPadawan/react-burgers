@@ -3,5 +3,7 @@ export const constructorSelector = (state) => state.constructorReduser.construct
 export const openModalSelector = (state) => state.modalReduser.isModalOpen
 export const currentIngredientSelector = (state) => state.currentIngredientReduser.currentIngredient
 export const currentOrderSelector = (state) => state.orderReduser.orderNumber
-export const userSelector = (state) => state.userReducer.user;
+export const userSelector = (state) => state.userReducer.user
 export const isAuthSelector = (state) => state.authCheckReducer.isAuthChecked
+export const feedSelector = (state) => state.feedReducer
+export const userFeedSelector = (state) => state.userFeedReducer
