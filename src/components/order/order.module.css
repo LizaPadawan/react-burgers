@@ -1,4 +1,4 @@
-.OrderItem {
+.item {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -69,12 +69,12 @@
     height: 56px;
 }
 
-.TotalPrice {
+.price {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.Done {
+.ready {
     color: #00cccc;
 }

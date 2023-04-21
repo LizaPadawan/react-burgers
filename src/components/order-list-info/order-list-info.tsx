@@ -5,12 +5,13 @@ import { useSelector } from 'react-redux';
 import { feedSelector, wsSelector } from '../../services/selectors';
 
 import styles from './order-list-info.module.css';
+import { TWsData } from '../order-proptypes';
 
 //const OrderInfo: FC = () => {
 const OrderListInfo = () => {
-    const order = useSelector(wsSelector);
+    const order : TWsData = useSelector(wsSelector);
 
-    //const ordersReady = useMemo<number[]>(() => {
+    // const ordersReady = useMemo<number[]>(() => {
     const ordersReady = useMemo(() => {
         return (
             order.orders.filter(order => order.status === 'done')

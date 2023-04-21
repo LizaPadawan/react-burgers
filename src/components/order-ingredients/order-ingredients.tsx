@@ -1,40 +1,26 @@
 import { FC, memo, useMemo } from 'react';
-
 import { useParams } from 'react-router-dom';
-
 import styles from './order-ingredients.module.css';
-
-//import { useAppSelector } from '../../../hooks/hooks';
-
-//import { TIngredientItem, TOrder } from '../../../utils/types';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import { feedSelector, ingredientsSelector, wsSelector} from '../../services/selectors';
+import { TWsData } from '../order-proptypes';
+import { TIngredient } from '../ingredients-proptypes';
 
-//const OrderIngredients: FC = () => {
-const OrderIngredients = () => {
+const OrderIngredients: FC = () => {
     const { orderId } = useParams();
     console.log(orderId );
-
-    //const ordersStore = useAppSelector(store => store.order);
-    const ordersStore = useSelector(wsSelector);
+    const wsData : TWsData = useSelector(wsSelector);
 
     const order = useMemo(() => {
-        //return ordersStore.orders.find(order => order._id === orderId) as TOrder;
-        return ordersStore.orders.find(order => order._id === orderId);
-    }, [ordersStore]);
+        return wsData.orders.find(order => order._id === orderId);
+    }, [wsData]);
 
     const status = ((order && order.status === 'done') && 'Выполнен') || ((order && order.status === 'pending') && 'Готовится') || ((order && order.status === 'created') && 'Создан');
+    const ingredientsStore : Array<TIngredient>  = useSelector(ingredientsSelector);
 
-    //const ingredientsStore = useAppSelector(store => store.ingredientsItems.items);
-    const ingredientsStore = useSelector(ingredientsSelector);
-    console.log(ingredientsStore);
-
-    //const ingredients = useMemo<TIngredientItem[]>(() => {
     const ingredients = useMemo(() => {
-        //const ingredients: TIngredientItem[] = [];
-        const ingredients = [];
-        //order?.ingredients.forEach((ingredientId: string) => {
+        const ingredients : Array<TIngredient>  = [];
         order?.ingredients.forEach((ingredientId) => {
             if (ingredientId !== null || ingredientId !== undefined) {
                 const ingredientItem = ingredientsStore
@@ -47,11 +33,8 @@ const OrderIngredients = () => {
         return ingredients;
     }, [order, ingredientsStore]);
 
-    console.log(ingredients);
-
     const uniqueIngredients = useMemo(() => {
-        //const table: any = {};
-        const table = {};
+        const table : any = {};
         return ingredients.filter((ingredient) => (!table[ingredient._id] && (table[ingredient._id] = 1)));
     }, [ingredients]);
 

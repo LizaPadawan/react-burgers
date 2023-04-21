@@ -1,13 +1,9 @@
-import { FC, memo, useMemo } from 'react';
-
+import { FC, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
 import styles from './order.module.css';
-
-//import { TIngredientItem, TOrder } from '../../../utils/types';
-
 import { TOrder } from '../order-proptypes';
+import { TIngredient } from '../ingredients-proptypes';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientsSelector } from '../../services/selectors';
 
@@ -18,40 +14,33 @@ interface OrderProps {
 }
 
 const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefined }) => {
-//const Order = ({ order, withStatus = false, extraClass = undefined }) => {
     const location = useLocation();
+    const ingredientsList : Array<TIngredient> = useSelector(ingredientsSelector);
 
-    const ingredientsStore = useSelector(ingredientsSelector);
-
-    //const ingredients = useMemo<TIngredientItem[]>(() => {
-    const ingredients = useMemo(() => {
-        //const ingredients: TIngredientItem[] = [];
-        const ingredients = [];
-        //order.ingredients.forEach((ingredientId: string) => {
-        order.ingredients.forEach((ingredientId) => {
+    const ingredients = useMemo<TIngredient[]>(() => {
+        const ingredients: TIngredient[] = [];
+        order.ingredients.forEach((ingredientId: string) => {
             if (ingredientId !== null || ingredientId !== undefined) {
-                const ingredientItem = ingredientsStore
-                    .find(ingredient => ingredient._id === ingredientId);
+                const ingredientItem = ingredientsList.find(ingredient => ingredient._id === ingredientId);
                 if (ingredientItem !== undefined) {
                     ingredients.push(ingredientItem);
                 }
             }
         });
         return ingredients;
-    }, [order, ingredientsStore]);
+    }, [order, ingredientsList]);
 
     const totalPrice = useMemo(() => {
-        return ingredients.reduce((acc, ingredient) => acc + ingredient.price, 0);
+        return ingredients.reduce((sum, ingredient) => sum + ingredient.price, 0);
     }, [ingredients]);
 
     const maxIndex = 6;
-
-    const status = ((order && order.status === 'done') && 'Выполнен') || ((order && order.status === 'pending') && 'Готовится') || ((order && order.status === 'created') && 'Создан');
+    const nameStatus = ((order && order.status === 'done') && 'Выполнен') || ((order && order.status === 'pending') && 'Готовится') || ((order && order.status === 'created') && 'Создан');
 
     return (
         <Link
             to={`${location.pathname}/${order._id}`}
-            className={`${styles.OrderItem} p-6 mb-4 mr-2 ${extraClass}`}
+            className={`${styles.item} p-6 mb-4 mr-2 ${extraClass}`}
             state={{ background: location }}
         >
             <section className={`${styles.OrderInfo} mb-6`}>
@@ -66,13 +55,12 @@ const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefin
                 {order.name}
             </p>
             {withStatus && (
-                <p className={`text text_type_main-default ${order.status === 'done' && styles.Done} mb-15`}>
-                    {status}
+                <p className={`text text_type_main-default ${order.status === 'done' && styles.ready} mb-15`}>
+                    {nameStatus}
                 </p>
             )}
             <section className={styles.OrderIngredients}>
                 <section className={styles.IngredientsContainer}>
-                    {/* {ingredients.slice(0, 6).map((ingredient: TIngredientItem, index: number) => ( */}
                     {ingredients.slice(0, 6).map((ingredient, index) => (
                         <div key={index} style={{ left: -(20 * index), zIndex: maxIndex - index }} className={styles.IngredientImage}>
                             <div className={styles.IngredientImageOverlay}>
@@ -88,7 +76,7 @@ const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefin
                         </div>
                     ))}
                 </section>
-                <section className={styles.TotalPrice}>
+                <section className={styles.price}>
                     <p className='text text_type_digits-default'>
                         {totalPrice}
                     </p>

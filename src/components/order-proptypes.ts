@@ -7,3 +7,9 @@ export type TOrder = {
     createdAt: string;
     updatedAt: string;
 };
+
+export type TWsData = {
+    orders: TOrder[];
+    total: number;
+    totalToday: number;
+};

@@ -7,45 +7,30 @@ import {
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { logout } from "../../services/thunk";
-
-//import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-//import { logout } from '../../services/slices/UserSlice';
-
 import { Link, useLocation } from 'react-router-dom';
-
 import styles from './profile-orders.module.css';
-
 import Order from '../../components/order/order';
-//import { getItemLocalStorage } from '../../utils/localStorage';
-//import { websocketDisconnecting, websocketStartConnecting } from '../../services/slices/socketSlice';
-//import { WS_BURGER_API_URL } from '../../utils/burger-api';
-//import { clearOrders } from '../../services/slices/OrderSlice';
-//import Loader from '../../components/Loader/Loader';
-import { feedSelector, isAuthSelector, wsSelector } from '../../services/selectors';
+import { isAuthSelector, wsSelector } from '../../services/selectors';
 import { useDispatch, useSelector } from "react-redux";
 import commonStyles from "../common.module.css";
 import { wsConnectionStart } from '../../services/actions/ws-actions-creator';
 import { wsConnectionClosed } from '../../services/actions/ws-actions-creator';
 import { getCookie } from '../../utils/cookie';
+import { TOrder } from '../../components/order-proptypes';
 
 function ProfileOrders() {
-    const pageParams = useParams();
-    //console.log("params=", pageParams.orders);
-    
-    const dispatch = useDispatch(); 
+    const pageParams = useParams();   
+    const dispatch = useDispatch() as any; 
     const isAuthChecked = useSelector(isAuthSelector);
-    //const orders = useSelector(feedSelector).orders;
-    const orders = useSelector(wsSelector).orders;
+    const orders : TOrder[] = useSelector(wsSelector).orders;
 
     const accessToken = getCookie('accessToken');
-    console.log(accessToken);
-    const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken.substr(7)}`;
+    const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken ? accessToken.substr(7) : ""}`;
 
     useEffect(() => {
         dispatch(wsConnectionStart(wsUrl));
         
         return () => {
-            //dispatch(clearOrders());
             dispatch(wsConnectionClosed());
         }
     }, [dispatch]);
@@ -94,7 +79,6 @@ function ProfileOrders() {
           
           <div className={commonStyles.columnstart + " pt-20"}>
           {(pageParams.orders) && 
-            //<div style={{width: '485px'}}>
             <div>
                 <section className={styles.OrderList}>
                             {orders && orders.map(order => (
