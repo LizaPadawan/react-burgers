@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import { feedSelector, ingredientsSelector } from '../../services/selectors';
+import { feedSelector, ingredientsSelector, wsSelector} from '../../services/selectors';
 import styles from './order-list.module.css';
 import Order from '../order/order';
 
 const OrderList = () => {
-    const orders = useSelector(feedSelector).orders;
+    const orders = useSelector(wsSelector).orders;
     const ingredients = useSelector(ingredientsSelector);
     console.log("order-list ingredients", ingredients);
 

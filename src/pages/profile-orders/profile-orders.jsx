@@ -21,10 +21,12 @@ import Order from '../../components/order/order';
 //import { WS_BURGER_API_URL } from '../../utils/burger-api';
 //import { clearOrders } from '../../services/slices/OrderSlice';
 //import Loader from '../../components/Loader/Loader';
-import { feedSelector, isAuthSelector } from '../../services/selectors';
+import { feedSelector, isAuthSelector, wsSelector } from '../../services/selectors';
 import { useDispatch, useSelector } from "react-redux";
 import commonStyles from "../common.module.css";
-
+import { wsConnectionStart } from '../../services/actions/ws-actions-creator';
+import { wsConnectionClosed } from '../../services/actions/ws-actions-creator';
+import { getCookie } from '../../utils/cookie';
 
 function ProfileOrders() {
     const pageParams = useParams();
@@ -32,7 +34,21 @@ function ProfileOrders() {
     
     const dispatch = useDispatch(); 
     const isAuthChecked = useSelector(isAuthSelector);
-    const orders = useSelector(feedSelector).orders;
+    //const orders = useSelector(feedSelector).orders;
+    const orders = useSelector(wsSelector).orders;
+
+    const accessToken = getCookie('accessToken');
+    console.log(accessToken);
+    const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken.substr(7)}`;
+
+    useEffect(() => {
+        dispatch(wsConnectionStart(wsUrl));
+        
+        return () => {
+            //dispatch(clearOrders());
+            dispatch(wsConnectionClosed());
+        }
+    }, [dispatch]);
   
     return (
       <div className={commonStyles.center_orders}>

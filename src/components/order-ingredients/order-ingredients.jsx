@@ -9,7 +9,7 @@ import styles from './order-ingredients.module.css';
 //import { TIngredientItem, TOrder } from '../../../utils/types';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
-import { feedSelector, ingredientsSelector } from '../../services/selectors';
+import { feedSelector, ingredientsSelector, wsSelector} from '../../services/selectors';
 
 //const OrderIngredients: FC = () => {
 const OrderIngredients = () => {
@@ -17,7 +17,7 @@ const OrderIngredients = () => {
     console.log(orderId );
 
     //const ordersStore = useAppSelector(store => store.order);
-    const ordersStore = useSelector(feedSelector);
+    const ordersStore = useSelector(wsSelector);
 
     const order = useMemo(() => {
         //return ordersStore.orders.find(order => order._id === orderId) as TOrder;

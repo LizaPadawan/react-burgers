@@ -2,13 +2,13 @@ import { FC, memo, useMemo } from 'react';
 
 //import { useAppSelector } from '../../hooks/hooks';
 import { useSelector } from 'react-redux';
-import { feedSelector } from '../../services/selectors';
+import { feedSelector, wsSelector } from '../../services/selectors';
 
 import styles from './order-list-info.module.css';
 
 //const OrderInfo: FC = () => {
 const OrderListInfo = () => {
-    const order = useSelector(feedSelector);
+    const order = useSelector(wsSelector);
 
     //const ordersReady = useMemo<number[]>(() => {
     const ordersReady = useMemo(() => {

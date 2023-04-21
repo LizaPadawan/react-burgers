@@ -7,3 +7,4 @@ export const userSelector = (state) => state.userReducer.user
 export const isAuthSelector = (state) => state.authCheckReducer.isAuthChecked
 export const feedSelector = (state) => state.feedReducer
 export const userFeedSelector = (state) => state.userFeedReducer
+export const wsSelector = (state) => state.wsReducer

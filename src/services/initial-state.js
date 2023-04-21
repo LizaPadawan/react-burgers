@@ -90,5 +90,14 @@ export const initialState = {
 		// orders: [],
 		// total: 0,
 		// totalToday: 0
+	},
+	
+	wsReducer: {	
+		wsConnected: false,
+		orders: [],
+		error: undefined,
+		total: 0,
+		totalToday: 0
+		//dataIsReady: false
 	}
 };

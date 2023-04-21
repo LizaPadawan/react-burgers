@@ -7,17 +7,18 @@ import styles from './order.module.css';
 
 //import { TIngredientItem, TOrder } from '../../../utils/types';
 
+import { TOrder } from '../order-proptypes';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientsSelector } from '../../services/selectors';
 
-// interface OrderItemProps {
-//     order: TOrder;
-//     withStatus?: boolean;
-//     extraClass?: string | undefined;
-// }
+interface OrderProps {
+    order: TOrder;
+    withStatus?: boolean;
+    extraClass?: string | undefined;
+}
 
-//const OrderItem: FC<OrderItemProps> = ({ order, withStatus = false, extraClass = undefined }) => {
-const Order = ({ order, withStatus = false, extraClass = undefined }) => {
+const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefined }) => {
+//const Order = ({ order, withStatus = false, extraClass = undefined }) => {
     const location = useLocation();
 
     const ingredientsStore = useSelector(ingredientsSelector);

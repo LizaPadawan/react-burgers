@@ -8,6 +8,7 @@ import { userReducer } from './user-reducer';
 import { authCheckReducer } from './auth-check-reducer';
 import { feedReducer } from './feed-reducer';
 import { userFeedReducer } from './user-feed-reducer';
+import wsReducer from './ws-reducer';
 
 export const rootReducer = combineReducers({
     constructorReduser,
@@ -18,5 +19,6 @@ export const rootReducer = combineReducers({
     userReducer,
     authCheckReducer,
     feedReducer,
-    userFeedReducer
+    userFeedReducer,
+    wsReducer
 }) 
