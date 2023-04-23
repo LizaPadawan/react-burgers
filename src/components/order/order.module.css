@@ -11,27 +11,27 @@
     background-color: #1c1c21;
 }
 
-.OrderInfo {
+.info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.OrderIngredients {
+.ingredients {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.IngredientsContainer {
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.IngredientImage {
+.image {
     position: relative;
     display: flex;
     justify-content: center;
@@ -43,7 +43,7 @@
     overflow: hidden;
 }
 
-.IngredientImageOverlay {
+.overlay {
     position: relative;
     display: flex;
     justify-content: center;
@@ -54,7 +54,7 @@
     border-radius: 50%;
 }
 
-.IngredientsCount {
+.count {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -65,7 +65,7 @@
     background-color: rgba(0, 0, 0, .7);
 }
 
-.IngredientImageOverlay>img {
+.overlay>img {
     height: 56px;
 }
 

@@ -259,7 +259,7 @@ const OrderedIngredient  : FC<TOrderedIngredientProps> = ({ item, index, moveCar
 
 const BurgerConstructor = () => {
     const isOpen = useSelector(openModalSelector);
-    const data = useSelector(constructorSelector);
+    const data : any = useSelector(constructorSelector);
     const dispatch = useDispatch();
 
     const [{ isHover }, dropTargerRef] = useDrop<TDragItem, void, {isHover: boolean}>({

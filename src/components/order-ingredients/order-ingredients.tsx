@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styles from './order-ingredients.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
-import { feedSelector, ingredientsSelector, wsSelector} from '../../services/selectors';
+import { ingredientsSelector, wsSelector} from '../../services/selectors';
 import { TWsData } from '../order-proptypes';
 import { TIngredient } from '../ingredients-proptypes';
 
@@ -54,25 +54,25 @@ const OrderIngredients: FC = () => {
     return (
         <>
             {order && (
-                <div className={styles.OrderDetails}>
+                <div className={styles.details}>
                     <p className='text text_type_digits-default mb-10'>
                         {`#${order.number}`}
                     </p>
                     <p className='text text_type_main-medium mb-3'>
                         {order.name}
                     </p>
-                    <p className={`text text_type_main-default ${order.status === 'done' && styles.Done} mb-15`}>
+                    <p className={`text text_type_main-default ${order.status === 'done' && styles.finish} mb-15`}>
                         {status}
                     </p>
                     <p className='text text_type_main-medium'>
                         Состав:
                     </p>
-                    <section className={`${styles.Ingredients} mb-10 mt-6`}>
+                    <section className={`${styles.ingredients} mb-10 mt-6`}>
                         {uniqueIngredients.map((ingredient, index) => (
-                            <div key={index} className={`${styles.IngredientInfo} mb-4`}>
-                                <section className={styles.IngredientItem}>
-                                    <section className={`${styles.IngredientImage} mr-4`}>
-                                        <div className={styles.IngredientImageOverlay}>
+                            <div key={index} className={`${styles.info} mb-4`}>
+                                <section className={styles.item}>
+                                    <section className={`${styles.image} mr-4`}>
+                                        <div className={styles.overlay}>
                                             <img src={ingredient.image_mobile} alt='ingredient' />
                                         </div>
                                     </section>
@@ -80,7 +80,7 @@ const OrderIngredients: FC = () => {
                                         {ingredient.name}
                                     </p>
                                 </section>
-                                <section className={`${styles.Price}`}>
+                                <section className={`${styles.price}`}>
                                     <p className='text text_type_digits-default'>
                                         {`${ingredients.filter((i) => i._id === ingredient._id).length} x ${ingredient.price}`}
                                     </p>
@@ -89,7 +89,7 @@ const OrderIngredients: FC = () => {
                             </div>
                         ))}
                     </section>
-                    <section className={styles.TimeTotal}>
+                    <section className={styles.time}>
                         <p className='text text_type_main-default text_color_inactive'>
                             <FormattedDate date={new Date(order.createdAt)} />
                         </p>

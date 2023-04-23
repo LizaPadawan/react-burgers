@@ -43,7 +43,7 @@ const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefin
             className={`${styles.item} p-6 mb-4 mr-2 ${extraClass}`}
             state={{ background: location }}
         >
-            <section className={`${styles.OrderInfo} mb-6`}>
+            <section className={`${styles.info} mb-6`}>
                 <p className='text text_type_digits-default'>
                     {`#${order.number}`}
                 </p>
@@ -59,13 +59,13 @@ const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefin
                     {nameStatus}
                 </p>
             )}
-            <section className={styles.OrderIngredients}>
-                <section className={styles.IngredientsContainer}>
+            <section className={styles.ingredients}>
+                <section className={styles.container}>
                     {ingredients.slice(0, 6).map((ingredient, index) => (
-                        <div key={index} style={{ left: -(20 * index), zIndex: maxIndex - index }} className={styles.IngredientImage}>
-                            <div className={styles.IngredientImageOverlay}>
+                        <div key={index} style={{ left: -(20 * index), zIndex: maxIndex - index }} className={styles.image}>
+                            <div className={styles.overlay}>
                                 {(order.ingredients.length > 6 && maxIndex - index === 1) && (
-                                    <section className={styles.IngredientsCount}>
+                                    <section className={styles.count}>
                                         <p className='text text_type_digits-default'>
                                             {`+${order.ingredients.length - 6}`}
                                         </p>

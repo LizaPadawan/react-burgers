@@ -19,7 +19,8 @@ async function getDataJson(url, callback, dispatch) {
 }
 
 export const fetchData = () => {
-    return ((dispatch, getState, extra) => {
+    //return ((dispatch, getState, extra) => {
+    return ((dispatch) => {
         //console.info("start fetching...");
         dispatch(ingredientsActions.requestIngredients());
 
@@ -66,7 +67,8 @@ export const sendOrder = async (data, callback, dispatch, navigate) => {
 }
 
 export const fetchOrderData = (data, navigate) => {
-    return ((dispatch, getState, extra) => {
+    // return ((dispatch, getState, extra) => {
+    return ((dispatch) => {
         dispatch(orderActions.requestOrder());
 
         const setOrder = (incomingData) => {
@@ -142,8 +144,33 @@ export const registerUser = async (form, callback, dispatch, navigate) => {
     }
 }
 
+// export const register = (form, navigate) => {
+//     return ((dispatch, getState, extra) => {
+//         dispatch(userActions.requestUser());
+//         const setUser = (incomingData) => {
+//             dispatch(userActions.setUser(incomingData.user));
+//             saveTokens(incomingData.refreshToken, incomingData.accessToken);
+//         }
+//         registerUser(form, setUser, dispatch, navigate);
+//     });
+// }
+
+// export const sendCode = async (form, dispatch, navigate) => {
+//     const response = await sendForm(form, BURGER_API_URL + "password-reset");
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) navigate('/reset-password', { replace: true, state: "reset_password" });
+//     };
+// }
+
+// export const forgotPasswordRequest = (form, navigate) => {
+//     return ((dispatch, getState, extra) => {
+//         sendCode(form, dispatch, navigate);
+//     });
+// }
+
 export const register = (form, navigate) => {
-    return ((dispatch, getState, extra) => {
+    return ((dispatch) => {
         dispatch(userActions.requestUser());
         const setUser = (incomingData) => {
             dispatch(userActions.setUser(incomingData.user));
@@ -153,7 +180,7 @@ export const register = (form, navigate) => {
     });
 }
 
-export const sendCode = async (form, dispatch, navigate) => {
+export const sendCode = async (form, navigate) => {
     const response = await sendForm(form, BURGER_API_URL + "password-reset");
     if (response.ok) {
         const json = await response.json();
@@ -162,12 +189,26 @@ export const sendCode = async (form, dispatch, navigate) => {
 }
 
 export const forgotPasswordRequest = (form, navigate) => {
-    return ((dispatch, getState, extra) => {
-        sendCode(form, dispatch, navigate);
+    return (() => {
+        sendCode(form, navigate);
     });
 }
 
-export const sendNewPassword = async (form, dispatch, navigate) => {
+// export const sendNewPassword = async (form, dispatch, navigate) => {
+//     const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) navigate('/login', { replace: true });
+//     };
+// }
+
+// export const resetPasswordRequest = (form, navigate) => {
+//     return ((dispatch, getState, extra) => {
+//         sendNewPassword(form, dispatch, navigate);
+//     });
+// }
+
+export const sendNewPassword = async (form, navigate) => {
     const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
     if (response.ok) {
         const json = await response.json();
@@ -176,12 +217,13 @@ export const sendNewPassword = async (form, dispatch, navigate) => {
 }
 
 export const resetPasswordRequest = (form, navigate) => {
-    return ((dispatch, getState, extra) => {
-        sendNewPassword(form, dispatch, navigate);
+    return (() => {
+        sendNewPassword(form, navigate);
     });
 }
 
-export const loginUser = async (form, callback, dispatch, navigate) => {
+//export const loginUser = async (form, callback, dispatch, navigate) => {
+export const loginUser = async (form, callback, dispatch) => {
     const response = await sendForm(form, BURGER_API_URL + "auth/login");
     if (response.ok) {
         const json = await response.json();
@@ -194,7 +236,8 @@ export const loginUser = async (form, callback, dispatch, navigate) => {
 }
 
 export const login = (form, navigate) => {
-    return ((dispatch, getState, extra) => {
+    //return ((dispatch, getState, extra) => {
+    return ((dispatch) => {
         dispatch(userActions.requestUser());
         const setUser = (incomingData) => {
             //console.log("incoming data = ", incomingData);
@@ -225,7 +268,8 @@ export const logoutUser = async (dispatch) => {
 }
 
 export const logout = () => {
-    return ((dispatch, getState, extra) => {
+    //return ((dispatch, getState, extra) => {
+    return ((dispatch) => {
         logoutUser(dispatch);
     });
 }

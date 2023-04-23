@@ -31,7 +31,7 @@ const OrderPage: FC = () => {
 
     return (
         <div className={`${commonStyles.content_panel} mt-10`}>
-            <div  className={styles.Order}>
+            <div  className={styles.order}>
                 {orders ? <OrderIngredients /> : <p>Идет загрузка . . . </p>}
             </div>
         </div>

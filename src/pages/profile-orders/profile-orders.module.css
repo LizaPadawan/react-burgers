@@ -1,12 +1,3 @@
-.ProfileOrders {
-    text-align: center;
-}
-
-.ProfileOrdersContainer {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
 
 .Navigation {
     display: flex;
@@ -25,11 +16,11 @@
     color: #fff
 }
 
-.OrderList {
+.list {
     height: 83vh;
     overflow-y: auto;
 }
 
-.OrderItem {
+.item {
     width: 844px;
 }

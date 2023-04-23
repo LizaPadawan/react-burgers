@@ -1,17 +1,14 @@
 import { FC, memo, useMemo } from 'react';
 
-//import { useAppSelector } from '../../hooks/hooks';
 import { useSelector } from 'react-redux';
-import { feedSelector, wsSelector } from '../../services/selectors';
+import { wsSelector } from '../../services/selectors';
 
 import styles from './order-list-info.module.css';
 import { TWsData } from '../order-proptypes';
 
-//const OrderInfo: FC = () => {
 const OrderListInfo = () => {
     const order : TWsData = useSelector(wsSelector);
 
-    // const ordersReady = useMemo<number[]>(() => {
     const ordersReady = useMemo(() => {
         return (
             order.orders.filter(order => order.status === 'done')
@@ -19,7 +16,6 @@ const OrderListInfo = () => {
         );
     }, [order]);
 
-    //const ordersInWork = useMemo<number[]>(() => {
     const ordersInWork = useMemo(() => {
         return (
             order.orders.filter(order => order.status === 'pending')
@@ -28,14 +24,14 @@ const OrderListInfo = () => {
     }, [order]);
 
     return (
-        <div className={`${styles.OrderInfo} ml-15`}>
-            <section className={`${styles.OrdersState} mb-15`}>
-                <section className={`${styles.OrdersReady} mr-4`}>
+        <div className={`${styles.info} ml-15`}>
+            <section className={`${styles.state} mb-15`}>
+                <section className={`${styles.ready} mr-4`}>
                     <p className='text text_type_main-medium'>
                         Готовы:
                     </p>
-                    <section className={styles.OrderNumbersContainer}>
-                        <section className={`${styles.OrderNumbers} ${styles.Ready}`}>
+                    <section className={styles.container}>
+                        <section className={`${styles.numbers} ${styles.ok}`}>
                             {ordersReady && ordersReady.map((orderNumber, index) => (
                                 <p key={index} className='text text_type_digits-default '>
                                     {orderNumber}
@@ -44,12 +40,12 @@ const OrderListInfo = () => {
                         </section>
                     </section>
                 </section>
-                <section className={styles.OrdersInWork}>
+                <section className={styles.work}>
                     <p className='text text_type_main-medium'>
                         В работе:
                     </p>
-                    <section className={styles.OrderNumbersContainer}>
-                        <section className={`${styles.OrderNumbers}`}>
+                    <section className={styles.container}>
+                        <section className={`${styles.numbers}`}>
                             {ordersInWork && ordersInWork.map((orderNumber, index) => (
                                 <p key={index} className='text text_type_digits-default '>
                                     {orderNumber}
@@ -59,19 +55,19 @@ const OrderListInfo = () => {
                     </section>
                 </section>
             </section>
-            <section className={`${styles.Total} mb-15`}>
+            <section className={`${styles.all} mb-15`}>
                 <p className='text text_type_main-medium'>
                     Выполнено за все время:
                 </p>
-                <p className={`text text_type_digits-large ${styles.TotalOrders}`}>
+                <p className={`text text_type_digits-large ${styles.allorders}`}>
                     {order.total}
                 </p>
             </section>
-            <section className={styles.Total}>
+            <section className={styles.all}>
                 <p className='text text_type_main-medium'>
                     Выполнено за сегодня:
                 </p>
-                <p className={`text text_type_digits-large ${styles.TotalOrders}`}>
+                <p className={`text text_type_digits-large ${styles.allorders}`}>
                     {order.totalToday}
                 </p>
             </section>

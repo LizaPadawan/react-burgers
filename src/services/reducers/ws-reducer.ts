@@ -1,16 +1,11 @@
-// const initialState = {
-//     wsConnected: false,
-//     orders: {},
-//     error: undefined,
-//     dataIsReady: false
-//   };
 
+    import { TActions } from "../action-types";
     import { initialState } from "../initial-state" ;
   
-    export const wsReducer = (state = initialState, action) => {
+    export const wsReducer = (state = initialState, action : {type: TActions, payload: any}) => {
     console.log("wsReducer",action.type,action.payload);
     switch (action.type) {
-      case "WS_CONNECTION_SUCCES":
+      case "WS_CONNECTION_SUCCESS":
         return {
           ...state,
           error: undefined,

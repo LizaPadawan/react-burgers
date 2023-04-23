@@ -1,4 +1,4 @@
-.Feed {
+.feed {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -7,7 +7,7 @@
     margin-top: 40px;
 }
 
-.OrderList {
+.list {
     display: flex;
     justify-content: center;
     align-items: flex-start;

@@ -1,10 +1,4 @@
-import {
-    FC,
-    memo,
-    useCallback,
-    useEffect,
-    useMemo
-} from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { logout } from "../../services/thunk";
 import { Link, useLocation } from 'react-router-dom';
@@ -80,13 +74,13 @@ function ProfileOrders() {
           <div className={commonStyles.columnstart + " pt-20"}>
           {(pageParams.orders) && 
             <div>
-                <section className={styles.OrderList}>
+                <section className={styles.list}>
                             {orders && orders.map(order => (
                                 <Order
                                     withStatus
                                     key={order._id}
                                     order={order}
-                                    extraClass={styles.OrderItem}
+                                    extraClass={styles.item}
                                 />
                             ))}
                 </section>

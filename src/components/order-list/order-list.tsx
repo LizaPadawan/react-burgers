@@ -7,11 +7,10 @@ import { TWsData } from '../order-proptypes';
 const OrderList = () => {
     const orders : TWsData["orders"]= useSelector(wsSelector).orders;
     const ingredients = useSelector(ingredientsSelector);
-    console.log("order-list ingredients", ingredients);
 
     return (
         <> { (ingredients.length > 0) ?
-        <div className={styles.OrderList}>
+        <div className={styles.list}>
             {orders && orders.map((order) => (
                 <Order key={order._id} order={order} />
             ))}

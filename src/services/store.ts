@@ -14,6 +14,7 @@ import {
   } from "./action-types";
 
 import { socketMiddleware } from "./socketMiddleware";
+import { TinitialState } from "./initial-state";
 
 export const wsUrl = "wss://norma.nomoreparties.space/orders/all";
 
@@ -28,7 +29,7 @@ export const wsActions = {
   wsPingPong: WS_SEND_PONG,
 };
 
-export const configureStore = (initialState) => {
+export const configureStore = (initialState : any) => {
 
     const store = createStore(
 	    rootReducer,
