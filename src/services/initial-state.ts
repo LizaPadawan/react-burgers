@@ -12,9 +12,6 @@ export type TinitialState = {
 	modalReduser: {
 		isModalOpen: boolean;
 	};
-    currentIngredientReduser: {
-		currentIngredient: string;
-	},
     orderReduser: { 
 		orderNumber: null | number;
 	},
@@ -46,9 +43,6 @@ export const initialState : TinitialState = {
 	},
 	modalReduser: {
 		isModalOpen: false,
-	},
-    currentIngredientReduser: {
-		currentIngredient: "",
 	},
     orderReduser: { 
 		orderNumber: null

@@ -5,10 +5,23 @@ import { orderActions } from "./actions/order-actions-creator";
 import { userActions } from "./actions/user-actions-creator";
 import { authCheckActions } from "./actions/auth-check-actions-creator";
 import { getCookie, setCookie, deleteCookie } from "../utils/cookie";
+import { store } from "..";
+import { TAllActions } from "./actions/union-action-type";
+import { Action, ActionCreator } from "redux";
+import { ThunkAction } from "redux-thunk";
+
+export type RootState = ReturnType<typeof store.getState>;
+type TApplicationActions = TAllActions;
+
+export type AppThunk<TReturn = void> = ActionCreator<
+  ThunkAction<TReturn, Action, RootState, TApplicationActions>
+>; 
+
+export type AppDispatch = typeof store.dispatch; 
 
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api/';
 
-async function getDataJson(url, callback, dispatch) {
+async function getDataJson(url : string, callback, dispatch : AppDispatch) {
     const response = await fetch(url);
     if (response.ok) {
         const json = await response.json();
@@ -20,7 +33,7 @@ async function getDataJson(url, callback, dispatch) {
 
 export const fetchData = () => {
     //return ((dispatch, getState, extra) => {
-    return ((dispatch) => {
+    return ((dispatch: AppDispatch) => {
         //console.info("start fetching...");
         dispatch(ingredientsActions.requestIngredients());
 

@@ -1,28 +1,29 @@
 
     import { TActions } from "../action-types";
-    import { initialState } from "../initial-state" ;
+import { TWsActions } from "../actions/ws-actions-creator";
+    import { initialState, TinitialState } from "../initial-state" ;
   
-    export const wsReducer = (state = initialState, action : {type: TActions, payload: any}) => {
-    console.log("wsReducer",action.type,action.payload);
+    export const wsReducer = (state = initialState.wsReducer, action : TWsActions) : TinitialState["wsReducer"] => {
+    console.log("wsReducer",action.type);
     switch (action.type) {
       case "WS_CONNECTION_SUCCESS":
         return {
           ...state,
-          error: undefined,
+          //error: undefined,
           wsConnected: true,
         };
   
       case "WS_CONNECTION_ERROR":
         return {
           ...state,
-          error: action.payload,
+          //error: action.payload,
           wsConnected: false,
         };
   
       case "WS_CONNECTION_CLOSED":
         return {
           ...state,
-          error: undefined,
+          //error: undefined,
           wsConnected: false,
           orders: []
         };
@@ -41,7 +42,7 @@
         
         return {
           ...state,
-          error: undefined,
+          //error: undefined,
           // wsConnected: true,
           orders: action.payload.data.orders,
           total: action.payload.data.total,

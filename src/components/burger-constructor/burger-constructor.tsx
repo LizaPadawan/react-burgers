@@ -12,7 +12,7 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import PropTypes from 'prop-types';
 import ingredientPropTypes from "../ingredients-proptypes";
-import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
+import { ingredientsSelector, openModalSelector, constructorSelector, currentOrderSelector } from '../../services/selectors';
 import { modalActions } from "../../services/actions/modal-actions-creator";
 import { fetchOrderData } from "../../services/thunk";
 import { useDrop } from "react-dnd";

@@ -16,7 +16,6 @@ import { isAuthSelector } from '../../services/selectors';
 import { List } from '../../pages/list/list-page';
 import { Ingredient } from '../../pages/ingredient/ingredient-page';
 import { Error } from '../../pages/error/error-page';
-import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
 import { useLocation } from 'react-router-dom';
 import Modal from '../modal/modal';
 import { useNavigate } from 'react-router-dom';
@@ -47,7 +46,7 @@ function App() {
   let background = location.state && location.state.background;
  
   const handleModalClose = () => {
-    dispatch(currentIngredientActions.cleanCurrentIngredient());
+    //dispatch(currentIngredientActions.cleanCurrentIngredient());
     navigate(-1);
   };
  

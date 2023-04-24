@@ -7,7 +7,6 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import PropTypes from 'prop-types';
 
 import { modalActions } from '../../services/actions/modal-actions-creator';
-import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
 
 type TModalProps = {
     modalId: string,

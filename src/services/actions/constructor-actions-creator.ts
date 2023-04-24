@@ -10,7 +10,9 @@ export interface ICleanConstructorAction {
     readonly type: typeof CLEAN_CONSTRUCTOR;
 }
 
+export type TConstructorActions = ISetConstructorAction | ICleanConstructorAction;
+
 export const constructorActions = {
     setConstructor: (data : Array<TIngredient>) :  ISetConstructorAction => ({type: SET_CONSTRUCTOR, payload: data}),
-    cleanConstructor: () => ({type: CLEAN_CONSTRUCTOR})
+    cleanConstructor: () : ICleanConstructorAction => ({type: CLEAN_CONSTRUCTOR})
 }

@@ -1,10 +1,11 @@
-import { initialState } from "../initial-state" ;
+import { initialState, TinitialState } from "../initial-state" ;
 import { OPEN_MODAL, CLOSE_MODAL } from "../action-types";
 import { TActions } from "../action-types";
+import { TModalActions } from "../actions/modal-actions-creator";
 
 //const initialStateIsOpenModal = initialState.modalReduser.isModalOpen;
 
-export const modalReduser = ( state = initialState, action : {type: TActions, payload: any}) => {
+export const modalReduser = ( state = initialState.modalReduser, action : TModalActions) : TinitialState["modalReduser"] => {
 	//console.log(action);
 	switch(action.type){
 		case OPEN_MODAL:

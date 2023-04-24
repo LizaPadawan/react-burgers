@@ -5,10 +5,9 @@ import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
-import { currentIngredientActions } from '../../services/actions/current-ingredient-actions-creator';
 import ingredientPropTypes from '../ingredients-proptypes';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
-import { ingredientsSelector, openModalSelector, currentIngredientSelector, constructorSelector } from '../../services/selectors';
+import { ingredientsSelector, openModalSelector, constructorSelector } from '../../services/selectors';
 import { InView } from 'react-intersection-observer';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -111,7 +110,6 @@ const IngredientGroup : FC <TIngredientGroupProps> = (props) =>{
 
 function BurgerIngredients() {
 
-  const ingredientKey = useSelector(currentIngredientSelector);
   const [currentGroup, setCurrentGroup] = useState('buns');
   const tabsArr = ["buns", "sauses", "fillings"];
   const min = (values : Array<number>)  => values.reduce((x, y) => Math.min(x, y));

@@ -8,8 +8,28 @@ export type TOrder = {
     updatedAt: string;
 };
 
+export type TOrders = {
+    data: {
+        orders: TOrder[];
+        total: number;
+        totalToday: number;
+    }
+}
+
 export type TWsData = {
     orders: TOrder[];
     total: number;
     totalToday: number;
+};
+
+export type TUser = {
+    user: {
+        email: string;
+        name: string;
+      }
+};
+
+export type TInUser = {
+    email: string;
+    name: string;
 };

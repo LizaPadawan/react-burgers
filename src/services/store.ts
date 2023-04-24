@@ -29,7 +29,7 @@ export const wsActions = {
   wsPingPong: WS_SEND_PONG,
 };
 
-export const configureStore = (initialState : any) => {
+export const configureStore = (initialState : TinitialState) => {
 
     const store = createStore(
 	    rootReducer,

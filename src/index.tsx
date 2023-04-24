@@ -7,10 +7,10 @@ import { Provider } from "react-redux";
 import { initialState } from './services/initial-state';
 import { configureStore } from './services/store';
 
-const store = configureStore(initialState);
+export const store = configureStore(initialState);
 
 store.subscribe(() => {
-  //console.log(store.getState());
+  console.log(store.getState());
 })
 
 const root = ReactDOM.createRoot(
