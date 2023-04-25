@@ -16,7 +16,9 @@ function Login() {
 
   return (
     <form 
-      onSubmit={(e) => { e.preventDefault(); dispatch(login(form, navigate)) }}
+      onSubmit={(e) => { e.preventDefault(); dispatch(login(form
+        //, navigate
+        )) }}
     >
     <div className={commonStyles.center + ' ' + commonStyles.column}>
       {isAuthChecked ?
@@ -49,7 +51,10 @@ function Login() {
               type="primary"
               size="medium"
             
-              onClick={() => { dispatch(login(form, navigate)) }}
+              onClick={() => { dispatch(login(
+                form
+                //, navigate
+                )) }}
             >
               Войти
             </Button>

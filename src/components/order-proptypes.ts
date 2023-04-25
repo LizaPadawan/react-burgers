@@ -33,3 +33,10 @@ export type TInUser = {
     email: string;
     name: string;
 };
+
+ export type TForm = { 
+    password?: string; 
+    email?: string;
+    name?: string,
+    token? : string
+ }

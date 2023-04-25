@@ -9,19 +9,19 @@ import { store } from "..";
 import { TAllActions } from "./actions/union-action-type";
 import { Action, ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { NavigateFunction } from "react-router";
+import { TIngredient } from "../components/ingredients-proptypes";
+import { TForm } from "../components/order-proptypes";
+import { ThunkDispatch } from "redux-thunk";
 
 export type RootState = ReturnType<typeof store.getState>;
 type TApplicationActions = TAllActions;
-
-export type AppThunk<TReturn = void> = ActionCreator<
-  ThunkAction<TReturn, Action, RootState, TApplicationActions>
->; 
-
-export type AppDispatch = typeof store.dispatch; 
+export type AppDispatch = ThunkDispatch<RootState, unknown, TApplicationActions>;
+export type AppThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, TApplicationActions>;
 
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api/';
 
-async function getDataJson(url : string, callback, dispatch : AppDispatch) {
+async function getDataJson(url : string, callback : (json : JSON) => void, dispatch : AppDispatch) {
     const response = await fetch(url);
     if (response.ok) {
         const json = await response.json();
@@ -37,7 +37,7 @@ export const fetchData = () => {
         //console.info("start fetching...");
         dispatch(ingredientsActions.requestIngredients());
 
-        const setIngredients = (incomingData) => {
+        const setIngredients = (incomingData : any) => {
             dispatch(ingredientsActions.setIngredients(incomingData.data));
         }
 
@@ -46,17 +46,17 @@ export const fetchData = () => {
 }
 
 
-export const sendOrder = async (data, callback, dispatch, navigate) => {
+export const sendOrder = async (data : TIngredient[], callback : (json : number) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
     const ingredients = data.map(item => item._id);
     //console.log("I try to send order");
 
-    const orderBurger = (ingredients) => {
+    const orderBurger = (ingredients : string[]) => {
         return fetch(BURGER_API_URL + "orders", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
                 Authorization: getCookie('accessToken'),
-            },
+            } as any,
             //Authorization: getCookie('accessToken'),
             body: JSON.stringify({
                 ingredients,
@@ -79,12 +79,12 @@ export const sendOrder = async (data, callback, dispatch, navigate) => {
         });
 }
 
-export const fetchOrderData = (data, navigate) => {
+export const fetchOrderData = (data : TIngredient[], navigate : NavigateFunction) => {
     // return ((dispatch, getState, extra) => {
-    return ((dispatch) => {
+    return ((dispatch : AppDispatch) => {
         dispatch(orderActions.requestOrder());
 
-        const setOrder = (incomingData) => {
+        const setOrder = (incomingData : any) => {
             dispatch(modalActions.openModal());
             dispatch(constructorActions.cleanConstructor());
             dispatch(orderActions.setOrder(incomingData));
@@ -116,7 +116,7 @@ export const fetchOrderData = (data, navigate) => {
 
 // sprint 3
 
-const sendForm = (form, url) => {
+const sendForm = (form : TForm, url : string) => {
     return fetch(
         url,
         {
@@ -146,7 +146,7 @@ const sendRefreshToken = () => {
 
 
 
-export const registerUser = async (form, callback, dispatch, navigate) => {
+export const registerUser = async (form : TForm, callback : (json : JSON) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
     const response = await sendForm(form, BURGER_API_URL + "auth/register");
     if (response.ok) {
         const json = await response.json();
@@ -157,35 +157,11 @@ export const registerUser = async (form, callback, dispatch, navigate) => {
     }
 }
 
-// export const register = (form, navigate) => {
-//     return ((dispatch, getState, extra) => {
-//         dispatch(userActions.requestUser());
-//         const setUser = (incomingData) => {
-//             dispatch(userActions.setUser(incomingData.user));
-//             saveTokens(incomingData.refreshToken, incomingData.accessToken);
-//         }
-//         registerUser(form, setUser, dispatch, navigate);
-//     });
-// }
 
-// export const sendCode = async (form, dispatch, navigate) => {
-//     const response = await sendForm(form, BURGER_API_URL + "password-reset");
-//     if (response.ok) {
-//         const json = await response.json();
-//         if (json.success) navigate('/reset-password', { replace: true, state: "reset_password" });
-//     };
-// }
-
-// export const forgotPasswordRequest = (form, navigate) => {
-//     return ((dispatch, getState, extra) => {
-//         sendCode(form, dispatch, navigate);
-//     });
-// }
-
-export const register = (form, navigate) => {
-    return ((dispatch) => {
+export const register = (form : TForm, navigate : NavigateFunction) => {
+    return ((dispatch : AppDispatch) => {
         dispatch(userActions.requestUser());
-        const setUser = (incomingData) => {
+        const setUser = (incomingData : any) => {
             dispatch(userActions.setUser(incomingData.user));
             saveTokens(incomingData.refreshToken, incomingData.accessToken);
         }
@@ -193,7 +169,7 @@ export const register = (form, navigate) => {
     });
 }
 
-export const sendCode = async (form, navigate) => {
+export const sendCode = async (form : TForm, navigate : NavigateFunction) => {
     const response = await sendForm(form, BURGER_API_URL + "password-reset");
     if (response.ok) {
         const json = await response.json();
@@ -201,27 +177,13 @@ export const sendCode = async (form, navigate) => {
     };
 }
 
-export const forgotPasswordRequest = (form, navigate) => {
+export const forgotPasswordRequest = (form : TForm, navigate : NavigateFunction) => {
     return (() => {
         sendCode(form, navigate);
     });
 }
 
-// export const sendNewPassword = async (form, dispatch, navigate) => {
-//     const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
-//     if (response.ok) {
-//         const json = await response.json();
-//         if (json.success) navigate('/login', { replace: true });
-//     };
-// }
-
-// export const resetPasswordRequest = (form, navigate) => {
-//     return ((dispatch, getState, extra) => {
-//         sendNewPassword(form, dispatch, navigate);
-//     });
-// }
-
-export const sendNewPassword = async (form, navigate) => {
+export const sendNewPassword = async (form : TForm, navigate : NavigateFunction) => {
     const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
     if (response.ok) {
         const json = await response.json();
@@ -229,14 +191,14 @@ export const sendNewPassword = async (form, navigate) => {
     };
 }
 
-export const resetPasswordRequest = (form, navigate) => {
+export const resetPasswordRequest = (form : TForm, navigate : NavigateFunction) => {
     return (() => {
         sendNewPassword(form, navigate);
     });
 }
 
 //export const loginUser = async (form, callback, dispatch, navigate) => {
-export const loginUser = async (form, callback, dispatch) => {
+export const loginUser = async (form: TForm, callback : (json : JSON) => void, dispatch : AppDispatch) => {
     const response = await sendForm(form, BURGER_API_URL + "auth/login");
     if (response.ok) {
         const json = await response.json();
@@ -248,27 +210,28 @@ export const loginUser = async (form, callback, dispatch) => {
     }
 }
 
-export const login = (form, navigate) => {
+export const login = (form : TForm) => {
     //return ((dispatch, getState, extra) => {
-    return ((dispatch) => {
+    return ((dispatch : AppDispatch) => {
         dispatch(userActions.requestUser());
-        const setUser = (incomingData) => {
+        const setUser = (incomingData : any) => {
             //console.log("incoming data = ", incomingData);
             dispatch(userActions.setUser(incomingData.user));
             saveTokens(incomingData.refreshToken, incomingData.accessToken);
         }
-        loginUser(form, setUser, dispatch, navigate);
+        loginUser(form, setUser, dispatch);
     });
 }
 
-const saveTokens = (refreshToken, accessToken) => {
+const saveTokens = (refreshToken : string, accessToken : string) => {
     deleteCookie('accessToken');
     setCookie('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 }
 
-export const logoutUser = async (dispatch) => {
-    const response = await sendRefreshToken(BURGER_API_URL + "auth/logout");
+export const logoutUser = async (dispatch : AppDispatch) => {
+    //const response = await sendRefreshToken(BURGER_API_URL + "auth/logout");
+    const response = await sendRefreshToken();
     if (response.ok) {
         const json = await response.json();
         if (json.success) {
@@ -282,7 +245,7 @@ export const logoutUser = async (dispatch) => {
 
 export const logout = () => {
     //return ((dispatch, getState, extra) => {
-    return ((dispatch) => {
+    return ((dispatch : AppDispatch) => {
         logoutUser(dispatch);
     });
 }
@@ -291,7 +254,7 @@ export const logout = () => {
 
 
 
-export const getProfileInfo = () => (dispatch) => {
+export const getProfileInfo = () => (dispatch : AppDispatch) => {
     dispatch(userActions.requestUser());
     getProfileRequest()
         .then((res) => {
@@ -310,7 +273,7 @@ export const getProfileInfo = () => (dispatch) => {
         });
 }
 
-export const updateProfileInfo = (form) => (dispatch) => {
+export const updateProfileInfo = (form : TForm) => (dispatch : AppDispatch) => {
     dispatch(userActions.requestUser());
     updateProfileRequest(form)
         .then((res) => {
@@ -325,14 +288,14 @@ export const updateProfileInfo = (form) => (dispatch) => {
         });
 }
 
-const updateProfileRequest = (form) => {
+const updateProfileRequest = (form : TForm) => {
     //console.log("get profile request");
     return fetch(BURGER_API_URL + "auth/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: getCookie('accessToken'),
-        },
+        } as any,
         body: JSON.stringify(form),
       })
     .then(checkResponse)
@@ -345,12 +308,13 @@ const getProfileRequest = () => {
         headers: {
             "Content-Type": "application/json",
             Authorization: getCookie('accessToken'),
-        },
+        } as any,
     })
     .then(checkResponse)
 }
 
-const refreshToken = (afterRefresh) => (dispatch) => {
+//const refreshToken = (afterRefresh : () => (dispatch: AppDispatch) => void) => (dispatch: AppDispatch) => {
+const refreshToken = (afterRefresh : any) => (dispatch: AppDispatch) => {
     refreshTokenRequest()
         .then((res) => {
             saveTokens(res.refreshToken, res.accessToken);
@@ -375,11 +339,11 @@ const refreshTokenRequest = () => {
     .then(checkResponse)
 }
 
-const checkResponse = (res) => {
+const checkResponse = (res : Response) => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 }
 
-export const checkUserAuth = () => (dispatch) => {
+export const checkUserAuth = () => (dispatch : AppDispatch) => {
   if (getCookie("accessToken")) {
     dispatch(getProfileInfo())
   } else {
