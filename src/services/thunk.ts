@@ -32,9 +32,7 @@ async function getDataJson(url : string, callback : (json : JSON) => void, dispa
 }
 
 export const fetchData = () => {
-    //return ((dispatch, getState, extra) => {
     return ((dispatch: AppDispatch) => {
-        //console.info("start fetching...");
         dispatch(ingredientsActions.requestIngredients());
 
         const setIngredients = (incomingData : any) => {
@@ -45,11 +43,8 @@ export const fetchData = () => {
     });
 }
 
-
 export const sendOrder = async (data : TIngredient[], callback : (json : number) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
     const ingredients = data.map(item => item._id);
-    //console.log("I try to send order");
-
     const orderBurger = (ingredients : string[]) => {
         return fetch(BURGER_API_URL + "orders", {
             method: "POST",
@@ -57,7 +52,6 @@ export const sendOrder = async (data : TIngredient[], callback : (json : number)
                 "Content-Type": "application/json;charset=utf-8",
                 Authorization: getCookie('accessToken'),
             } as any,
-            //Authorization: getCookie('accessToken'),
             body: JSON.stringify({
                 ingredients,
             }),
@@ -73,14 +67,12 @@ export const sendOrder = async (data : TIngredient[], callback : (json : number)
             if (err.message === 'jwt expired') {
                 dispatch(refreshToken(sendOrder(data, callback, dispatch, navigate)));
             } else {
-                //dispatch(orderActions.initialOrder());
                 navigate("/login", { replace: true });
             }
         });
 }
 
 export const fetchOrderData = (data : TIngredient[], navigate : NavigateFunction) => {
-    // return ((dispatch, getState, extra) => {
     return ((dispatch : AppDispatch) => {
         dispatch(orderActions.requestOrder());
 
@@ -197,13 +189,11 @@ export const resetPasswordRequest = (form : TForm, navigate : NavigateFunction) 
     });
 }
 
-//export const loginUser = async (form, callback, dispatch, navigate) => {
+
 export const loginUser = async (form: TForm, callback : (json : JSON) => void, dispatch : AppDispatch) => {
     const response = await sendForm(form, BURGER_API_URL + "auth/login");
     if (response.ok) {
         const json = await response.json();
-        //  callback(json);
-        //  if (json.success) navigate("/", { replace: true });
         if (json.success) callback(json);
     } else {
         dispatch(userActions.initialUser());
@@ -211,11 +201,9 @@ export const loginUser = async (form: TForm, callback : (json : JSON) => void, d
 }
 
 export const login = (form : TForm) => {
-    //return ((dispatch, getState, extra) => {
     return ((dispatch : AppDispatch) => {
         dispatch(userActions.requestUser());
         const setUser = (incomingData : any) => {
-            //console.log("incoming data = ", incomingData);
             dispatch(userActions.setUser(incomingData.user));
             saveTokens(incomingData.refreshToken, incomingData.accessToken);
         }
@@ -230,7 +218,6 @@ const saveTokens = (refreshToken : string, accessToken : string) => {
 }
 
 export const logoutUser = async (dispatch : AppDispatch) => {
-    //const response = await sendRefreshToken(BURGER_API_URL + "auth/logout");
     const response = await sendRefreshToken();
     if (response.ok) {
         const json = await response.json();
@@ -238,21 +225,17 @@ export const logoutUser = async (dispatch : AppDispatch) => {
             dispatch(userActions.initialUser());
             dispatch(orderActions.initialOrder());
             deleteCookie('accessToken');
-            //console.log("logout ok");
         }
     }
 }
 
 export const logout = () => {
-    //return ((dispatch, getState, extra) => {
     return ((dispatch : AppDispatch) => {
         logoutUser(dispatch);
     });
 }
 
 // profile
-
-
 
 export const getProfileInfo = () => (dispatch : AppDispatch) => {
     dispatch(userActions.requestUser());
@@ -289,7 +272,6 @@ export const updateProfileInfo = (form : TForm) => (dispatch : AppDispatch) => {
 }
 
 const updateProfileRequest = (form : TForm) => {
-    //console.log("get profile request");
     return fetch(BURGER_API_URL + "auth/user", {
         method: "PATCH",
         headers: {
@@ -302,7 +284,6 @@ const updateProfileRequest = (form : TForm) => {
 }
 
 const getProfileRequest = () => {
-    //console.log("get profile request");
     return fetch(BURGER_API_URL + "auth/user", {
         method: "GET",
         headers: {
@@ -313,7 +294,6 @@ const getProfileRequest = () => {
     .then(checkResponse)
 }
 
-//const refreshToken = (afterRefresh : () => (dispatch: AppDispatch) => void) => (dispatch: AppDispatch) => {
 const refreshToken = (afterRefresh : any) => (dispatch: AppDispatch) => {
     refreshTokenRequest()
         .then((res) => {
@@ -321,7 +301,6 @@ const refreshToken = (afterRefresh : any) => (dispatch: AppDispatch) => {
             dispatch(afterRefresh);
         })
         .catch((err) => {
-            //console.log(err.message);
             dispatch(authCheckActions.isChecked());
         });
 }
