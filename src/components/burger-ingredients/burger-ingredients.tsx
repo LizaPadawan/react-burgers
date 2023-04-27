@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, FC} from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector } from '../../utils/hooks';
 import { useDrag } from 'react-dnd';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -37,7 +37,7 @@ const IngredientsTabs  : FC<TIngredientsTabsProps> = ( { currentGroup } ) => {
 
 const IngredientCard: FC<TIngredient>  = (props) => {
   //const dispatch = useDispatch();
-  const constructorElements  : Array<TIngredient> = useSelector(constructorSelector);
+  const constructorElements  : Array<TIngredient> = useAppSelector(constructorSelector);
   let count : number = constructorElements.filter(item => item._id == props._id).length;
   if (props.type == 'bun') count = count * 2;
 
@@ -90,7 +90,7 @@ export type TIngredientGroupProps = {
 
 const IngredientGroup : FC <TIngredientGroupProps> = (props) =>{
 
-  const data   : Array<TIngredient> = useSelector(ingredientsSelector);
+  const data   : Array<TIngredient> = useAppSelector(ingredientsSelector);
   const groupName = props.groupName;
   const groupTitle = props.groupTitle;
 

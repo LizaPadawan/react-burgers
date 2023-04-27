@@ -11,6 +11,7 @@ import { wsConnectionStart } from '../../services/actions/ws-actions-creator';
 import { wsConnectionClosed } from '../../services/actions/ws-actions-creator';
 import { getCookie } from '../../utils/cookie';
 import { TOrder } from '../../components/order-proptypes';
+import { WS_BASE_URL } from '../../utils/const';
 
 function ProfileOrders() {
     const pageParams = useParams();   
@@ -19,7 +20,7 @@ function ProfileOrders() {
     const orders : TOrder[] = useSelector(wsSelector).orders;
 
     const accessToken = getCookie('accessToken');
-    const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken ? accessToken.substr(7) : ""}`;
+    const wsUrl = WS_BASE_URL + `?token=${accessToken ? accessToken.substr(7) : ""}`;
 
     useEffect(() => {
         dispatch(wsConnectionStart(wsUrl));

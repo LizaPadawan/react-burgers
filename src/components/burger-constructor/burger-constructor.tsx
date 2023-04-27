@@ -2,7 +2,6 @@ import { useState, useContext, useEffect, useMemo, FC } from "react";
 import { useCallback } from "react";
 import { useRef } from "react";
 import { useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -22,10 +21,11 @@ import { useNavigate } from "react-router-dom";
 import { constructorActions } from "../../services/actions/constructor-actions-creator";
 import { TIngredient } from "../ingredients-proptypes";
 import { Identifier, XYCoord } from 'dnd-core'
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 
 const OrderDetails = () => {
-    const dispatch : any = useDispatch();
-    const orderData = useSelector(currentOrderSelector);
+    const dispatch = useAppDispatch();
+    const orderData = useAppSelector(currentOrderSelector);
     //console.log("orderData=", orderData);
     const onClose = () => {dispatch(modalActions.closeModal())};
 
@@ -58,8 +58,8 @@ const OrderDetails = () => {
 
 const OrderInfo = () => {
 
-    const dispatch = useDispatch() as any;
-    const data : Array<TIngredient> = useSelector(constructorSelector);
+    const dispatch = useAppDispatch();
+    const data : Array<TIngredient> = useAppSelector(constructorSelector);
     const bun : TIngredient | undefined  = data.find((item : TIngredient) : boolean => item.type == 'bun');
     const bunPrice : number  = (bun) ? bun.price : 0;
     const noBunIngredients : Array<TIngredient> = data.filter((item : TIngredient) => item.type !== 'bun');
@@ -102,7 +102,7 @@ export type TConstructorBunElementProps = {
 
 const ConstructorBunElement : FC<TConstructorBunElementProps> = ({type}) => {
   
-    const data : Array<TIngredient> = useSelector(constructorSelector);
+    const data : Array<TIngredient> = useAppSelector(constructorSelector);
     //const type = props.type;
     const item : TIngredient | undefined = (data.length > 0) ? data.find(item => item.type == 'bun') : undefined;
 
@@ -127,8 +127,8 @@ const ConstructorBunElement : FC<TConstructorBunElementProps> = ({type}) => {
 
 
 const ConstructorIngredientsList : FC = () => {
-    const dispatch = useDispatch() as any;
-    const data  : Array<TIngredient> = useSelector(constructorSelector);
+    const dispatch = useAppDispatch();
+    const data  : Array<TIngredient> = useAppSelector(constructorSelector);
     const ingredients = data.filter(item => item.type !== 'bun');
     const bun = data.find(item => item.type == 'bun');
 
@@ -169,8 +169,8 @@ export type TDragItem  = {
 };
 
 const OrderedIngredient  : FC<TOrderedIngredientProps> = ({ item, index, moveCard }) => {
-    const dispatch = useDispatch() as any;
-    const data   : Array<TIngredient> = useSelector(constructorSelector);
+    const dispatch = useAppDispatch();
+    const data   : Array<TIngredient> = useAppSelector(constructorSelector);
 
     const ref = useRef<HTMLDivElement>(null);
     const [{ handlerId }, drop] = useDrop<TDragItem, void, {handlerId: Identifier | null}>({
@@ -223,7 +223,7 @@ const OrderedIngredient  : FC<TOrderedIngredientProps> = ({ item, index, moveCar
 
     const preventDefault = (e : Event) => e.preventDefault();
 
-    const close = (dragId : number) => {
+    const close = (dragId : string|undefined) => {
         dispatch(constructorActions.setConstructor(data.filter(item => item.dragId !== dragId)))
     }
 
@@ -258,24 +258,25 @@ const OrderedIngredient  : FC<TOrderedIngredientProps> = ({ item, index, moveCar
 
 
 const BurgerConstructor = () => {
-    const isOpen = useSelector(openModalSelector);
-    const data : any = useSelector(constructorSelector);
-    const dispatch = useDispatch();
+    const isOpen = useAppSelector(openModalSelector);
+    const data = useAppSelector(constructorSelector);
+    const dataIngredients = useAppSelector(ingredientsSelector);
+    const dispatch = useAppDispatch();
 
-    const [{ isHover }, dropTargerRef] = useDrop<TDragItem, void, {isHover: boolean}>({
+    const [{ isHover }, dropTargerRef] = useDrop<TIngredient, void, {isHover: boolean}>({
         accept: 'ingredient',
         collect: monitor => ({
             isHover: monitor.isOver()
         }),
 
-        drop(item : TDragItem) {
+        drop(item) {
+            console.log(item);
 
             if (item.type !== 'bun'){
                 dispatch(constructorActions.setConstructor([...data, { ...item, dragId: uuid()}]))
             } else { // если перетаскивается булка, стираются все булки в списке
                 const newData = data.filter((item : TIngredient) => item.type !== 'bun');
                 dispatch(constructorActions.setConstructor([...newData, { ...item, dragId: uuid()}]))
-                
             }
         }
     });

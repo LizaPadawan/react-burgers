@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { useDispatch, useSelector } from "react-redux";
 import './App.css';
 import AppHeader from '../app-header/app-header';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -25,10 +24,11 @@ import OrderPage from '../../pages/order/order-page';
 import OrderIngredients from '../order-ingredients/order-ingredients';
 import styles from './app.module.css';
 import ProfileOrders from '../../pages/profile-orders/profile-orders';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 function App() {
 
-  const dispatch = useDispatch() as any;
+  const dispatch = useAppDispatch();
 
   useEffect(
     () => {
@@ -38,7 +38,7 @@ function App() {
     []
   );
 
-  const isAuthChecked = useSelector(isAuthSelector);
+  const isAuthChecked = useAppSelector(isAuthSelector);
 
   const ModalSwitch = () => {
   const location = useLocation();

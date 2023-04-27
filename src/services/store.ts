@@ -15,8 +15,9 @@ import {
 
 import { socketMiddleware } from "./socketMiddleware";
 import { TinitialState } from "./initial-state";
+import { WS_BASE_URL } from "../utils/const";
 
-export const wsUrl = "wss://norma.nomoreparties.space/orders/all";
+export const wsUrl = WS_BASE_URL + "/all";
 
 export const wsActions = {
   wsStart: WS_CONNECTION_START,
@@ -42,5 +43,6 @@ export const configureStore = (initialState : TinitialState) => {
 
     return store;
 };
+
 
 

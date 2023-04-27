@@ -6,12 +6,13 @@ import { wsSelector } from '../../services/selectors';
 import OrderListInfo from '../../components/order-list-info/order-list-info';
 import commonStyles from "../common.module.css";
 import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/ws-actions-creator';
+import { WS_BASE_URL } from '../../utils/const';
 
 const Feed = () => {
     const dispatch = useDispatch();
     const feed = useSelector(wsSelector);
     console.log("feed=", feed);
-    const wsUrl = "wss://norma.nomoreparties.space/orders/all";
+    const wsUrl = WS_BASE_URL + "/all";
 
     useEffect(() => {
         dispatch(wsConnectionStart(wsUrl));

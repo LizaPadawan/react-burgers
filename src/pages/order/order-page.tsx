@@ -10,16 +10,17 @@ import { useLocation } from 'react-router';
 import { getCookie } from '../../utils/cookie';
 
 import OrderIngredients from '../../components/order-ingredients/order-ingredients';
+import { WS_BASE_URL } from '../../utils/const';
 
 const OrderPage: FC = () => {
 
     const accessToken = getCookie('accessToken');
-    const tokenUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken ? accessToken.substr(7) : ""}`;
+    const tokenUrl = WS_BASE_URL + `?token=${accessToken ? accessToken.substr(7) : ""}`;
 
     const { pathname } = useLocation();
     const orders : TWsData["orders"] = useSelector(wsSelector).orders;
     const dispatch = useDispatch();
-    const wsUrl = pathname.includes('/list') ? "wss://norma.nomoreparties.space/orders/all" : tokenUrl;
+    const wsUrl = pathname.includes('/list') ? WS_BASE_URL + "/all" : tokenUrl;
 
     useEffect(() => {
         dispatch(wsConnectionStart(wsUrl));
