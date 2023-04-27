@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { register } from '../../services/thunk';
+import { register } from "../../services/thunk";
 
 import {
   EmailInput,
@@ -18,31 +18,37 @@ function Register() {
   const navigate = useNavigate();
 
   return (
-    <div className={ commonStyles.center + ' ' + commonStyles.column }>
+    <div className={commonStyles.center + " " + commonStyles.column}>
       <>
         <p className="text text_type_main-medium pt-20">Регистрация</p>
         <Input
           type={"text"}
           placeholder={"Имя"}
-          onChange={(e) => {setForm({ ...form, name: e.target.value })}}
+          onChange={(e) => {
+            setForm({ ...form, name: e.target.value });
+          }}
           value={form.name}
           error={false}
           size={"default"}
           extraClass="ml-1"
         />
 
-        <EmailInput 
+        <EmailInput
           placeholder={"E-mail"}
-          onChange={(e) => {setForm({ ...form, email: e.target.value });}}
+          onChange={(e) => {
+            setForm({ ...form, email: e.target.value });
+          }}
           value={form.email}
           //error={false}
           size={"default"}
           extraClass="ml-1"
         />
 
-        <PasswordInput 
+        <PasswordInput
           placeholder={"Пароль"}
-          onChange={(e) => {setForm({ ...form, password: e.target.value })}}
+          onChange={(e) => {
+            setForm({ ...form, password: e.target.value });
+          }}
           value={form.password}
           //error={false}
           size={"default"}
@@ -52,13 +58,18 @@ function Register() {
           htmlType="button"
           type="primary"
           size="medium"
-          onClick={() => {dispatch(register(form, navigate))}}
+          onClick={() => {
+            dispatch(register(form, navigate));
+          }}
         >
           Зарегистрироваться
         </Button>
       </>
       <p className="text text_type_main-default text_color_inactive pt-4 mt-10">
-        Уже зарегистрированы? <Link to='/login' className={commonStyles.link}>Войти</Link>
+        Уже зарегистрированы?{" "}
+        <Link to="/login" className={commonStyles.link}>
+          Войти
+        </Link>
       </p>
     </div>
   );
