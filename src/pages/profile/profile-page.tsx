@@ -1,7 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../services/thunk";
 
 import {
@@ -16,17 +14,18 @@ import { userSelector } from "../../services/selectors";
 import { getProfileInfo, updateProfileInfo } from "../../services/thunk";
 import { isAuthSelector } from "../../services/selectors";
 import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 
 function Profile() {
   const pageParams = useParams();
   //console.log("params=", pageParams.orders);
   
-  const dispatch = useDispatch() as any;
-  const user = useSelector(userSelector);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(userSelector);
   const [form, setForm] = useState({ password: "", email: "", name:  ""});
   const [buttonsOpen, setButtonsOpen] = useState(false);
 
-  const isAuthChecked = useSelector(isAuthSelector);
+  const isAuthChecked = useAppSelector(isAuthSelector);
 
   useEffect(() => {
    dispatch(getProfileInfo());
@@ -147,7 +146,7 @@ function Profile() {
             </Button>
           </div>
           }
-        </> : <div style={{width: '485px'}}/>}
+        </> : <div className={commonStyles.fixsecondwidth}/>}
         </div>
       </div> :
           <div>Идет загрузка ...</div>

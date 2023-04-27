@@ -1,5 +1,4 @@
 import { FC, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import OrderList from '../../components/order-list/order-list';
 import styles from './feed-page.module.css';
 import { wsSelector } from '../../services/selectors';
@@ -7,10 +6,11 @@ import OrderListInfo from '../../components/order-list-info/order-list-info';
 import commonStyles from "../common.module.css";
 import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/ws-actions-creator';
 import { WS_BASE_URL } from '../../utils/const';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 const Feed = () => {
-    const dispatch = useDispatch();
-    const feed = useSelector(wsSelector);
+    const dispatch = useAppDispatch();
+    const feed = useAppSelector(wsSelector);
     console.log("feed=", feed);
     const wsUrl = WS_BASE_URL + "/all";
 

@@ -43,6 +43,10 @@
   .fixwidth {
     width: 320px;
   }
+
+  .fixsecondwidth{
+    width: 485px;
+  }
   
   .white {
     color: white;

@@ -2,22 +2,22 @@ import { FC, memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './order-ingredients.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { ingredientsSelector, wsSelector} from '../../services/selectors';
 import { TWsData } from '../order-proptypes';
 import { TIngredient } from '../ingredients-proptypes';
+import { useAppSelector } from '../../utils/hooks';
 
 const OrderIngredients: FC = () => {
     const { orderId } = useParams();
     console.log(orderId );
-    const wsData : TWsData = useSelector(wsSelector);
+    const wsData : TWsData = useAppSelector(wsSelector);
 
     const order = useMemo(() => {
         return wsData.orders.find(order => order._id === orderId);
     }, [wsData]);
 
     const status = ((order && order.status === 'done') && 'Выполнен') || ((order && order.status === 'pending') && 'Готовится') || ((order && order.status === 'created') && 'Создан');
-    const ingredientsStore : Array<TIngredient>  = useSelector(ingredientsSelector);
+    const ingredientsStore : Array<TIngredient>  = useAppSelector(ingredientsSelector);
 
     const ingredients = useMemo(() => {
         const ingredients : Array<TIngredient>  = [];

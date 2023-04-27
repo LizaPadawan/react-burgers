@@ -5,19 +5,19 @@ import { Link, useLocation } from 'react-router-dom';
 import styles from './profile-orders.module.css';
 import Order from '../../components/order/order';
 import { isAuthSelector, wsSelector } from '../../services/selectors';
-import { useDispatch, useSelector } from "react-redux";
 import commonStyles from "../common.module.css";
 import { wsConnectionStart } from '../../services/actions/ws-actions-creator';
 import { wsConnectionClosed } from '../../services/actions/ws-actions-creator';
 import { getCookie } from '../../utils/cookie';
 import { TOrder } from '../../components/order-proptypes';
 import { WS_BASE_URL } from '../../utils/const';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 function ProfileOrders() {
     const pageParams = useParams();   
-    const dispatch = useDispatch() as any; 
-    const isAuthChecked = useSelector(isAuthSelector);
-    const orders : TOrder[] = useSelector(wsSelector).orders;
+    const dispatch = useAppDispatch(); 
+    const isAuthChecked = useAppSelector(isAuthSelector);
+    const orders : TOrder[] = useAppSelector(wsSelector).orders;
 
     const accessToken = getCookie('accessToken');
     const wsUrl = WS_BASE_URL + `?token=${accessToken ? accessToken.substr(7) : ""}`;

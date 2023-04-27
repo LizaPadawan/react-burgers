@@ -1,5 +1,4 @@
 import { useEffect, FC, ReactNode } from 'react';
-import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from 'react-dom';
 import { Tab, CurrencyIcon,CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import modalStyles from './modal.module.css';
@@ -18,13 +17,12 @@ type TModalProps = {
 
 const Modal : FC <TModalProps> = (props) => {
   let modal = document.getElementById(props.modalId);
-  //const dispatch = useDispatch();
 
   const closeModal = props.onClose;
 
   useEffect(() => {
     const handleEsc = (e : KeyboardEvent) => {
-       if (e.keyCode === 27) {
+       if (e.key === 'Escape') {
         closeModal();
       }
     };
@@ -47,7 +45,7 @@ const Modal : FC <TModalProps> = (props) => {
       <div className={modalStyles.panel} >
       <div className={modalStyles.title} >
         <p className="text text_type_main-medium">{props.caption}</p>
-        <div style={{zIndex:10}} onClick={() => {
+        <div className={modalStyles.zindex} onClick={() => {
           closeModal();
           }}>
         <CloseIcon type="primary" />

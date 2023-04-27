@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import styles from './order.module.css';
 import { TOrder } from '../order-proptypes';
 import { TIngredient } from '../ingredients-proptypes';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientsSelector } from '../../services/selectors';
+import { useAppSelector } from '../../utils/hooks';
 
 interface OrderProps {
     order: TOrder;
@@ -15,7 +15,7 @@ interface OrderProps {
 
 const Order: FC<OrderProps> = ({ order, withStatus = false, extraClass = undefined }) => {
     const location = useLocation();
-    const ingredientsList : Array<TIngredient> = useSelector(ingredientsSelector);
+    const ingredientsList : Array<TIngredient> = useAppSelector(ingredientsSelector);
 
     const ingredients = useMemo<TIngredient[]>(() => {
         const ingredients: TIngredient[] = [];

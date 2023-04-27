@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { register } from '../../services/thunk';
 
 import {
@@ -11,10 +10,11 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from "../common.module.css";
+import { useAppDispatch } from "../../utils/hooks";
 
 function Register() {
   const [form, setForm] = useState({ password: "", email: "", name: "" });
-  const dispatch = useDispatch() as any;
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   return (

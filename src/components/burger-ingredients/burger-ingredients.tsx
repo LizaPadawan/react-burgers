@@ -36,7 +36,6 @@ const IngredientsTabs  : FC<TIngredientsTabsProps> = ( { currentGroup } ) => {
 } 
 
 const IngredientCard: FC<TIngredient>  = (props) => {
-  //const dispatch = useDispatch();
   const constructorElements  : Array<TIngredient> = useAppSelector(constructorSelector);
   let count : number = constructorElements.filter(item => item._id == props._id).length;
   if (props.type == 'bun') count = count * 2;
@@ -62,7 +61,7 @@ const IngredientCard: FC<TIngredient>  = (props) => {
           style={{ opacity }}
       >
         <div className={burgerIngredientsStyles.burger_ingredient_content}>
-          <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} style={{width: 240, height: 120}} />
+          <img src={props.image}  className={burgerIngredientsStyles.burger_ingredient_image} />
           <div className={burgerIngredientsStyles.burger_ingredient_count}>
             {
             //count > 0 && <Counter count={count} className={'m-1 ' + burgerIngredientsStyles.burger_ingredient_count} size='default'/>

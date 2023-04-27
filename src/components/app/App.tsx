@@ -117,7 +117,7 @@ function App() {
   }
     </main>
 
-    <div id="portal"></div>    
+     
     </>
   );
 }

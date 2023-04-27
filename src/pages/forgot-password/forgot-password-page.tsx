@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 
 import {
   EmailInput,
@@ -10,11 +8,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from "../common.module.css";
 import { forgotPasswordRequest } from "../../services/thunk";
+import { useAppDispatch } from "../../utils/hooks";
 
 function ForgotPassword() {
   const [form, setForm] = useState({ email: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch() as any;
+  const dispatch = useAppDispatch();
 
   return (
     <form 

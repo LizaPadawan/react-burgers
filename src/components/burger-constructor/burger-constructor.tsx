@@ -69,16 +69,11 @@ const OrderInfo = () => {
 
     return (
 
-        <div className='p-4' style={{
-            display: 'flex', justifyContent: 'center',
-            alignItems: 'center',
-            width: "600px"
-        }}>
+        <div className={burgerConstructorStyles.orderInfoContainer + ' p-4'}>
 
-            <p className={`text text_type_digits-medium p-6`} style={{ gap: '10px' }}>
+            <p className={burgerConstructorStyles.gap + ` text text_type_digits-medium p-6`}>
                 {summ}
                 <CurrencyIcon 
-                //style={{ width: '22', height: '22' }} // extra_mod
                 type='primary' />
             </p>
 
@@ -288,11 +283,8 @@ const BurgerConstructor = () => {
 
                 <ConstructorBunElement type="top" />
 
-                <div style={{
-                    display: 'flex', flexDirection: 'column', overflowY: "scroll", gap: '10px',
-                }}>
+                <div className={burgerConstructorStyles.list}>
                     <ConstructorIngredientsList />
-
                 </div>
 
                 <ConstructorBunElement type="bottom" />

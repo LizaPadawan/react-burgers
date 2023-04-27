@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from "../common.module.css";
 import { login } from "../../services/thunk";
 import { useNavigate } from "react-router-dom";
 import { isAuthSelector } from "../../services/selectors";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 
 function Login() {
   const [form, setForm] = useState({ password: "", email: "" });
-  const dispatch = useDispatch()as any;
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthChecked = useSelector(isAuthSelector);
+  const isAuthChecked = useAppSelector(isAuthSelector);
 
   return (
     <form 

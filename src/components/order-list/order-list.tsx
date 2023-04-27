@@ -1,12 +1,12 @@
-import { useSelector } from 'react-redux';
 import { ingredientsSelector, wsSelector} from '../../services/selectors';
 import styles from './order-list.module.css';
 import Order from '../order/order';
 import { TWsData } from '../order-proptypes';
+import { useAppSelector } from '../../utils/hooks';
 
 const OrderList = () => {
-    const orders : TWsData["orders"]= useSelector(wsSelector).orders;
-    const ingredients = useSelector(ingredientsSelector);
+    const orders : TWsData["orders"]= useAppSelector(wsSelector).orders;
+    const ingredients = useAppSelector(ingredientsSelector);
 
     return (
         <> { (ingredients.length > 0) ?

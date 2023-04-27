@@ -1,16 +1,15 @@
 import { FC, memo, useEffect, useMemo } from 'react';
 import { wsSelector } from '../../services/selectors';
-import { useSelector } from 'react-redux';
 import commonStyles from "../common.module.css";
 import styles from './order-page.module.css';
 import { TWsData } from '../../components/order-proptypes';
-import { useDispatch } from 'react-redux';
 import { wsConnectionClosed, wsConnectionStart } from '../../services/actions/ws-actions-creator';
 import { useLocation } from 'react-router';
 import { getCookie } from '../../utils/cookie';
 
 import OrderIngredients from '../../components/order-ingredients/order-ingredients';
 import { WS_BASE_URL } from '../../utils/const';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 const OrderPage: FC = () => {
 
@@ -18,8 +17,8 @@ const OrderPage: FC = () => {
     const tokenUrl = WS_BASE_URL + `?token=${accessToken ? accessToken.substr(7) : ""}`;
 
     const { pathname } = useLocation();
-    const orders : TWsData["orders"] = useSelector(wsSelector).orders;
-    const dispatch = useDispatch();
+    const orders : TWsData["orders"] = useAppSelector(wsSelector).orders;
+    const dispatch = useAppDispatch();
     const wsUrl = pathname.includes('/list') ? WS_BASE_URL + "/all" : tokenUrl;
 
     useEffect(() => {

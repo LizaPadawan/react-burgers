@@ -13,6 +13,9 @@ export const orderReduser = ( state = initialState.orderReduser, action : TOrder
 			return state;
 
 		case FETCH_ORDER_SUCCESS:
+			console.log("ORDER REDUCER", { ...state, 
+				orderNumber: action.payload
+			});
 			return { ...state, 
 				orderNumber: action.payload
 			}

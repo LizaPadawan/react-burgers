@@ -1,0 +1,38 @@
+.all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+.center {
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.centercontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contentcenter {
+    display: flex;
+    justify-content: center;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.fixwidth{
+    width: 480px;
+}
+
+.fixwidth2{
+    width: 520px;
+}

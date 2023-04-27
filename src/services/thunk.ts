@@ -43,37 +43,6 @@ export const fetchData = () => {
     });
 }
 
-// export const sendOrder = async (data : TIngredient[], callback : (json : number) => void, navigate : NavigateFunction) => (dispatch : AppDispatch) => {
-// //export const sendOrder = async (data : TIngredient[], callback : (json : number) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
-//     const ingredients = data.map(item => item._id);
-//     const orderBurger = (ingredients : string[]) => {
-//         return fetch(BURGER_API_URL + "orders", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json;charset=utf-8",
-//                 Authorization: getCookie('accessToken'),
-//             } as any,
-//             body: JSON.stringify({
-//                 ingredients,
-//             }),
-//         })
-//         .then(checkResponse);
-//     }
-
-//     orderBurger(ingredients)
-//         .then((res) => {
-//             callback(res.order.number);
-//         })
-//         .catch((err) => {
-//             if (err.message === 'jwt expired') {
-//                 //dispatch(refreshToken(sendOrder(data, callback, dispatch, navigate)));
-//                 dispatch(refreshToken(sendOrder(data, callback, navigate)));
-//             } else {
-//                 navigate("/login", { replace: true });
-//             }
-//         });
-// }
-
 const sendOrderRequest = (data : TIngredient[]) => {
     const ingredients = data.map(item => item._id);
 
@@ -94,16 +63,9 @@ export const sendOrderData = (data : TIngredient[], navigate : NavigateFunction)
     return ((dispatch : AppDispatch) => {
         dispatch(orderActions.requestOrder());
 
-        // const setOrder = (incomingData : any) => {
-        //     dispatch(modalActions.openModal());
-        //     dispatch(constructorActions.cleanConstructor());
-        //     dispatch(orderActions.setOrder(incomingData));
-        // }
-
         sendOrderRequest(data)
         .then((res) => {
-            if (res.success) {
-                //setOrder(res.data);   
+            if (res.success) {   
                 console.log("RESREQUEST", res);
                 dispatch(modalActions.openModal());
                 dispatch(constructorActions.cleanConstructor());
@@ -118,8 +80,6 @@ export const sendOrderData = (data : TIngredient[], navigate : NavigateFunction)
             }
         });
 
-
-        //sendOrder(data, setOrder, dispatch, navigate);
     });
 }
 
@@ -127,18 +87,9 @@ export const fetchOrderData = (data : TIngredient[], navigate : NavigateFunction
     return ((dispatch : AppDispatch) => {
         dispatch(orderActions.requestOrder());
 
-        // const setOrder = (incomingData : any) => {
-        //     dispatch(modalActions.openModal());
-        //     dispatch(constructorActions.cleanConstructor());
-        //     dispatch(orderActions.setOrder(incomingData));
-        // }
-
-        //new
-
         getProfileRequest()
         .then((res) => {
             if (res.success) {
-                //sendOrder(data, setOrder, dispatch, navigate); 
                 dispatch(sendOrderData(data, navigate)); 
                 dispatch(userActions.setUser(res.user));       
             }   
@@ -151,45 +102,9 @@ export const fetchOrderData = (data : TIngredient[], navigate : NavigateFunction
             }
         });
 
-
-        //sendOrder(data, setOrder, dispatch, navigate);
     });
 }
 
-// export const fetchOrderData = (data : TIngredient[], navigate : NavigateFunction) => {
-//     return ((dispatch : AppDispatch) => {
-//         dispatch(orderActions.requestOrder());
-
-//         const setOrder = (incomingData : any) => {
-//             dispatch(modalActions.openModal());
-//             dispatch(constructorActions.cleanConstructor());
-//             dispatch(orderActions.setOrder(incomingData));
-//         }
-
-//         //new
-
-//         getProfileRequest()
-//         .then((res) => {
-//             if (res.success) {
-//                 //sendOrder(data, setOrder, dispatch, navigate); 
-//                 sendOrder(data, setOrder, navigate); 
-//                 dispatch(userActions.setUser(res.user));       
-//             }   
-//         })
-//         .catch((err) => {
-//             if (err.message === 'jwt expired') {
-//                 dispatch(refreshToken(fetchOrderData(data, navigate)));
-//             } else {
-//                 navigate("/login", { replace: true });    
-//             }
-//         });
-
-
-//         //sendOrder(data, setOrder, dispatch, navigate);
-//     });
-// }
-
-// sprint 3
 
 const sendForm = (form : TForm, url : string) => {
     return fetch(
@@ -206,7 +121,8 @@ const sendForm = (form : TForm, url : string) => {
             referrerPolicy: "no-referrer",
             body: JSON.stringify(form),
         }
-    );
+    )
+    .then(checkResponse)
 }
 
 const sendRefreshToken = () => {
@@ -217,19 +133,31 @@ const sendRefreshToken = () => {
         },
         body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
     })
+    .then(checkResponse)
 }
 
 
 
-export const registerUser = async (form : TForm, callback : (json : JSON) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
-    const response = await sendForm(form, BURGER_API_URL + "auth/register");
-    if (response.ok) {
-        const json = await response.json();
-        callback(json);
-        if (json.success) navigate("/login", { replace: true });
-    } else {
+// export const registerUser = async (form : TForm, callback : (json : JSON) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
+//     const response = await sendForm(form, BURGER_API_URL + "auth/register");
+//     if (response.ok) {
+//         const json = await response.json();
+//         callback(json);
+//         if (json.success) navigate("/login", { replace: true });
+//     } else {
+//         dispatch(userActions.initialUser());
+//     }
+// }
+
+export const registerUser = (form : TForm, callback : (json : JSON) => void, dispatch : AppDispatch, navigate : NavigateFunction) => {
+    sendForm(form, BURGER_API_URL + "auth/register")
+    .then((res) => {
+        callback(res);
+        navigate("/login", { replace: true });
+    })
+    .catch((err) => {
         dispatch(userActions.initialUser());
-    }
+    });
 }
 
 
@@ -244,12 +172,22 @@ export const register = (form : TForm, navigate : NavigateFunction) => {
     });
 }
 
-export const sendCode = async (form : TForm, navigate : NavigateFunction) => {
-    const response = await sendForm(form, BURGER_API_URL + "password-reset");
-    if (response.ok) {
-        const json = await response.json();
-        if (json.success) navigate('/reset-password', { replace: true, state: "reset_password" });
-    };
+// export const sendCode = async (form : TForm, navigate : NavigateFunction) => {
+//     const response = await sendForm(form, BURGER_API_URL + "password-reset");
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) navigate('/reset-password', { replace: true, state: "reset_password" });
+//     };
+// }
+
+export const sendCode = (form : TForm, navigate : NavigateFunction) => {
+    sendForm(form, BURGER_API_URL + "password-reset")
+    .then((res) => {
+        navigate('/reset-password', { replace: true, state: "reset_password" });
+    })
+    .catch((err) => {
+        console.log(err.message );
+    });
 }
 
 export const forgotPasswordRequest = (form : TForm, navigate : NavigateFunction) => {
@@ -259,12 +197,23 @@ export const forgotPasswordRequest = (form : TForm, navigate : NavigateFunction)
 }
 
 export const sendNewPassword = async (form : TForm, navigate : NavigateFunction) => {
-    const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
-    if (response.ok) {
-        const json = await response.json();
-        if (json.success) navigate('/login', { replace: true });
-    };
+    sendForm(form, BURGER_API_URL + "password-reset/reset")
+    .then((res) => {
+        navigate('/login', { replace: true });
+    })
+    .catch((err) => {
+        console.log(err.message );
+    });
 }
+
+// export const sendNewPassword = async (form : TForm, navigate : NavigateFunction) => {
+    
+//     const response = await sendForm(form, BURGER_API_URL + "password-reset/reset");
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) navigate('/login', { replace: true });
+//     };
+// }
 
 export const resetPasswordRequest = (form : TForm, navigate : NavigateFunction) => {
     return (() => {
@@ -273,14 +222,24 @@ export const resetPasswordRequest = (form : TForm, navigate : NavigateFunction) 
 }
 
 
+// export const loginUser = async (form: TForm, callback : (json : JSON) => void, dispatch : AppDispatch) => {
+//     const response = await sendForm(form, BURGER_API_URL + "auth/login");
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) callback(json);
+//     } else {
+//         dispatch(userActions.initialUser());
+//     }
+// }
+
 export const loginUser = async (form: TForm, callback : (json : JSON) => void, dispatch : AppDispatch) => {
-    const response = await sendForm(form, BURGER_API_URL + "auth/login");
-    if (response.ok) {
-        const json = await response.json();
-        if (json.success) callback(json);
-    } else {
+    sendForm(form, BURGER_API_URL + "auth/login")
+    .then((res) => {
+        callback(res);
+    })
+    .catch((err) => {
         dispatch(userActions.initialUser());
-    }
+    });
 }
 
 export const login = (form : TForm) => {
@@ -300,16 +259,28 @@ const saveTokens = (refreshToken : string, accessToken : string) => {
     localStorage.setItem('refreshToken', refreshToken);
 }
 
-export const logoutUser = async (dispatch : AppDispatch) => {
-    const response = await sendRefreshToken();
-    if (response.ok) {
-        const json = await response.json();
-        if (json.success) {
+// export const logoutUser = async (dispatch : AppDispatch) => {
+//     const response = await sendRefreshToken();
+//     if (response.ok) {
+//         const json = await response.json();
+//         if (json.success) {
+//             dispatch(userActions.initialUser());
+//             dispatch(orderActions.initialOrder());
+//             deleteCookie('accessToken');
+//         }
+//     }
+// }
+
+export const logoutUser = (dispatch : AppDispatch) => {
+    sendRefreshToken()
+    .then((res) => {
             dispatch(userActions.initialUser());
             dispatch(orderActions.initialOrder());
             deleteCookie('accessToken');
-        }
-    }
+        })
+    .catch((err) => {
+            console.log(err.message );
+        });
 }
 
 export const logout = () => {
@@ -318,7 +289,6 @@ export const logout = () => {
     });
 }
 
-// profile
 
 export const getProfileInfo = () => (dispatch : AppDispatch) => {
     dispatch(userActions.requestUser());

@@ -1,13 +1,12 @@
 import { FC, memo, useMemo } from 'react';
-
-import { useSelector } from 'react-redux';
 import { wsSelector } from '../../services/selectors';
 
 import styles from './order-list-info.module.css';
 import { TWsData } from '../order-proptypes';
+import { useAppSelector } from '../../utils/hooks';
 
 const OrderListInfo = () => {
-    const order : TWsData = useSelector(wsSelector);
+    const order : TWsData = useAppSelector(wsSelector);
 
     const ordersReady = useMemo(() => {
         return (

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
@@ -12,11 +11,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from "../common.module.css";
 import { resetPasswordRequest } from "../../services/thunk";
+import { useAppDispatch } from "../../utils/hooks";
 
 function ResetPassword() {
   const [form, setForm] = useState({ password: "", token: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch() as any;
+  const dispatch = useAppDispatch();
   const incomingState = useLocation().state;
   //console.log("resetpasswordlocaton", incomingState);
 
