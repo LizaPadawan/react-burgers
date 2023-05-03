@@ -351,7 +351,7 @@ const BurgerConstructor = () => {
       ref={dropTargerRef}
     >
       {data.length > 0 ? (
-        <div className={burgerConstructorStyles.burger_components}>
+        <div className={burgerConstructorStyles.burger_components} test-id='constructor'>
           <ConstructorBunElement type="top" />
 
           <div className={burgerConstructorStyles.list}>
@@ -361,7 +361,7 @@ const BurgerConstructor = () => {
           <ConstructorBunElement type="bottom" />
         </div>
       ) : (
-        <div className={burgerConstructorStyles.burger_constructor_header}>
+        <div className={burgerConstructorStyles.burger_constructor_header} test-id='empty_constructor'>
           <p className="text text_type_main-medium">Перетащите элементы сюда</p>
         </div>
       )}
