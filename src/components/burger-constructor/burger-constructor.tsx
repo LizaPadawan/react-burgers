@@ -349,6 +349,7 @@ const BurgerConstructor = () => {
         `${isHover ? burgerConstructorStyles.onHover : ""}`
       }
       ref={dropTargerRef}
+      test-id='constructor-spread'
     >
       {data.length > 0 ? (
         <div className={burgerConstructorStyles.burger_components} test-id='constructor'>

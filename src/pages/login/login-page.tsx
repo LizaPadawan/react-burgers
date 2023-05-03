@@ -45,6 +45,7 @@ function Login() {
                 //error={false}
                 size={"default"}
                 extraClass="ml-1"
+                test-id="email"
               />
 
               <PasswordInput
@@ -56,6 +57,7 @@ function Login() {
                 //error={false}
                 size={"default"}
                 extraClass="ml-1"
+                test-id="password"
               />
 
               <Button
