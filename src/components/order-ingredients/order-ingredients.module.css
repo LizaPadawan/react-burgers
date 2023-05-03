@@ -1,0 +1,69 @@
+.details {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+    width: 640px;
+}
+
+.finish {
+    color: #00cccc;
+}
+
+.image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 68px;
+    height: 68px;
+    background: linear-gradient(45deg, #801AB2, #4C4CFF);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    background-color: #000;
+    border-radius: 50%;
+}
+
+.overlay>img {
+    height: 56px;
+}
+
+.ingredients {
+    width: 100%;
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 608px;
+}
+
+.item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}

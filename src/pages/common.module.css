@@ -6,6 +6,15 @@
     padding: 0px;
     gap: 24px;
   }
+
+  .center_orders {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 80px;
+    gap: 24px;
+  }
   
   .column {
     display: flex;
@@ -33,6 +42,10 @@
   
   .fixwidth {
     width: 320px;
+  }
+
+  .fixsecondwidth{
+    width: 485px;
   }
   
   .white {

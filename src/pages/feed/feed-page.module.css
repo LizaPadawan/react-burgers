@@ -1,0 +1,16 @@
+.feed {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 1240px;
+    /* margin-top: 40px; */
+    margin-top: 40px;
+}
+
+.list {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 590px;
+}

@@ -170,3 +170,21 @@ background-repeat: no-repeat;
     display: flex;
     justify-content: center;
 }
+
+.orderInfoContainer {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+}
+
+.gap{ 
+    gap: 10px;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+    overflow-Y: scroll;
+    gap: 10px;
+}

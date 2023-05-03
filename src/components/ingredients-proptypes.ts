@@ -25,7 +25,7 @@ export type TIngredient = {
     carbohydrates: number;
     calories: number;
     price: number;
-    dragId: number;
+    dragId?: string;
     image: string;
     image_mobile: string;
     image_large: string;
