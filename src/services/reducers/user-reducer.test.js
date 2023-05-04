@@ -1,12 +1,8 @@
 import { userReducer } from "./user-reducer";
 import { FETCH_USER_ERROR, FETCH_USER_SUCCESS, FETCH_USER_REQUEST } from "../action-types";
+import { initialState as init } from "../initial-state";
 
-const initialState = {	
-    user: {
-        email: "",
-        name: ""
-      }
-};
+const initialState = init.userReducer;
 
 const mockedData = {
     user: {

@@ -3,10 +3,9 @@ import { SET_CONSTRUCTOR, CLEAN_CONSTRUCTOR } from "../action-types";
 import { TActions } from "../action-types";
 import { TConstructorActions } from "../actions/constructor-actions-creator";
 import { constructorReduser } from "./constructor-reducer";
+import { initialState as init } from "../initial-state";
 
-const initialState = {
-    constructor: [],
-};
+const initialState = init.constructorReduser;
 
 const mockedData = [{
     calories: 420,

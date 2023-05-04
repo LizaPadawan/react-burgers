@@ -1,13 +1,8 @@
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_SUCCESS, WS_GET_ORDERS } from "../action-types";
 import wsReducer from "./ws-reducer";
+import { initialState as init } from "../initial-state";
 
-const initialState = {	
-    wsConnected: false,
-    orders: [],
-    error: undefined,
-    total: 0,
-    totalToday: 0
-};
+const initialState = init.wsReducer;
 
 const mockedData = {
     data: {

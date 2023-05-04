@@ -1,9 +1,8 @@
 import { ingredientsReduser } from "./ingredients-reducer";
 import { FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_ERROR, FETCH_ORDER_REQUEST, FETCH_INGREDIENTS_REQUEST } from "../action-types";
+import { initialState as init } from "../initial-state";
 
-const initialState = {
-    ingredients: [],
-};
+const initialState = init.ingredientsReduser;
 
 const mockedData = [{
     calories: 420,

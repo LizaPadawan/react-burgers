@@ -1,9 +1,8 @@
 import { modalReduser } from "./open-modal-reducer";
 import { OPEN_MODAL, CLOSE_MODAL } from "../action-types";
+import { initialState as init } from "../initial-state";
 
-const initialState = {
-    isModalOpen: false,
-};
+const initialState = init.modalReduser;
 
 describe("modalReduser", () => {
 

@@ -3,10 +3,9 @@ import { AUTH_CHECKED } from "../action-types";
 import { TActions } from "../action-types";
 import { IAuthCheckAction } from "../actions/auth-check-actions-creator";
 import { authCheckReducer } from "./auth-check-reducer";
+import { initialState as init } from "../initial-state";
 
-const initialState = {
-    isAuthChecked: false
-};
+const initialState = init.authCheckReducer;
 
 describe("authCheckReducer", () => {
 

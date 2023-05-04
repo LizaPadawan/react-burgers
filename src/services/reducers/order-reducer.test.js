@@ -1,7 +1,8 @@
 import { orderReduser } from "./order-reducer";
 import { FETCH_ORDER_ERROR, FETCH_ORDER_SUCCESS, FETCH_ORDER_REQUEST } from "../action-types";
+import { initialState as init } from "../initial-state";
 
-const initialState = {orderNumber: null};
+const initialState = init.orderReduser;
 const mockedData = 1024;
 
 describe("orderReduser", () => {
