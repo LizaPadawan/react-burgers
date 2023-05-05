@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import AppHeader from "../app-header/app-header";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import { fetchData } from "../../services/thunk";
 import Main from "../../pages/main/main-page";
 import Login from "../../pages/login/login-page";
@@ -158,9 +158,11 @@ function App() {
     <>
       <main>
         {isAuthChecked && (
-          <BrowserRouter>
+          // <BrowserRouter>
+          <HashRouter>
             <ModalSwitch />
-          </BrowserRouter>
+          </HashRouter>
+          // </BrowserRouter>
         )}
       </main>
     </>
