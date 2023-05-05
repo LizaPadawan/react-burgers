@@ -38,7 +38,7 @@
     "eject": "react-scripts eject",
     "cypress": "cypress open cache clear",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "sprint6/step1 -d build"
   },
   "eslintConfig": {
     "extends": [
