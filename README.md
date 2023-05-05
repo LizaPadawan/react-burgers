@@ -1,7 +1,7 @@
 # Проект 'Stellar burgers'
 
 Приложение для клиента бургерной. Есть возможность создания заказа, просмотра ленты заказов, регистрации и изменения персональных данных.
-Демо: https://lizapadawan.github.io/stellar-burgers/index.html
+Демо: https://lizapadawan.github.io/react-burgers/
 
 ## В приложении используются
 
