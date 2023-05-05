@@ -76,6 +76,7 @@ function Profile() {
                       ? "text text_type_main-medium text_color_inactive"
                       : commonStyles.white + " text text_type_main-medium")
                   }
+                  test-id="profile-info"
                 >
                   Профиль
                 </Link>

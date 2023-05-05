@@ -2,7 +2,9 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lizapadawan.github.io/react-burgers/",
   "dependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.3",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -12,6 +14,8 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
+    "cypress-drag-drop": "^1.1.1",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -31,7 +35,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "cypress open cache clear",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +57,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^12.11.0"
   }
 }

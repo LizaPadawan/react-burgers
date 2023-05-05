@@ -69,6 +69,7 @@ const IngredientCard: FC<TIngredient> = (props) => {
       className={burgerIngredientsStyles.burger_ingredient_card}
       ref={dragRef}
       style={{ opacity }}
+      test-id='ingredient'
     >
       <div className={burgerIngredientsStyles.burger_ingredient_content}>
         <img

@@ -25,7 +25,9 @@ import { TWsActions } from "../actions/ws-actions-creator";
           ...state,
           //error: undefined,
           wsConnected: false,
-          orders: []
+          orders: [],
+          total: 0,
+          totalToday: 0,
         };
 
 

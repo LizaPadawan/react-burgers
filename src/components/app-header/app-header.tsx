@@ -58,6 +58,7 @@ function AppHeader() {
           <NavLink
             to="/profile"
             className={appHeaderStyles.navigation_link_profile}
+            test-id="profile-link"
           >
             {({ isActive }) => (
               <>

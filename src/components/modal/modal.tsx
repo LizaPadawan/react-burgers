@@ -49,6 +49,7 @@ const Modal: FC<TModalProps> = (props) => {
               onClick={() => {
                 closeModal();
               }}
+              test-id="close-modal"
             >
               <CloseIcon type="primary" />
             </div>
